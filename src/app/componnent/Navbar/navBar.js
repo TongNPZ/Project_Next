@@ -7,6 +7,7 @@ const Navbar = () => {
       <div className="container">
         <Link href="/">
           <p className="navbar-brand">หน้าหลัก</p>
+          <h1>Test</h1>
         </Link>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
