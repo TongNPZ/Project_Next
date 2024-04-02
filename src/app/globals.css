@@ -6,12 +6,16 @@
     background-color: #dee2e6;
   }
   
-.sidebar {
+  .sidebar.open {
+    display: block; /* เมื่อสถานะเปิดให้แสดงผลเป็น block */
+  }
+
+  .sidebar {
     background-color: #f8f9fa;
     padding: 20px;
-    border-right: 2px solid #dee2e6;
-  }
-  
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* เพิ่มเงา */
+}
+
   .sidebar ul {
     padding-left: 0;
     list-style: none;
@@ -29,3 +33,5 @@
   .sidebar ul li a:hover {
     color: #007bff;
   }
+
+  
