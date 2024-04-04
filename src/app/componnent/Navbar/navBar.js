@@ -12,20 +12,21 @@ const Navbar = () => {
             alt="Logo"
             width={130}
             height={60}
+            priority={true} // เพิ่ม property นี้เพื่อระบุว่ารูปภาพเป็นส่วนสำคัญของเนื้อหาหลัก
           />
         </Link>
       </div>
       <div className="container">
-        <div class="navbar-collapse justify-content-center" id="navbarTogglerDemo03">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link mx-4" aria-current="page" href="#">หน้าหลัก</a>
+        <div className="navbar-collapse justify-content-center" id="navbarTogglerDemo03">
+          <ul className="navbar-nav mb-2 mb-lg-0">
+            <li className="nav-item">
+              <a className="nav-link mx-4" aria-current="page" href="#">หน้าหลัก</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link mx-4" aria-current="page" href="#">โครงการ</a>
+            <li className="nav-item">
+              <a className="nav-link mx-4" aria-current="page" href="#">โครงการ</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link mx-4" aria-current="page" href="#">ติดต่อเรา</a>
+            <li className="nav-item">
+              <a className="nav-link mx-4" aria-current="page" href="#">ติดต่อเรา</a>
             </li>
           </ul>
         </div>
