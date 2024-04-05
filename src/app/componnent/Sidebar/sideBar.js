@@ -12,14 +12,21 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className='sidebar-toggle-container'>
-        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-          <div className='sidebar-content'>
-            <div className='row justify-content-end'>
+
+      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+
+        <div className='sidebar-toggle-container'>
+          <div className='row'>
+            <div className='col'></div>
+            <div className='col d-flex justify-content-end'> {/* เพิ่มคลาส d-flex เพื่อให้ flexbox ทำงาน */}
               <button className="sidebar-toggle" onClick={toggleSidebar}>
                 {isOpen ? <FaTimes /> : <FaBars />}
               </button>
             </div>
+          </div>
+        </div>
+        <div className='sidebar-content'>
+          <div className='row justify-content-end'>
             <ul className="list-unstyled">
               <li>
                 <Link href="/">
