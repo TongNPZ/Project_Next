@@ -14,7 +14,6 @@ const Sidebar = () => {
     <>
 
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-
         <div className='sidebar-toggle-container'>
           <div className='row'>
             <div className='col'></div>
