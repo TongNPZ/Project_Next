@@ -1,0 +1,7 @@
+export const API_URL = process.env.REACT_APP_API_URL ?? 'http://26.90.237.200:3000/'
+// export const AUTH_SERVICE = process.env.REACT_APP_AUTH_SERVICE ?? 'auth'
+// export const NOTI_SERVICE = process.env.REACT_APP_NOTI_SERVICE ?? 'noti'
+// export const TASK_SERVICE = process.env.REACT_APP_TASK_SERVICE ?? 'task'
+// export const APPROVAL_SERVICE = process.env.REACT_APP_APPROVAL_SERVICE ?? 'approval'
+// export const PROFILE_SERVICE = process.env.REACT_APP_PROFILE_SERVICE ?? 'profile'
+// export const PROJECT_SERVICE = process.env.REACT_APP_PROJECT_SERVICE ?? 'project'
