@@ -40,8 +40,8 @@
 
  /* ========================================================================================================================= */
 
-  /* Logo !!!!!!!!!!!!!!! */
-  .logo-container {
+  /* Nav-container !!!!!!!!!!!!!!! */
+  .Nav-container {
     /* text-align: center; */
     margin-right: 15px;
     margin-left: 15px;
@@ -51,3 +51,25 @@
   }
   
    /* ========================================================================================================================= */
+
+    /* button !!!!!!!!!!!!!!! */
+   .button {
+    background-color: #1088d8;
+    color: #ffffff; /* Set the color of the text to white */
+    transition-duration: 0.4s;
+    border: 1px solid #1088d8; /* Add a border */
+    margin: auto;
+    display: flex;
+    border-radius: 20px;
+    padding: 6px;
+    padding-left: 15px; /* เพิ่มพื้นที่ว่างด้านซ้าย */
+    padding-right: 15px; /* เพิ่มพื้นที่ว่างด้านขวา */
+  }
+  
+  .button:hover {
+    background-color: #ffffff;
+    color: #1088d8; /* Set the color of the text to #1088d8 when hovered */
+    border-color: #1088d8; /* Set the border color to #1088d8 when hovered */
+  }
+
+     /* ========================================================================================================================= */

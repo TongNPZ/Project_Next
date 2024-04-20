@@ -1,11 +1,14 @@
 // components/Navbar.js
+"use client"
 import Link from 'next/link';
 import Image from 'next/image'; // เพิ่มการ import NextImage
+import { useRouter } from 'next/navigation'
 
 const Navbar = () => {
+  const router = useRouter()
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
-      <div className="logo-container">
+      <div className="Nav-container">
         <Link href="/">
           <Image
             src="/images/logo.png"
@@ -31,7 +34,9 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-
+      <div className="Nav-container">
+        <button className='button' onClick={() => router.push('/Login')}> เข้าสู่ระบบ </button>
+      </div>
     </nav>
   );
 };
