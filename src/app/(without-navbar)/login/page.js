@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form } from 'react-bootstrap';
 
 export default function Login() {
