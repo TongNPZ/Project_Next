@@ -4,7 +4,7 @@ import Navbar from '../componnent/NavbarComponent/navBar';
 export default function NavbarLayout({ children }) {
 
     return (
-        <div className="container-color">
+        <>
             <Navbar />
             <div className="row">
                 {/* <div className='col-md-2'>
@@ -13,6 +13,6 @@ export default function NavbarLayout({ children }) {
 
                 {children}
             </div>
-        </div>
+        </>
     );
 }

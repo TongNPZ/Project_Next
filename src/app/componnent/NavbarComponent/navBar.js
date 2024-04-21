@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-color mb-5">
       <div className="Nav-container">
         <Link href="/">
           {/* <Image
