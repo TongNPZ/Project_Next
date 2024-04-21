@@ -23,19 +23,48 @@ export default async function GetRequest(host, method, body) {
         }
 
         const response = await fetch(host, requestOptions);
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error('Response was not OK!');
+            if (data.message === 'Failed To Insert Data!') {
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล!",
+                    text: "กรุณากรอกข้อมูลใหม่อีกครั้ง",
+                    confirmButtonText: "ตกลง",
+                    confirmButtonColor: "#f27474",
+                });
+            } else if (data.message === 'Data already exists!') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "ข้อมูลนี้มีอยู่ในระบบแล้ว!",
+                    text: "กรุณาตรวจสอบและกรอกข้อมูลใหม่อีกครั้ง",
+                    confirmButtonText: "ตกลง",
+                    confirmButtonColor: "#f8bb86",
+                });
+            } else if (data.message === 'Bad Request!') {
+                Swal.fire({
+                    icon: "error",
+                    title: "คำขอที่ส่งมาไม่ถูกต้อง!",
+                    text: "กรุณากรอกข้อมูลใหม่อีกครั้ง (หมายเหตุ บางช่องห้ามมีค่าว่าง และช่องกรอกตัวเลขห้ามกรอกเลข 0)",
+                    confirmButtonText: "ตกลง",
+                    confirmButtonColor: "#f27474",
+                });
+            } else {
+                throw new Error(response.message);
+            }
         }
 
         if (response.status === 204) {
-            return Swal.fire({
+            Swal.fire({
                 icon: "warning",
                 title: "ข้อมูลไม่มีการเปลี่ยนแปลง!",
+                confirmButtonText: "ตกลง",
+                confirmButtonColor: "#f8bb86",
             });
         }
 
-        return response.json();
+        return data
 
     } catch (error) {
         console.error('Error Calling API: ', error);

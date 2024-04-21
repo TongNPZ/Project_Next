@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 const Navbar = () => {
   const router = useRouter()
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-color mb-5">
       <div className="Nav-container">
         <Link href="/">
           {/* <Image
