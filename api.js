@@ -1,9 +1,14 @@
 import {
-    API_URL,
-  } from './app'
+  API_URL,
+  ADMIN,
+} from './app'
 
   //authservice
   export const POST_API_LOGIN = `${API_URL}login`
+  
+  // admin
+  export const GET_API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
+  
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`
 //   export const POST_API_CHECK_TOKEN_VALIDATE = `${API_URL}${AUTH_SERVICE}/checkTokenValidity`

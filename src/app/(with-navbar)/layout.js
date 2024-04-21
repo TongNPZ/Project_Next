@@ -7,9 +7,9 @@ export default function NavbarLayout({ children }) {
         <div className="container-color">
             <Navbar />
             <div className="row">
-                <div className='col-md-2'>
+                {/* <div className='col-md-2'>
                     <Sidebar />
-                </div>
+                </div> */}
 
                 {children}
             </div>
