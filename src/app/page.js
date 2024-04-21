@@ -1,5 +1,4 @@
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Sidebar from './componnent/SidebarComponent/sideBar';
 import Navbar from './componnent/NavbarComponent/navBar';
 import Link from 'next/link';
