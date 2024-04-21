@@ -1,18 +1,28 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form } from 'react-bootstrap';
 import {
     POST_API_LOGIN,
 } from '../../../../api'
+import GetRequest from '../../ConfigAPI'
+// import { AuthContext } from '../../componnent/AuthContext/AuthContext';
+// import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
 
 export default function Login() {
-    const router = useRouter()
-
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const token = localStorage.getItem('token');
+
+    // ป้องการการเข้าหน้า Login ซำ้
+    useEffect(() => {
+        if (token) {
+            router.push('/');
+        }
+    }, [token, router]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -24,23 +34,15 @@ export default function Login() {
                 // rememberMe: rememberMe
             };
             // ทำการ POST ข้อมูลไปยัง API
-            const response = await fetch(POST_API_LOGIN, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+            const response = await GetRequest(POST_API_LOGIN, 'POST', data);
             // ตรวจสอบว่าส่งข้อมูลไปยัง API สำเร็จหรือไม่
-            if (response.ok) {
-                const responseData = await response.json();
-                // setToken(responseData.token)
-                localStorage.setItem('token', responseData.token);
-                localStorage.setItem('role', responseData.role);
-                localStorage.setItem('id', responseData.id);
+            if (response.message === "login success") {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('role', response.role);
+                localStorage.setItem('id', response.id);
                 router.push('/')
                 console.log('การเข้าสู่ระบบสำเร็จ');
-                console.log(responseData);
+                console.log(response);
                 // ทำตามขั้นตอนต่อไปที่คุณต้องการ
             } else {
                 console.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');

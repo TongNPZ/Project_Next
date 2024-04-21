@@ -1,11 +1,31 @@
 // components/Navbar.js
 "use client"
+// components/Navbar.js
 import Link from 'next/link';
-// import Image from 'next/image'; // เพิ่มการ import NextImage
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
+import Image from 'react-bootstrap/Image';
 
 const Navbar = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const { authData } = UseAuth();
+
+  // Logout!!!!!!
+  const handleLogout = () => {
+    // ลบข้อมูลที่เกี่ยวข้องใน localStorage
+    localStorage.removeItem('id');
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
+    // กำหนดค่า authData เป็น null เพื่อบอกให้ระบบรีเฟรช
+    setAuthData({
+      id: null,
+      role: null,
+      token: null,
+    });
+    // นำผู้ใช้กลับไปยังหน้าหลักหลังจากออกจากระบบ
+    router.push('/');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
       <div className="Nav-container">
@@ -35,7 +55,15 @@ const Navbar = () => {
         </div>
       </div>
       <div className="Nav-container">
-        <button className='button' onClick={() => router.push('/login')}> เข้าสู่ระบบ </button>
+        {/* เช็คว่ามี token หรือไม่ */}
+        {authData.token ? (
+          // <button className='button' onClick={() => router.push('/profile')}> Profile </button>
+          // <Image src="holder.js/171x180" roundedCircle />
+          <i class="bi bi-person-circle"></i>
+
+        ) : (
+          <button className='button' onClick={() => router.push('/login')}> เข้าสู่ระบบ </button>
+        )}
       </div>
     </nav>
   );
