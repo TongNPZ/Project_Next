@@ -23,13 +23,13 @@ const Navbar = () => {
         <div className="navbar-collapse justify-content-center" id="navbarTogglerDemo03">
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" href="#">หน้าหลัก</a>
+              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/')}>หน้าหลัก</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" href="#">โครงการ</a>
+              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/housing-estate')}>โครงการ</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" href="#">ติดต่อเรา</a>
+              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/about')}>ติดต่อเรา</a>
             </li>
           </ul>
         </div>

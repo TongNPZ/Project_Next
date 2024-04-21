@@ -1,12 +1,18 @@
 "use client"
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form } from 'react-bootstrap';
+import {
+    POST_API_LOGIN,
+} from '../../../../api'
 
 export default function Login() {
+    const router = useRouter()
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    const [token, setToken] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -18,7 +24,7 @@ export default function Login() {
                 // rememberMe: rememberMe
             };
             // ทำการ POST ข้อมูลไปยัง API
-            const response = await fetch('http://26.90.237.200:3000/Login', {
+            const response = await fetch(POST_API_LOGIN, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -26,17 +32,18 @@ export default function Login() {
                 body: JSON.stringify(data)
             });
             // ตรวจสอบว่าส่งข้อมูลไปยัง API สำเร็จหรือไม่
-
             if (response.ok) {
                 const responseData = await response.json();
+                // setToken(responseData.token)
+                localStorage.setItem('token', responseData.token);
+                localStorage.setItem('role', responseData.role);
+                localStorage.setItem('id', responseData.id);
+                router.push('/')
                 console.log('การเข้าสู่ระบบสำเร็จ');
                 console.log(responseData);
-                console.log(data);
                 // ทำตามขั้นตอนต่อไปที่คุณต้องการ
             } else {
                 console.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
-                console.log(data);
-
             }
         } catch (error) {
             console.error('เกิดข้อผิดพลาดในการเชื่อมต่อ:', error);
