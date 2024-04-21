@@ -7,7 +7,7 @@ import {
   export const POST_API_LOGIN = `${API_URL}login`
   
   // admin
-  export const API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
+  export const GET_API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
   
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`
@@ -18,6 +18,7 @@ import {
 //   export const POST_API_CHECK_PASSWORD = `${API_URL}${AUTH_SERVICE}/checkPassword`
   
 //   // User
+ export const GET_API_DATA_USER = `${API_URL}/user/`
 //   export const GET_API_ALL_USERS = `${API_URL}${AUTH_SERVICE}/user/all`
 //   export const PUT_API_UPDATE_USER = `${API_URL}${AUTH_SERVICE}/user/edit`
 //   export const GET_API_USER_INFORMATION = `${API_URL}${AUTH_SERVICE}/user/me`

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 // สร้าง Context
 const AuthContext = createContext();
 // สร้าง Provider Component
@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
         role: role || null,
         token: token || null,
     });
+
     console.log(authData)
     return (
         // ใช้ Context.Provider เพื่อทำให้ข้อมูลสามารถเข้าถึงได้ทุกที่ใน Component Tree
@@ -23,5 +24,6 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
 // สร้าง custom hook เพื่อใช้งาน Context ใน Component อื่น
 export const UseAuth = () => useContext(AuthContext);
