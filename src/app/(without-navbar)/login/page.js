@@ -7,8 +7,6 @@ import {
     POST_API_LOGIN,
 } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
-// import { AuthContext } from '../../componnent/AuthContext/AuthContext';
-// import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
 
 export default function Login() {
     const router = useRouter();
@@ -43,6 +41,7 @@ export default function Login() {
                 router.push('/')
                 console.log('การเข้าสู่ระบบสำเร็จ');
                 console.log(response);
+                window.location.reload();
                 // ทำตามขั้นตอนต่อไปที่คุณต้องการ
             } else {
                 console.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
