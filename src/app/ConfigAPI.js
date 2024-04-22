@@ -1,4 +1,7 @@
-import Swal from 'sweetalert2'
+import {
+    Error,
+    Warning
+} from '@/app/componnent/SweetAlertComponent/ResponseMessage'
 
 export default async function GetRequest(host, method, body) {
     try {
@@ -23,45 +26,47 @@ export default async function GetRequest(host, method, body) {
         }
 
         const response = await fetch(host, requestOptions);
-        const data = await response.json();
+
+        let data
+
+        if (response.status === 204) {
+            Warning(
+                "ข้อมูลไม่มีการเปลี่ยนแปลง!",
+                null
+            )
+        } else {
+            data = await response.json();
+        }
 
         if (!response.ok) {
-            if (data.message === 'Failed To Insert Data!') {
-                Swal.fire({
-                    icon: "error",
-                    title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล!",
-                    text: "กรุณากรอกข้อมูลใหม่อีกครั้ง",
-                    confirmButtonText: "ตกลง",
-                    confirmButtonColor: "#f27474",
-                });
+            if (data.message === 'Bad Request!') {
+                Error(
+                    "คำขอที่ส่งมาไม่ถูกต้อง!",
+                    "กรุณากรอกข้อมูลใหม่อีกครั้ง (หมายเหตุ บางช่องห้ามมีค่าว่าง และช่องกรอกตัวเลขห้ามกรอกเลข 0)"
+                )
+            } else if (data.message === 'Failed To Insert Data!') {
+                Error(
+                    "เกิดข้อผิดพลาดในการเพิ่มข้อมูล!",
+                    "กรุณากรอกข้อมูลใหม่อีกครั้ง"
+                )
+            } else if (data.message === 'Failed To Update Data!') {
+                Error(
+                    "เกิดข้อผิดพลาดในการแก้ไขข้อมูล!",
+                    "กรุณากรอกข้อมูลใหม่อีกครั้ง"
+                )
+            } else if (data.message === 'Not Found Data!') {
+                Error(
+                    "ไม่พบข้อมูล!",
+                    "กรุณากรอกข้อมูลใหม่อีกครั้ง"
+                )
             } else if (data.message === 'Data already exists!') {
-                Swal.fire({
-                    icon: "warning",
-                    title: "ข้อมูลนี้มีอยู่ในระบบแล้ว!",
-                    text: "กรุณาตรวจสอบและกรอกข้อมูลใหม่อีกครั้ง",
-                    confirmButtonText: "ตกลง",
-                    confirmButtonColor: "#f8bb86",
-                });
-            } else if (data.message === 'Bad Request!') {
-                Swal.fire({
-                    icon: "error",
-                    title: "คำขอที่ส่งมาไม่ถูกต้อง!",
-                    text: "กรุณากรอกข้อมูลใหม่อีกครั้ง (หมายเหตุ บางช่องห้ามมีค่าว่าง และช่องกรอกตัวเลขห้ามกรอกเลข 0)",
-                    confirmButtonText: "ตกลง",
-                    confirmButtonColor: "#f27474",
-                });
+                Warning(
+                    "ข้อมูลนี้มีอยู่ในระบบแล้ว!",
+                    "กรุณาตรวจสอบและกรอกข้อมูลใหม่อีกครั้ง"
+                )
             } else {
                 throw new Error(response.message);
             }
-        }
-
-        if (response.status === 204) {
-            Swal.fire({
-                icon: "warning",
-                title: "ข้อมูลไม่มีการเปลี่ยนแปลง!",
-                confirmButtonText: "ตกลง",
-                confirmButtonColor: "#f8bb86",
-            });
         }
 
         return data

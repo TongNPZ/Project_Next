@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE_ZONE } from '../../../../../api';
 import ModalAdd from './ModalAdd'
+import ModalEdit from './ModalEdit'
 import {
     Table,
     Card,
     Button,
-    Form
+    Form,
+    Badge
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
@@ -34,16 +36,33 @@ export default function HouseZone() {
     }, [showData]);
     // --- //
 
-    // modal //
-    const [show, setShow] = useState(false);
+    // modal add //
+    const [showAdd, setShowAdd] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleAddClose = () => setShowAdd(false);
+    const handleAddShow = () => setShowAdd(true);
+    // --- //
+
+    // modal edit //
+    const [selectedId, setSelectedId] = useState('');
+    const [showEdit, setShowEdit] = useState(false);
+
+    const handleEditClose = () => setShowEdit(false);
+    const handleEditShow = (id) => {
+        setSelectedId(id);
+        setShowEdit(true);
+    }
     // --- //
 
     return (
 
         <div className='container-fluid px-4'>
+
+            {/* modal */}
+            <ModalAdd show={showAdd} handleClose={handleAddClose} />
+            <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
+            {/* --- */}
+
             <Card>
                 <Card.Header>
 
@@ -52,10 +71,9 @@ export default function HouseZone() {
                             <h5>ตารางข้อมูลโซนบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
-                            <Button variant="success" onClick={handleShow}>
+                            <Button variant="success" onClick={handleAddShow}>
                                 <BsFillHouseAddFill style={{ fontSize: '24px' }} />
                             </Button>
-                            <ModalAdd show={show} handleClose={handleClose} />
                         </div>
                     </div>
                 </Card.Header>
@@ -89,16 +107,19 @@ export default function HouseZone() {
 
                                         {data.status === 1 ? (
                                             <td>
-                                                <p className='text-success'>โซนเปิดใช้งาน</p>
+                                                <Badge bg="success">โซนเปิดใช้งาน</Badge>
                                             </td>
                                         ) : (
                                             <td>
-                                                <p className='text-danger'>โซนปิดใช้งาน</p>
+                                                <Badge bg="danger">โซนปิดใช้งาน</Badge>
                                             </td>
                                         )}
 
                                         <td>
-                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
+                                            <a href='#' onClick={() => handleEditShow(data.hz_id)} >
+                                                <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
+                                            </a>
+
                                             <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
                                         </td>
                                     </tr>

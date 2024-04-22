@@ -13,6 +13,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 // } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
 
+const id = localStorage.getItem('id');
+
 const Navbar = () => {
   const router = useRouter();
   const { authData } = UseAuth();
@@ -26,7 +28,7 @@ const Navbar = () => {
         // const response = await GetRequest(GET_API_DATA_USER, 'GET', id);
         // ตรวจสอบว่าส่งคำขอไปยังเซิร์ฟเวอร์สำเร็จหรือไม่
         if (response) {
-          setUserData(response[0])
+          setUserData(response)
           console.log(response);
         } else {
           console.error('เชื่อมต่อข้อมูลไม่สำเร็จ');
@@ -46,7 +48,11 @@ const Navbar = () => {
     localStorage.removeItem('id');
     localStorage.removeItem('role');
     localStorage.removeItem('token');
-    window.location.reload();
+    router.push('/');
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 50);
     // กำหนดค่า authData เป็น null เพื่อบอกให้ระบบรีเฟรช
     // setAuthData({
     //   id: null,
@@ -54,7 +60,6 @@ const Navbar = () => {
     //   token: null,
     // });
     // นำผู้ใช้กลับไปยังหน้าหลักหลังจากออกจากระบบ
-    router.push('/');
   };
 
   return (
@@ -79,9 +84,13 @@ const Navbar = () => {
             <li className="nav-item">
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/housing-estate')}>โครงการ</a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house/zone')}>โซนบ้าน</a>
-            </li>
+
+            {id ? (
+              <li className="nav-item">
+                <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house/zone')}>โซนบ้าน</a>
+              </li>
+            ) : (null)}
+
             <li className="nav-item">
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/about')}>ติดต่อเรา</a>
             </li>

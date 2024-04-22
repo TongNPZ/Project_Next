@@ -11,7 +11,9 @@ export default function NavbarLayout({ children }) {
                     <Sidebar />
                 </div> */}
 
-                {children}
+                <div className='mt-5'>
+                    {children}
+                </div>
             </div>
         </>
     );
