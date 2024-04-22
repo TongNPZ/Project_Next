@@ -5,7 +5,7 @@ import {
     ConfirmInsert,
     ConfirmCancel,
     ConfirmRestore,
-    InsertSuccessfully
+    Success
 } from '@/app/componnent/SweetAlertComponent/ResponseMessage'
 import {
     Modal,
@@ -48,7 +48,7 @@ export default function ModalAdd({ show, handleClose }) {
                             const response = await GetRequest(API_HOUSE_ZONE, 'POST', data)
 
                             if (response.message === 'Insert Successfully!') {
-                                InsertSuccessfully().then(() => {
+                                Success("เพิ่มข้อมูลสำเร็จ!").then(() => {
                                     setConfirmSubmit(false);
                                     handleCloseResetData();
                                 }).then(() => {
@@ -104,7 +104,7 @@ export default function ModalAdd({ show, handleClose }) {
                                 placeholder="ชื่อโซน"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                maxLength={1}
+                                maxLength={100}
                                 required
                             />
                         </div>

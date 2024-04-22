@@ -41,7 +41,10 @@ export default function Login() {
                 router.push('/')
                 console.log('การเข้าสู่ระบบสำเร็จ');
                 console.log(response);
-                window.location.reload();
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 50);
                 // ทำตามขั้นตอนต่อไปที่คุณต้องการ
             } else {
                 console.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
