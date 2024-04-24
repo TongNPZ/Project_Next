@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import GetRequest from '@/app/ConfigAPI';
-import { API_HOUSE_ZONE } from '../../../../../api';
+import { API_HOUSE_STYLE } from '../../../../../api';
 import ModalAdd from './ModalAdd'
 import ModalEdit from './ModalEdit'
 import ChangedStatus from './ChangedStatus';
@@ -18,7 +18,8 @@ import {
     BsPencilSquare,
     BsFillHouseSlashFill,
     BsFillHouseAddFill,
-    BsFillHouseUpFill
+    BsFillHouseUpFill,
+    BsBadge3DFill
 } from "react-icons/bs";
 
 export default function HouseZone() {
@@ -26,9 +27,9 @@ export default function HouseZone() {
     // fecth //
     const [showData, setShowData] = useState([]);
 
-    const fecthHouseZone = async () => {
+    const fecthHouseStyle = async () => {
         try {
-            const result = await GetRequest(API_HOUSE_ZONE, 'GET', null);
+            const result = await GetRequest(API_HOUSE_STYLE, 'GET', null);
             setShowData(result.data);
         } catch (error) {
             console.log('error', error);
@@ -36,7 +37,7 @@ export default function HouseZone() {
     }
 
     useEffect(() => {
-        fecthHouseZone();
+        fecthHouseStyle();
     }, [showData]);
     // --- //
 
@@ -59,6 +60,12 @@ export default function HouseZone() {
     // --- //
 
     // tooltip //
+    const renderTooltip3D = (props) => (
+        <Tooltip {...props}>
+            ดูบ้าน 3 มิติ
+        </Tooltip>
+    );
+
     const renderTooltipEdit = (props) => (
         <Tooltip {...props}>
             แก้ไขข้อมูล
@@ -90,7 +97,7 @@ export default function HouseZone() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลโซนบ้าน</h5>
+                            <h5>ตารางข้อมูลแบบบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button variant="success" onClick={handleAddShow}>
@@ -113,27 +120,38 @@ export default function HouseZone() {
                         <Table bordered hover>
                             <thead>
                                 <tr>
-                                    <th>รหัสโซนบ้าน</th>
-                                    <th>ชื่อโซนบ้าน</th>
-                                    <th>ราคาบ้านต่อที่ดิน</th>
+                                    <th>รหัสแบบบ้าน</th>
+                                    <th>ชื่อแบบบ้าน</th>
+                                    <th>ขนาดพื้นที่ใช้สอยเริ่มต้น</th>
+                                    <th>ขนาดพื้นที่ดินเบื้องต้นเริ่มต้น</th>
+                                    <th>รูปภาพบ้าน 3 มิติ</th>
+                                    <th>โซนบ้าน</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {showData.map((data) => (
-                                    <tr key={data.hz_id}>
-                                        <td>{data.hz_id}</td>
+                                    <tr key={data.hs_id}>
+                                        <td>{data.hs_id}</td>
+                                        <td>{data.house_name}</td>
+                                        <td>{data.hsUsable_space}</td>
+                                        <td>{data.hsLand_space}</td>
+                                        <td>
+                                            <OverlayTrigger overlay={renderTooltip3D}>
+                                                <a href={data.image3d} target="_blank" rel="noreferrer">
+                                                    <BsBadge3DFill style={{ fontSize: '24px' }} />
+                                                </a>
+                                            </OverlayTrigger>
+                                        </td>
                                         <td>{data.name}</td>
-                                        <td>{data.landArea_price}</td>
-
                                         {data.status === 1 ? (
                                             <td>
-                                                <Badge bg="success">โซนเปิดใช้งาน</Badge>
+                                                <Badge bg="success">เปิดใช้งานแบบบ้าน</Badge>
                                             </td>
                                         ) : (
                                             <td>
-                                                <Badge bg="danger">โซนปิดใช้งาน</Badge>
+                                                <Badge bg="danger">ปิดใช้งานแบบบ้าน</Badge>
                                             </td>
                                         )}
 
