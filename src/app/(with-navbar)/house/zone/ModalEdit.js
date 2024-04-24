@@ -68,7 +68,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                         const data = {
                             id: id,
                             name: name,
-                            landAreaPrice: landAreaPrice
+                            landAreaPrice: parseFloat(landAreaPrice)
                         }
 
                         const response = await GetRequest(API_HOUSE_ZONE, 'PATCH', data)

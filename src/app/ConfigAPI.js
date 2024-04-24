@@ -34,6 +34,11 @@ export default async function GetRequest(host, method, body) {
                 "ข้อมูลไม่มีการเปลี่ยนแปลง!",
                 null
             )
+        } else if (response.status === 500) {
+            Error(
+                "เกิดข้อผิดพลาดเกี่ยวกับเซิร์ฟเวอร์!",
+                "กรุณาลองใหม่อีกครั้ง"
+            )
         } else {
             data = await response.json();
         }
@@ -57,7 +62,7 @@ export default async function GetRequest(host, method, body) {
             } else if (data.message === 'Not Found Data!') {
                 Error(
                     "ไม่พบข้อมูล!",
-                    "กรุณากรอกข้อมูลใหม่อีกครั้ง"
+                    "กรุณากรอกหรือเลือกข้อมูลใหม่อีกครั้ง"
                 )
             } else if (data.message === 'Data already exists!') {
                 Warning(

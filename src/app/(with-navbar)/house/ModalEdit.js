@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import GetRequest from '@/app/ConfigAPI';
 import {
-    API_HOUSE_STYLE,
-    API_HOUSE_ZONE
-} from '../../../../../api';
+    API_HOUSE_ZONE,
+    API_HOUSE_STYLE
+} from './../../../../api';
 import {
-    ConfirmInsert,
+    Success,
     ConfirmCancel,
     ConfirmRestore,
-    Success
+    ConfirmUpdate
 } from '@/app/componnent/SweetAlertComponent/ResponseMessage'
 import {
     Modal,
     Button,
-    Form
+    Form,
+    FloatingLabel
 } from 'react-bootstrap';
 
-export default function ModalAdd({ show, handleClose }) {
+export default function ModalEdit({ show, handleClose, id }) {
+    const [houseNameDefault, setHouseNameDefault] = useState('');
+    const [hsUsableSpaceDefault, setHsUsableSpaceDefault] = useState(0);
+    const [hsLandSpaceDefault, setHsLandSpaceDefault] = useState(0);
+    const [image3DDefault, setImage3DDefault] = useState('');
+    const [hzIdDefault, setHzIdDefault] = useState(0);
+
     const [houseName, setHouseName] = useState('');
     const [hsUsableSpace, setHsUsableSpace] = useState(0);
     const [hsLandSpace, setHsLandSpace] = useState(0);
@@ -25,11 +32,11 @@ export default function ModalAdd({ show, handleClose }) {
 
     // *** function *** //
     const ResetData = () => {
-        setHouseName('');
-        setHsUsableSpace(0);
-        setHsLandSpace(0);
-        setImage3D('');
-        setHzId(0);
+        setHouseName(houseNameDefault);
+        setHsUsableSpace(hsUsableSpaceDefault);
+        setHsLandSpace(hsLandSpaceDefault);
+        setImage3D(image3DDefault);
+        setHzId(hzIdDefault);
     }
 
     const handleCloseResetData = () => {
@@ -38,7 +45,33 @@ export default function ModalAdd({ show, handleClose }) {
     }
     // *** //
 
-    // fetch house zone //
+    // fecth //
+    const fetchHouseStyleById = async () => {
+        try {
+            const result = await GetRequest(`${API_HOUSE_STYLE}/${id}`, 'GET', null);
+            setHouseNameDefault(result.house_name);
+            setHsUsableSpaceDefault(result.hsUsable_space);
+            setHsLandSpaceDefault(result.hsLand_space);
+            setImage3DDefault(result.image3d);
+            setHzIdDefault(result.hz_id);
+
+            setHouseName(result.house_name);
+            setHsUsableSpace(result.hsUsable_space);
+            setHsLandSpace(result.hsLand_space);
+            setImage3D(result.image3d);
+            setHzId(result.hz_id);
+        } catch (error) {
+            console.log('error', error);
+        }
+
+    }
+
+    useEffect(() => {
+        if (show) {
+            fetchHouseStyleById();
+        }
+    }, [show, id]);
+
     const [showHouseZone, setShowHouseZone] = useState([]);
 
     const fecthHouseZone = async () => {
@@ -59,23 +92,24 @@ export default function ModalAdd({ show, handleClose }) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        ConfirmInsert().then((result) => {
+        ConfirmUpdate().then((result) => {
             if (result.isConfirmed) {
-                const addData = async () => {
+                const editData = async () => {
                     try {
                         const data = {
+                            id: id,
                             houseName: houseName,
                             hsUsableSpace: parseFloat(hsUsableSpace),
                             hsLandSpace: parseFloat(hsLandSpace),
-                            Image3D: image3D,
+                            image3d: image3D,
                             hzId: hzId
                         }
 
-                        const response = await GetRequest(API_HOUSE_STYLE, 'POST', data)
+                        const response = await GetRequest(API_HOUSE_STYLE, 'PATCH', data)
 
-                        if (response.message === 'Insert Successfully!') {
-                            Success("เพิ่มข้อมูลสำเร็จ!").then(() => {
-                                handleCloseResetData();
+                        if (response.message === 'Update Successfully!') {
+                            Success("แก้ไขข้อมูลสำเร็จ!").then(() => {
+                                handleClose();
                             })
                         }
                     } catch (error) {
@@ -83,7 +117,7 @@ export default function ModalAdd({ show, handleClose }) {
                     }
                 }
 
-                addData()
+                editData()
             }
         });
     }
@@ -112,12 +146,19 @@ export default function ModalAdd({ show, handleClose }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel} size='lg'>
+        <Modal show={show} onHide={handleCancel} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>เพิ่มข้อมูลแบบบ้าน</Modal.Title>
+                <Modal.Title>แก้ไขข้อมูลแบบบ้าน</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="รหัสแบบบ้าน"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={id} readOnly disabled />
+                    </FloatingLabel>
                     <div className="mb-3">
                         <label className="col-form-label">ชื่อแบบบ้าน</label>
                         <div className="mt-1">
@@ -133,7 +174,7 @@ export default function ModalAdd({ show, handleClose }) {
                     </div>
                     <div className="row mb-3">
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)</label>
+                            <label className="col-form-label">ขนาดพื้นที่ใช้สอยเริ่มต้น</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
@@ -145,7 +186,7 @@ export default function ModalAdd({ show, handleClose }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</label>
+                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
@@ -162,7 +203,7 @@ export default function ModalAdd({ show, handleClose }) {
                         <div className="mt-1">
                             <Form.Control
                                 type="url"
-                                placeholder="URL ภาพ 3 มิติ"
+                                placeholder="ลิงค์ภาพ 3 มิติ"
                                 value={image3D}
                                 onChange={(e) => setImage3D(e.target.value)}
                                 required
@@ -176,22 +217,19 @@ export default function ModalAdd({ show, handleClose }) {
                             <option>กรุณาเลือกโซนบ้าน</option>
 
                             {showHouseZone.map((data) => (
-                                data.hz_status === 1 ? (
-                                    <option key={data.hz_id} value={data.hz_id}>{data.name}</option>
-                                ) : null
+                                <option key={data.hz_id} value={data.hz_id}>{data.name}</option>
                             ))}
 
                         </Form.Select>
 
 
                     </div>
-
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleRestore}>
                             คืนค่า
                         </Button>
-                        <Button variant="success" type='submit'>
-                            เพื่มข้อมูล
+                        <Button variant="warning" type='submit'>
+                            แก้ไขข้อมูล
                         </Button>
                     </Modal.Footer>
                 </Form>
