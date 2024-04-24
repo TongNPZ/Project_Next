@@ -1,4 +1,4 @@
-export const API_URL = process.env.REACT_APP_API_URL ?? 'http://26.90.237.200:3000/'
+export const API_URL = process.env.REACT_APP_API_URL ?? 'http://26.90.237.200:3000'
 export const ADMIN = process.env.REACT_APP_ADMIN ?? 'admin'
 // export const AUTH_SERVICE = process.env.REACT_APP_AUTH_SERVICE ?? 'auth'
 // export const NOTI_SERVICE = process.env.REACT_APP_NOTI_SERVICE ?? 'noti'
