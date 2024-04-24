@@ -14,7 +14,7 @@ export default function Home() {
           <Sidebar />
         </div> */}
         <div className='col-md-12'>
-          <div className='container'>
+          <div className='container-fluid px-5'>
             <div className='row'>
               <div className='col-md-12'>
                 <Carousel >

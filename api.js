@@ -8,6 +8,7 @@ import {
   
   // admin
   export const API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
+  export const API_HOUSE_STYLE = `${API_URL}${ADMIN}/house_style`
   
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`

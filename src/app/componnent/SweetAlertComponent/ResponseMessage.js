@@ -31,6 +31,17 @@ export function ConfirmUpdate() {
     });
 }
 
+export function ConfirmChanged() {
+    return Swal.fire({
+        icon: "warning",
+        title: "คุณต้องการเปลี่ยนสถานะใช่ไหม?",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#f8bb86",
+        cancelButtonText: "ยกเลิก"
+    });
+}
+
 export function ConfirmCancel() {
     return Swal.fire({
         icon: "question",

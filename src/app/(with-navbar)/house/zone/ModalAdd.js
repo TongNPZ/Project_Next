@@ -90,7 +90,7 @@ export default function ModalAdd({ show, handleClose }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel}>
+        <Modal show={show} onHide={handleCancel} size='md'>
             <Modal.Header closeButton>
                 <Modal.Title>เพิ่มข้อมูลโซนบ้าน</Modal.Title>
             </Modal.Header>
