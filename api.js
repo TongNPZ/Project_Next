@@ -4,9 +4,10 @@ import {
 } from './app'
 
   //authservice
-  export const POST_API_LOGIN = `${API_URL}login`
+  export const POST_API_LOGIN = `${API_URL}/login`
   
   // admin
+  export const API_HOUSE = `${API_URL}${ADMIN}/house`
   export const API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
   export const API_HOUSE_STYLE = `${API_URL}${ADMIN}/house_style`
   

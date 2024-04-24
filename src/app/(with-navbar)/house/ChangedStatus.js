@@ -1,5 +1,5 @@
 import GetRequest from '@/app/ConfigAPI';
-import { API_HOUSE_STYLE } from '../../../../../api';
+import { API_HOUSE_STYLE } from './../../../../api';
 import {
     Success,
     ConfirmChanged

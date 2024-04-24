@@ -110,7 +110,7 @@ export default function HouseZone() {
                         </div>
                     </div>
                     <div>
-                        <Table bordered hover>
+                        <Table bordered hover responsive>
                             <thead>
                                 <tr>
                                     <th>รหัสโซนบ้าน</th>
@@ -125,9 +125,9 @@ export default function HouseZone() {
                                     <tr key={data.hz_id}>
                                         <td>{data.hz_id}</td>
                                         <td>{data.name}</td>
-                                        <td>{data.landArea_price}</td>
+                                        <td>{data.landArea_price.toLocaleString()}</td>
 
-                                        {data.status === 1 ? (
+                                        {data.hz_status === 1 ? (
                                             <td>
                                                 <Badge bg="success">โซนเปิดใช้งาน</Badge>
                                             </td>
@@ -137,16 +137,16 @@ export default function HouseZone() {
                                             </td>
                                         )}
 
-                                        {data.status !== 0 ? (
+                                        {data.hz_status !== 0 ? (
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipEdit}>
-                                                    <a href='#' onClick={() => handleEditShow(data.hz_id)} >
+                                                    <a onClick={() => handleEditShow(data.hz_id)} style={{ cursor: 'pointer' }}>
                                                         <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
                                                     </a>
                                                 </OverlayTrigger>
 
                                                 <OverlayTrigger overlay={renderTooltipClose}>
-                                                    <a href='#' onClick={() => ChangedStatus(data.hz_id)} >
+                                                    <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
                                                         <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
                                                     </a>
                                                 </OverlayTrigger>
@@ -154,7 +154,7 @@ export default function HouseZone() {
                                         ) : (
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipOpen}>
-                                                    <a href='#' onClick={() => ChangedStatus(data.hz_id)} >
+                                                    <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
                                                         <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
                                                     </a>
                                                 </OverlayTrigger>
