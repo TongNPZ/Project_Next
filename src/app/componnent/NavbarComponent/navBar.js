@@ -7,6 +7,7 @@ import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
 import Image from 'react-bootstrap/Image';
 import React, { useState, useEffect } from 'react';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Sidebar from '@/app/componnent/SidebarComponent/sideBar';
 
 // import {
 //   GET_API_DATA_USER,
@@ -74,6 +75,8 @@ const Navbar = () => {
             priority={true} // เพิ่ม property นี้เพื่อระบุว่ารูปภาพเป็นส่วนสำคัญของเนื้อหาหลัก
           />
         </Link>
+        <Sidebar />
+
       </div>
       <div className="container">
         <div className="navbar-collapse justify-content-center" id="navbarTogglerDemo03">

@@ -1,18 +1,18 @@
 "use client"
-// import Sidebar from './componnent/SidebarComponent/sideBar';
 import Navbar from './componnent/NavbarComponent/navBar';
 import Link from 'next/link';
 import { Carousel, Card } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 export default function Home() {
+
   return (
     <div className='container-color'>
       <Navbar />
       <div className='row'>
-        {/* <div className='col-md-2'>
-          <Sidebar />
-        </div> */}
+        <div className='col-md-2'>
+          {/* <Sidebar /> */}
+        </div>
         <div className='col-md-12'>
           <div className='container'>
             <div className='row'>
@@ -58,7 +58,6 @@ export default function Home() {
 
                 <br />
               </div>
-              <br />
 
               <div className='col-md-4'>
                 <Card style={{ width: '18rem' }}>
