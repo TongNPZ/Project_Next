@@ -14,7 +14,7 @@ import GetRequest from '../../ConfigAPI'
 
 const Navbar = () => {
   const router = useRouter();
-  const { authData } = UseAuth();
+  const { authData, setAuthData } = UseAuth();
   const [userData, setUserData] = useState('');
   const id = authData.id;
   // console.log(id)
@@ -23,14 +23,14 @@ const Navbar = () => {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const response = await GetRequest(GET_API_DATA_USER + '/' + id, 'GET', null)
-        setUserData(response)
+        const response = await GetRequest(GET_API_DATA_USER + '/' + id, 'GET', null);
+        setUserData(response);
       } catch (error) {
         console.log('error', error);
       }
     }
-    fetchUserData()
-  }, [])
+    fetchUserData();
+  }, [id]);
 
   // Logout!!!!!!
   const handleLogout = () => {
@@ -38,10 +38,9 @@ const Navbar = () => {
     localStorage.removeItem('id');
     localStorage.removeItem('role');
     localStorage.removeItem('token');
+    setAuthData({});
     router.push('/');
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 50);
+
   };
 
   return (
