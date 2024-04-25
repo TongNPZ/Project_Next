@@ -7,24 +7,20 @@ import {
     POST_API_LOGIN,
 } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
-import { useCookies } from 'react-cookie';
-import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    // const token = localStorage.getItem('token');
-    const { setAuthData } = UseAuth();
-    const [cookies, setCookie] = useCookies(['token']);
+    const token = localStorage.getItem('token');
 
     // ป้องการการเข้าหน้า Login ซำ้
-    // useEffect(() => {
-    //     if (token) {
-    //         router.push('/');
-    //     }
-    // }, [token, router]);
+    useEffect(() => {
+        if (token) {
+            router.push('/');
+        }
+    }, [token, router]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -39,10 +35,10 @@ export default function Login() {
             const response = await GetRequest(POST_API_LOGIN, 'POST', data);
             // ตรวจสอบว่าส่งข้อมูลไปยัง API สำเร็จหรือไม่
             if (response.message === "login success") {
-                setCookie('id', response.id); // เก็บ token ในคุกกี้
-                setCookie('role', response.role); // เก็บ token ในคุกกี้
-                setCookie('token', response.token); // เก็บ token ในคุกกี้
 
+                localStorage.setItem('id', response.id);
+                localStorage.setItem('role', response.role);
+                localStorage.setItem('token', response.token);
                 router.push('/')
                 console.log('การเข้าสู่ระบบสำเร็จ');
                 // console.log(response);
