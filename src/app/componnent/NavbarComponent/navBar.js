@@ -7,55 +7,37 @@ import Image from 'react-bootstrap/Image';
 import React, { useState, useEffect } from 'react';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Sidebar from '@/app/componnent/SidebarComponent/sideBar';
-// import {
-//   GET_API_DATA_USER,
-// } from '../../../../api'
+import {
+  GET_API_DATA_USER,
+} from '../../../../api'
 import GetRequest from '../../ConfigAPI'
-import { useCookies } from 'react-cookie';
 
 const Navbar = () => {
   const router = useRouter();
   const { authData } = UseAuth();
   const [userData, setUserData] = useState('');
   const id = authData.id;
-  const [cookies, setCookie, removeCookie] = useCookies(['id', 'role', 'token']);
+  // console.log(id)
+  console.log(userData)
 
   useEffect(() => {
     async function fetchUserData() {
       try {
-        // const url = `http://26.90.237.200:3000/user/0687268867039`;
-        const response = await fetch(`http://26.90.237.200:3000/user/0687268867039`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            // สามารถเพิ่ม headers อื่น ๆ ตามต้องการ
-          },
-          body: JSON.stringify({ /* ข้อมูลใน body ตามต้องการ */ }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUserData(data);
-          console.log(data);
-        } else {
-          console.error('เชื่อมต่อข้อมูลไม่สำเร็จ');
-        }
+        const response = await GetRequest(GET_API_DATA_USER + '/' + id, 'GET', null)
+        setUserData(response)
       } catch (error) {
-        console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+        console.log('error', error);
       }
     }
-    fetchUserData();
-  }, [authData.id]);
+    fetchUserData()
+  }, [])
 
-  console.log(userData.user_name)
   // Logout!!!!!!
   const handleLogout = () => {
-    removeCookie('id'); // ลบคุกกี้ชื่อ 'token'
-    removeCookie('role');
-    removeCookie('token');
     // ลบข้อมูลที่เกี่ยวข้องใน localStorage
-    // localStorage.removeItem('id');
-    // localStorage.removeItem('role');
-    // localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
     router.push('/');
     // setTimeout(() => {
     //   window.location.reload();

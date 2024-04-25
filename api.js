@@ -20,7 +20,7 @@ import {
 //   export const POST_API_CHECK_PASSWORD = `${API_URL}${AUTH_SERVICE}/checkPassword`
   
 //   // User
- export const GET_API_DATA_USER = `${API_URL}/user/`
+ export const GET_API_DATA_USER = `${API_URL}/user`
 //   export const GET_API_ALL_USERS = `${API_URL}${AUTH_SERVICE}/user/all`
 //   export const PUT_API_UPDATE_USER = `${API_URL}${AUTH_SERVICE}/user/edit`
 //   export const GET_API_USER_INFORMATION = `${API_URL}${AUTH_SERVICE}/user/me`
