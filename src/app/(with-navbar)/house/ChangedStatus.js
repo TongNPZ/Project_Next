@@ -1,5 +1,5 @@
 import GetRequest from '@/app/ConfigAPI';
-import { API_HOUSE_STYLE } from './../../../../api';
+import { API_HOUSE } from './../../../../api';
 import {
     Success,
     ConfirmChanged
@@ -11,7 +11,7 @@ export default function ChangedStatus(id) {
         if (result.isConfirmed) {
             const changedStatus = async () => {
                 try {
-                    const response = await GetRequest(`${API_HOUSE_STYLE}/${id}`, 'PATCH', null);
+                    const response = await GetRequest(`${API_HOUSE}/${id}`, 'PATCH', null);
 
                     if (response.message === 'Update Successfully!') {
                         Success("เปลี่ยนสถานะสำเร็จ!")

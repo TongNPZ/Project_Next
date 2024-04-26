@@ -47,7 +47,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
       <div className="Nav-container">
         <div className="row align-items-center">
-          <div className="col">
+          <div className="col d-flex justify-content-center">
             <Link href="/">
               <Image
                 src="\images\Logo.png"
@@ -58,7 +58,9 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="col d-flex justify-content-center">
-            <Sidebar />
+            <a style={{ cursor: 'pointer' }}>
+              <Sidebar />
+            </a>
           </div>
         </div>
       </div>
@@ -72,12 +74,6 @@ const Navbar = () => {
             <li className="nav-item">
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house_estate')}>โครงการ</a>
             </li>
-
-            {id ? (
-              <li className="nav-item">
-                <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house/zone')}>โซนบ้าน</a>
-              </li>
-            ) : (null)}
 
             <li className="nav-item">
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/about')}>ติดต่อเรา</a>

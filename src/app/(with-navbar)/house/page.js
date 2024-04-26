@@ -14,7 +14,6 @@ import {
     Badge,
     OverlayTrigger,
     Tooltip,
-    Image
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
@@ -222,7 +221,7 @@ export default function HouseZone() {
                                                 </OverlayTrigger>
 
                                                 <OverlayTrigger overlay={renderTooltipClose}>
-                                                    <a onClick={() => ChangedStatus(data.hs_id)} style={{ cursor: 'pointer' }}>
+                                                    <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
                                                         <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
                                                     </a>
                                                 </OverlayTrigger>
@@ -230,7 +229,7 @@ export default function HouseZone() {
                                         ) : (
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipOpen}>
-                                                    <a onClick={() => ChangedStatus(data.hs_id)} style={{ cursor: 'pointer' }}>
+                                                    <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
                                                         <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
                                                     </a>
                                                 </OverlayTrigger>
