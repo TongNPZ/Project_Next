@@ -54,7 +54,6 @@ const Navbar = () => {
                 alt="Logo"
                 width={130}
                 height={60}
-                priority="true"
               />
             </Link>
           </div>
@@ -73,7 +72,7 @@ const Navbar = () => {
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/')}>หน้าหลัก</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/housing-estate')}>โครงการ</a>
+              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house_estate')}>โครงการ</a>
             </li>
 
             <li className="nav-item">
@@ -92,8 +91,8 @@ const Navbar = () => {
             title={'คุณ ' + userData.user_name + ' ' + userData.user_lastname}
             style={{ color: 'white' }}
           >
-            <NavDropdown.Item href="#action/3.1">ข้อมูลผู้ใช้</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">โครงการ</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => router.push('/profile')}>ข้อมูลผู้ใช้</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => router.push('/house_estate')}>โครงการ</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={handleLogout}>ออกจากระบบ</NavDropdown.Item>
           </NavDropdown>
