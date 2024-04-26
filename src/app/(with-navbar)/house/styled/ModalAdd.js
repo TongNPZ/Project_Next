@@ -52,7 +52,7 @@ export default function ModalAdd({ show, handleClose }) {
 
     useEffect(() => {
         fecthHouseZone();
-    }, []);
+    }, [showHouseZone]);
     // --- //
 
     // submit //

@@ -88,7 +88,7 @@ export default function ModalEdit({ show, handleClose, id }) {
 
     useEffect(() => {
         fecthHouseZone();
-    }, []);
+    }, [showHouseZone]);
 
     // --- //
 

@@ -63,7 +63,7 @@ export default function ModalAdd({ show, handleClose }) {
 
     useEffect(() => {
         fecthHouseStyle();
-    }, []);
+    }, [showHouseStyle]);
     // --- //
 
     // submit //
@@ -224,7 +224,7 @@ export default function ModalAdd({ show, handleClose }) {
                         <div className="mt-1">
                             <Form.Control
                                 as='textarea'
-                                placeholder="หมายเหตุ (ถ้าไม่มีหมายเหตุให้เว้นว่างช่องกรอกนี้)"
+                                placeholder="หมายเหตุ (ถ้าไม่มีหมายเหตุให้ใส่ - ช่องกรอกนี้)"
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
                             />
