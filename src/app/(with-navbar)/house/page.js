@@ -14,7 +14,6 @@ import {
     Badge,
     OverlayTrigger,
     Tooltip,
-    Image
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
