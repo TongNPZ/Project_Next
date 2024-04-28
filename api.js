@@ -6,12 +6,14 @@ import {
   //authservice
   export const POST_API_LOGIN = `${API_URL}/login`
 
+  // house
   export const API_HOUSE = `${API_URL}${ADMIN}/house`
   export const API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
   export const API_HOUSE_STYLE = `${API_URL}${ADMIN}/house_style`
   export const API_HOUSE_ESTATE = `${API_URL}${ADMIN}/house_estate`
 
-  
+  // buy
+  export const API_BOOK = `${API_URL}/book`
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`
 //   export const POST_API_CHECK_TOKEN_VALIDATE = `${API_URL}${AUTH_SERVICE}/checkTokenValidity`
@@ -20,8 +22,8 @@ import {
 //   export const POST_API_CHANGE_PASSWORD = `${API_URL}${AUTH_SERVICE}/resetPasswordbylogin`
 //   export const POST_API_CHECK_PASSWORD = `${API_URL}${AUTH_SERVICE}/checkPassword`
   
-//   // User
- export const GET_API_DATA_USER = `${API_URL}/user/`
+// User
+ export const GET_API_DATA_USER = `${API_URL}/user`
 //   export const GET_API_ALL_USERS = `${API_URL}${AUTH_SERVICE}/user/all`
 //   export const PUT_API_UPDATE_USER = `${API_URL}${AUTH_SERVICE}/user/edit`
 //   export const GET_API_USER_INFORMATION = `${API_URL}${AUTH_SERVICE}/user/me`
