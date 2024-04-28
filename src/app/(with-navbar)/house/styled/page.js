@@ -22,7 +22,7 @@ import {
     BsBadge3DFill
 } from "react-icons/bs";
 
-export default function HouseZone() {
+export default function HouseStyle() {
 
     // fecth //
     const [showData, setShowData] = useState([]);

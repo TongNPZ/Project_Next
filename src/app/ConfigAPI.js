@@ -35,16 +35,18 @@ export default async function GetRequest(host, method, body) {
                 null
             )
         } else if (response.status === 500) {
-            Error(
-                "เกิดข้อผิดพลาดเกี่ยวกับเซิร์ฟเวอร์!",
-                "กรุณาลองใหม่อีกครั้ง"
-            )
+            null
         } else {
             data = await response.json();
         }
 
         if (!response.ok) {
-            if (data.message === 'Bad Request!') {
+            if (data.message === 'Internal Server Error!') {
+                Error(
+                    "เกิดข้อผิดพลาดเกี่ยวกับเซิร์ฟเวอร์!",
+                    "กรุณาลองใหม่อีกครั้ง"
+                )
+            } else if (data.message === 'Bad Request!') {
                 Error(
                     "คำขอที่ส่งมาไม่ถูกต้อง!",
                     "กรุณากรอกข้อมูลใหม่อีกครั้ง (หมายเหตุ ช่องกรอกตัวเลขห้ามกรอกเลข 0)"
@@ -62,12 +64,22 @@ export default async function GetRequest(host, method, body) {
             } else if (data.message === 'Not Found Data!') {
                 Error(
                     "ไม่พบข้อมูล!",
-                    "กรุณากรอกหรือเลือกข้อมูลใหม่อีกครั้ง"
+                    "กรุณากรอก เลือกข้อมูล หรือเพิ่มข้อมูลใหม่อีกครั้ง" 
+                )
+            } else if (data.message === 'Password Bad Request!') {
+                Error(
+                    "รหัสผ่านไม่ถูกต้อง!",
+                    "กรุณากรอกรหัสผ่านใหม่อีกครั้ง (หมายเหตุ ต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และห้ามต่ำกว่า 8 ตัว)"
                 )
             } else if (data.message === 'Data already exists!') {
                 Warning(
                     "ข้อมูลนี้มีอยู่ในระบบแล้ว!",
                     "กรุณาตรวจสอบและกรอกข้อมูลใหม่อีกครั้ง"
+                )
+            } else if (data.message === 'Password already exists!') {
+                Warning(
+                    "รหัสผ่านนี้มีอยู่ในระบบแล้ว!",
+                    "กรุณากรอกรหัสผ่านใหม่อีกครั้ง"
                 )
             } else {
                 throw new Error(response.message);
