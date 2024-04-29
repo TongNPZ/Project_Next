@@ -113,8 +113,9 @@ export default function HouseZone() {
                         <Table bordered hover responsive>
                             <thead>
                                 <tr>
-                                    <th>รหัสโซนบ้าน</th>
-                                    <th>ชื่อโซนบ้าน</th>
+                                    <th>รหัสโซน</th>
+                                    <th>ชื่อโซน</th>
+                                    <th>ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</th>
                                     <th>ราคาบ้านต่อที่ดิน</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
@@ -125,7 +126,8 @@ export default function HouseZone() {
                                     <tr key={data.hz_id}>
                                         <td>{data.hz_id}</td>
                                         <td>{data.name}</td>
-                                        <td>{data.landArea_price.toLocaleString()}</td>
+                                        <td>{data.land_space.toLocaleString()}</td>
+                                        <td>{data.land_price.toLocaleString()}</td>
 
                                         {data.hz_status === 1 ? (
                                             <td>

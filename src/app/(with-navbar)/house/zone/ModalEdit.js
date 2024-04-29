@@ -15,16 +15,21 @@ import {
 } from 'react-bootstrap';
 
 export default function ModalEdit({ show, handleClose, id }) {
-    const [nameDefault, setNameDefault] = useState('');
-    const [landAreaPriceDefault, setLandAreaPriceDefault] = useState(0);
+    const [defaultValues, setDefaultValues] = useState({
+        name: "",
+        landSpace: "",
+        landPrice: ""
+    });
 
     const [name, setName] = useState('');
-    const [landAreaPrice, setLandAreaPrice] = useState(0);
+    const [landSpace, setLandSpace] = useState('');
+    const [landPrice, setLandPrice] = useState('');
 
     // *** function *** //
     const ResetData = () => {
-        setName(nameDefault);
-        setLandAreaPrice(landAreaPriceDefault);
+        setName(defaultValues.name);
+        setLandSpace(defaultValues.landSpace);
+        setLandPrice(defaultValues.landPrice);
     }
 
     const handleCloseResetData = () => {
@@ -37,11 +42,15 @@ export default function ModalEdit({ show, handleClose, id }) {
     const fetchHouseZoneById = async () => {
         try {
             const result = await GetRequest(`${API_HOUSE_ZONE}/${id}`, 'GET', null);
-            setNameDefault(result.name);
-            setLandAreaPriceDefault(result.landArea_price);
+            setDefaultValues({
+                name: result.name,
+                landSpace: result.land_space,
+                landPrice: result.land_price
+            });
 
             setName(result.name);
-            setLandAreaPrice(result.landArea_price);
+            setLandSpace(result.land_space);
+            setLandPrice(result.land_price);
         } catch (error) {
             console.log('error', error);
         }
@@ -68,7 +77,8 @@ export default function ModalEdit({ show, handleClose, id }) {
                         const data = {
                             id: id,
                             name: name,
-                            landAreaPrice: parseFloat(landAreaPrice)
+                            landSpace: parseFloat(landSpace),
+                            landPrice: parseFloat(landPrice)
                         }
 
                         const response = await GetRequest(API_HOUSE_ZONE, 'PATCH', data)
@@ -125,34 +135,42 @@ export default function ModalEdit({ show, handleClose, id }) {
                     >
                         <Form.Control type="text" defaultValue={id} readOnly />
                     </FloatingLabel>
-                    <div className='row'>
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อโซน</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                placeholder="ชื่อโซน"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                maxLength={100}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="row mb-3">
                         <div className='col-md-6'>
-                            <div className="row mb-3">
-                                <label className="col-md-4 col-form-label">ชื่อโซน</label>
-                                <div className="col-md-8">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="ชื่อโซน"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        maxLength={100}
-                                        required
-                                    />
-                                </div>
+                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
+                                    value={landSpace}
+                                    onChange={(e) => setLandSpace(e.target.value)}
+                                    required
+                                />
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <div className="row mb-3">
-                                <label className="col-md-6 col-form-label">ราคาบ้านต่อที่ดิน</label>
-                                <div className="col-md-6">
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="ราคาบ้านต่อที่ดิน (ตารางวา)"
-                                        value={landAreaPrice}
-                                        onChange={(e) => setLandAreaPrice(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                            <label className="col-form-label">ราคาบ้านต่อที่ดิน</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ราคาบ้านต่อที่ดิน"
+                                    value={landPrice}
+                                    onChange={(e) => setLandPrice(e.target.value)}
+                                    required
+                                />
                             </div>
                         </div>
                     </div>

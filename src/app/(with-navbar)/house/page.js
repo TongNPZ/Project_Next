@@ -5,6 +5,7 @@ import { API_HOUSE } from './../../../../api';
 import ModalAdd from './ModalAdd'
 import ModalEdit from './ModalEdit'
 import ModalImage from './ModalImage';
+import ModalBookAdd from '../buy/book/ModalAdd';
 import ChangedStatus from './ChangedStatus';
 import {
     Table,
@@ -20,11 +21,12 @@ import {
     BsFillHouseSlashFill,
     BsFillHouseAddFill,
     BsFillHouseUpFill,
-    BsBadge3DFill,
-    BsCardImage
+    BsFillInfoCircleFill,
+    BsCardImage,
+    BsCalendar2PlusFill
 } from "react-icons/bs";
 
-export default function HouseZone() {
+export default function House() {
 
     // fecth //
     const [showData, setShowData] = useState([]);
@@ -45,12 +47,14 @@ export default function HouseZone() {
 
     // modal //
     const [selectedId, setSelectedId] = useState('');
+    const [selectedHouseNo, setSelectedHouseNo] = useState('');
 
     // +++ modal add +++ //
     const [showAdd, setShowAdd] = useState(false);
 
     const handleAddClose = () => setShowAdd(false);
     const handleAddShow = () => setShowAdd(true);
+    // +++ //
 
     // +++ modal edit +++ //
     const [showEdit, setShowEdit] = useState(false);
@@ -60,6 +64,7 @@ export default function HouseZone() {
         setSelectedId(id);
         setShowEdit(true);
     }
+    // +++ //
 
     // +++ modal image +++ //
     const [showImage, setShowImage] = useState(false);
@@ -69,6 +74,18 @@ export default function HouseZone() {
         setSelectedId(id);
         setShowImage(true);
     }
+    // +++ //
+
+    // +++ modal book add +++ //
+    const [showBookAdd, setShowBookAdd] = useState(false);
+
+    const handleBookAddClose = () => setShowBookAdd(false);
+    const handleBookAddShow = (id, houseNo) => {
+        setSelectedId(id);
+        setSelectedHouseNo(houseNo);
+        setShowBookAdd(true);
+    }
+    // +++ //
 
     // --- //
 
@@ -79,15 +96,21 @@ export default function HouseZone() {
         </Tooltip>
     );
 
-    const renderTooltip3D = (props) => (
+    const renderTooltipDetail = (props) => (
         <Tooltip {...props}>
-            ดูบ้าน 3 มิติ
+            ดูรายละเอียด
         </Tooltip>
     );
 
     const renderTooltipEdit = (props) => (
         <Tooltip {...props}>
             แก้ไขข้อมูล
+        </Tooltip>
+    );
+
+    const renderTooltipBook = (props) => (
+        <Tooltip {...props}>
+            จองบ้าน
         </Tooltip>
     );
 
@@ -110,6 +133,7 @@ export default function HouseZone() {
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalImage show={showImage} handleClose={handleImageClose} id={selectedId} />
+            <ModalBookAdd show={showBookAdd} handleClose={handleBookAddClose} hId={selectedId} houseNo={selectedHouseNo} />
             {/* --- */}
 
             <Card>
@@ -146,97 +170,110 @@ export default function HouseZone() {
                                     <th>เลขที่โฉนดที่ดิน</th>
                                     <th>เลขที่หน้าสำรวจ</th>
                                     <th>
-                                        ขนาดพื้นที่ใช้สอย <br />
-                                        (ตารางเมตร)
-                                    </th>
-                                    <th>
                                         ขนาดพื้นที่ดิน <br />
                                         (ตารางวา)
                                     </th>
-                                    <th>ราคาขายบ้าน</th>
                                     <th>ราคาบ้านพร้อมที่ดิน</th>
                                     <th>หมายเหตุ</th>
                                     <th>รูปภาพบ้าน</th>
-                                    <th>ภาพบ้าน 3 มิติ</th>
+                                    <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {showData.map((data) => (
-                                    <tr key={data.h_id}>
-                                        <td>{data.h_id}</td>
-                                        <td>{data.house_no}</td>
-                                        <td>{data.house_name}</td>
-                                        <td>{data.num_deed}</td>
-                                        <td>{data.num_survey}</td>
-                                        <td>{data.hUsable_space.toLocaleString()}</td>
-                                        <td>{data.hLand_space.toLocaleString()}</td>
-                                        <td>{data.houseSale_price.toLocaleString()}</td>
-                                        <td>{data.price.toLocaleString()}</td>
-                                        <td>{data.note}</td>
-                                        <td>
-                                            <OverlayTrigger overlay={renderTooltipImage}>
-                                                <a onClick={() => handleImageShow(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                    <BsCardImage className='text-primary' style={{ fontSize: '28px' }} />
-                                                </a>
-                                            </OverlayTrigger>
+
+                                {showData && showData.length > 0 ? (
+                                    showData.map((data) => (
+                                        <tr key={data.h_id}>
+                                            <td>{data.h_id}</td>
+                                            <td>{data.house_no}</td>
+                                            <td>{data.house_name}</td>
+                                            <td>{data.num_deed}</td>
+                                            <td>{data.num_survey}</td>
+                                            <td>{data.hLand_space.toLocaleString()}</td>
+                                            <td>{data.price.toLocaleString()}</td>
+                                            <td>{data.note}</td>
+                                            <td>
+                                                <OverlayTrigger overlay={renderTooltipImage}>
+                                                    <a onClick={() => handleImageShow(data.h_id)} style={{ cursor: 'pointer' }}>
+                                                        <BsCardImage className='text-primary' style={{ fontSize: '28px' }} />
+                                                    </a>
+                                                </OverlayTrigger>
+                                            </td>
+                                            <td>
+                                                <OverlayTrigger overlay={renderTooltipDetail}>
+                                                    <a style={{ cursor: 'pointer' }}>
+                                                        <BsFillInfoCircleFill className='text-primary' style={{ fontSize: '28px' }} />
+                                                    </a>
+                                                </OverlayTrigger>
+                                            </td>
+
+                                            {data.h_status === 1 ? (
+                                                <td>
+                                                    <Badge bg="success">ว่าง</Badge>
+                                                </td>
+                                            ) : data.h_status === 2 ? (
+                                                <td>
+                                                    <Badge bg="warning">จองแล้ว</Badge>
+                                                </td>
+                                            ) : data.h_status === 3 ? (
+                                                <td>
+                                                    <Badge bg="info">ทำสัญญาแล้ว</Badge>
+                                                </td>
+                                            ) : data.h_status === 4 ? (
+                                                <td>
+                                                    <Badge bg="secondary">ขายแล้ว</Badge>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    <Badge bg="danger">ยกเลิกขาย</Badge>
+                                                </td>
+                                            )}
+
+                                            {data.h_status === 1 ? (
+                                                <td>
+                                                    <OverlayTrigger overlay={renderTooltipBook}>
+                                                        <a onClick={() => handleBookAddShow(data.h_id, data.house_no)} style={{ cursor: 'pointer' }}>
+                                                            <BsCalendar2PlusFill className='me-2 text-primary' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                    <OverlayTrigger overlay={renderTooltipEdit}>
+                                                        <a onClick={() => handleEditShow(data.h_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                    <OverlayTrigger overlay={renderTooltipClose}>
+                                                        <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                </td>
+                                            ) : data.h_status === 0 ? (
+                                                <td>
+                                                    <OverlayTrigger overlay={renderTooltipOpen}>
+                                                        <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    {/* null */}
+                                                </td>
+                                            )}
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="12" className="text-center">
+                                            <h4>
+                                                ไม่มีข้อมูลที่แสดง
+                                            </h4>
                                         </td>
-                                        <td>
-                                            <OverlayTrigger overlay={renderTooltip3D}>
-                                                <a href={data.image3d_edit} target="_blank" rel="noreferrer">
-                                                    <BsBadge3DFill style={{ fontSize: '28px' }} />
-                                                </a>
-                                            </OverlayTrigger>
-                                        </td>
-
-                                        {data.h_status === 1 ? (
-                                            <td>
-                                                <Badge bg="success">กำลังขาย</Badge>
-                                            </td>
-                                        ) : data.h_status === 2 ? (
-                                            <td>
-                                                <Badge bg="warning">จองแล้ว</Badge>
-                                            </td>
-                                        ) : data.h_status === 3 ? (
-                                            <td>
-                                                <Badge bg="info">ทำสัญญาแล้ว</Badge>
-                                            </td>
-                                        ) : data.h_status === 4 ? (
-                                            <td>
-                                                <Badge bg="secondary">ขายแล้ว</Badge>
-                                            </td>
-                                        ) : (
-                                            <td>
-                                                <Badge bg="danger">ยกเลิกขาย</Badge>
-                                            </td>
-                                        )}
-
-                                        {data.h_status !== 0 ? (
-                                            <td>
-                                                <OverlayTrigger overlay={renderTooltipEdit}>
-                                                    <a onClick={() => handleEditShow(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-
-                                                <OverlayTrigger overlay={renderTooltipClose}>
-                                                    <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-                                            </td>
-                                        ) : (
-                                            <td>
-                                                <OverlayTrigger overlay={renderTooltipOpen}>
-                                                    <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-                                            </td>
-                                        )}
                                     </tr>
-                                ))}
+                                )}
+
                             </tbody>
                         </Table>
                     </div>

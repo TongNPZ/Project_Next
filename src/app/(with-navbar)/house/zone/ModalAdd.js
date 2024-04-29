@@ -15,14 +15,14 @@ import {
 
 export default function ModalAdd({ show, handleClose }) {
     const [name, setName] = useState('');
-    const [landAreaPrice, setLandAreaPrice] = useState(0);
-
-    const [confirmSubmit, setConfirmSubmit] = useState(true);
+    const [landSpace, setLandSpace] = useState('');
+    const [landPrice, setLandPrice] = useState('');
 
     // *** function *** //
     const ResetData = () => {
         setName('');
-        setLandAreaPrice(0);
+        setLandSpace('');
+        setLandPrice('');
     }
 
     const handleCloseResetData = () => {
@@ -35,35 +35,31 @@ export default function ModalAdd({ show, handleClose }) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (confirmSubmit) {
-            ConfirmInsert().then((result) => {
-                if (result.isConfirmed) {
-                    const addData = async () => {
-                        try {
-                            const data = {
-                                name: name,
-                                landAreaPrice: landAreaPrice
-                            }
-
-                            const response = await GetRequest(API_HOUSE_ZONE, 'POST', data)
-
-                            if (response.message === 'Insert Successfully!') {
-                                Success("เพิ่มข้อมูลสำเร็จ!").then(() => {
-                                    setConfirmSubmit(false);
-                                    handleCloseResetData();
-                                }).then(() => {
-                                    setConfirmSubmit(true);
-                                })
-                            }
-                        } catch (error) {
-                            console.log('error', error);
+        ConfirmInsert().then((result) => {
+            if (result.isConfirmed) {
+                const addData = async () => {
+                    try {
+                        const data = {
+                            name: name,
+                            landSpace: parseFloat(landSpace),
+                            landPrice: parseFloat(landPrice)
                         }
-                    }
 
-                    addData()
+                        const response = await GetRequest(API_HOUSE_ZONE, 'POST', data)
+
+                        if (response.message === 'Insert Successfully!') {
+                            Success("เพิ่มข้อมูลสำเร็จ!").then(() => {
+                                handleCloseResetData();
+                            })
+                        }
+                    } catch (error) {
+                        console.log('error', error);
+                    }
                 }
-            });
-        }
+
+                addData()
+            }
+        });
     }
     // --- //
 
@@ -90,15 +86,15 @@ export default function ModalAdd({ show, handleClose }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel} size='md'>
+        <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
                 <Modal.Title>เพิ่มข้อมูลโซนบ้าน</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <div className="row mb-3">
-                        <label className="col-md-4 col-form-label">ชื่อโซน</label>
-                        <div className="col-md-8">
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อโซน</label>
+                        <div className="mt-1">
                             <Form.Control
                                 type="text"
                                 placeholder="ชื่อโซน"
@@ -110,15 +106,29 @@ export default function ModalAdd({ show, handleClose }) {
                         </div>
                     </div>
                     <div className="row mb-3">
-                        <label className="col-md-4 col-form-label">ราคาบ้านต่อที่ดิน</label>
-                        <div className="col-md-8">
-                            <Form.Control
-                                type="number"
-                                placeholder="ราคาบ้านต่อที่ดิน (ตารางวา)"
-                                value={landAreaPrice}
-                                onChange={(e) => setLandAreaPrice(e.target.value)}
-                                required
-                            />
+                        <div className='col-md-6'>
+                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
+                                    value={landSpace}
+                                    onChange={(e) => setLandSpace(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <label className="col-form-label">ราคาบ้านต่อที่ดิน</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ราคาบ้านต่อที่ดิน"
+                                    value={landPrice}
+                                    onChange={(e) => setLandPrice(e.target.value)}
+                                    required
+                                />
+                            </div>
                         </div>
                     </div>
                     <Modal.Footer>

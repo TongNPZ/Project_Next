@@ -18,18 +18,18 @@ import {
 
 export default function ModalAdd({ show, handleClose }) {
     const [houseName, setHouseName] = useState('');
-    const [hsUsableSpace, setHsUsableSpace] = useState(0);
-    const [hsLandSpace, setHsLandSpace] = useState(0);
+    const [usableSpace, setUsableSpace] = useState('');
+    const [housePrice, setHousePrice] = useState('');
     const [image3D, setImage3D] = useState('');
-    const [hzId, setHzId] = useState(0);
+    const [hzId, setHzId] = useState('');
 
     // *** function *** //
     const ResetData = () => {
         setHouseName('');
-        setHsUsableSpace(0);
-        setHsLandSpace(0);
+        setUsableSpace('');
+        setHousePrice('');
         setImage3D('');
-        setHzId(0);
+        setHzId('');
     }
 
     const handleCloseResetData = () => {
@@ -65,8 +65,8 @@ export default function ModalAdd({ show, handleClose }) {
                     try {
                         const data = {
                             houseName: houseName,
-                            hsUsableSpace: parseFloat(hsUsableSpace),
-                            hsLandSpace: parseFloat(hsLandSpace),
+                            usableSpace: parseFloat(usableSpace),
+                            housePrice: parseFloat(housePrice),
                             Image3D: image3D,
                             hzId: hzId
                         }
@@ -126,7 +126,6 @@ export default function ModalAdd({ show, handleClose }) {
                                 placeholder="ชื่อแบบบ้าน"
                                 value={houseName}
                                 onChange={(e) => setHouseName(e.target.value)}
-                                maxLength={100}
                                 required
                             />
                         </div>
@@ -138,20 +137,20 @@ export default function ModalAdd({ show, handleClose }) {
                                 <Form.Control
                                     type="number"
                                     placeholder="ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)"
-                                    value={hsUsableSpace}
-                                    onChange={(e) => setHsUsableSpace(e.target.value)}
+                                    value={usableSpace}
+                                    onChange={(e) => setUsableSpace(e.target.value)}
                                     required
                                 />
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</label>
+                            <label className="col-form-label">ราคาขายบ้าน</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
-                                    value={hsLandSpace}
-                                    onChange={(e) => setHsLandSpace(e.target.value)}
+                                    placeholder="ราคาขายบ้าน"
+                                    value={housePrice}
+                                    onChange={(e) => setHousePrice(e.target.value)}
                                     required
                                 />
                             </div>
@@ -182,10 +181,7 @@ export default function ModalAdd({ show, handleClose }) {
                             ))}
 
                         </Form.Select>
-
-
                     </div>
-
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleRestore}>
                             คืนค่า

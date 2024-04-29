@@ -18,25 +18,27 @@ import {
 } from 'react-bootstrap';
 
 export default function ModalEdit({ show, handleClose, id }) {
-    const [houseNameDefault, setHouseNameDefault] = useState('');
-    const [hsUsableSpaceDefault, setHsUsableSpaceDefault] = useState(0);
-    const [hsLandSpaceDefault, setHsLandSpaceDefault] = useState(0);
-    const [image3DDefault, setImage3DDefault] = useState('');
-    const [hzIdDefault, setHzIdDefault] = useState(0);
+    const [defaultValues, setDefaultValues] = useState({
+        houseName: "",
+        usableSpace: "",
+        housePrice: "",
+        image3d: "",
+        hzId: ""
+    });
 
     const [houseName, setHouseName] = useState('');
-    const [hsUsableSpace, setHsUsableSpace] = useState(0);
-    const [hsLandSpace, setHsLandSpace] = useState(0);
+    const [usableSpace, setUsableSpace] = useState('');
+    const [housePrice, setHousePrice] = useState('');
     const [image3D, setImage3D] = useState('');
-    const [hzId, setHzId] = useState(0);
+    const [hzId, setHzId] = useState('');
 
     // *** function *** //
     const ResetData = () => {
-        setHouseName(houseNameDefault);
-        setHsUsableSpace(hsUsableSpaceDefault);
-        setHsLandSpace(hsLandSpaceDefault);
-        setImage3D(image3DDefault);
-        setHzId(hzIdDefault);
+        setHouseName(defaultValues.houseName);
+        setUsableSpace(defaultValues.usableSpace);
+        setHousePrice(defaultValues.housePrice);
+        setImage3D(defaultValues.image3d);
+        setHzId(defaultValues.hzId);
     }
 
     const handleCloseResetData = () => {
@@ -51,15 +53,17 @@ export default function ModalEdit({ show, handleClose, id }) {
     const fetchHouseStyleById = async () => {
         try {
             const result = await GetRequest(`${API_HOUSE_STYLE}/${id}`, 'GET', null);
-            setHouseNameDefault(result.house_name);
-            setHsUsableSpaceDefault(result.hsUsable_space);
-            setHsLandSpaceDefault(result.hsLand_space);
-            setImage3DDefault(result.image3d);
-            setHzIdDefault(result.hz_id);
+            setDefaultValues({
+                houseName: result.house_name,
+                usableSpace: result.usable_space,
+                housePrice: result.house_price,
+                image3d: result.image3d,
+                hzId: result.hz_id
+            });
 
             setHouseName(result.house_name);
-            setHsUsableSpace(result.hsUsable_space);
-            setHsLandSpace(result.hsLand_space);
+            setUsableSpace(result.usable_space);
+            setHousePrice(result.house_price);
             setImage3D(result.image3d);
             setHzId(result.hz_id);
         } catch (error) {
@@ -103,8 +107,8 @@ export default function ModalEdit({ show, handleClose, id }) {
                         const data = {
                             id: id,
                             houseName: houseName,
-                            hsUsableSpace: parseFloat(hsUsableSpace),
-                            hsLandSpace: parseFloat(hsLandSpace),
+                            usableSpace: parseFloat(usableSpace),
+                            housePrice: parseFloat(housePrice),
                             image3d: image3D,
                             hzId: hzId
                         }
@@ -171,7 +175,6 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 placeholder="ชื่อแบบบ้าน"
                                 value={houseName}
                                 onChange={(e) => setHouseName(e.target.value)}
-                                maxLength={100}
                                 required
                             />
                         </div>
@@ -183,20 +186,20 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 <Form.Control
                                     type="number"
                                     placeholder="ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)"
-                                    value={hsUsableSpace}
-                                    onChange={(e) => setHsUsableSpace(e.target.value)}
+                                    value={usableSpace}
+                                    onChange={(e) => setUsableSpace(e.target.value)}
                                     required
                                 />
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</label>
+                            <label className="col-form-label">ราคาขายบ้าน</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
-                                    value={hsLandSpace}
-                                    onChange={(e) => setHsLandSpace(e.target.value)}
+                                    placeholder="ราคาขายบ้าน"
+                                    value={housePrice}
+                                    onChange={(e) => setHousePrice(e.target.value)}
                                     required
                                 />
                             </div>
@@ -218,8 +221,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                         <label className="col-form-label">โซนบ้าน</label>
 
                         <Form.Select value={hzId} onChange={(e) => setHzId(e.target.value)}>
-                            <option>กรุณาเลือกโซนบ้าน</option>
-
+                            
                             {showHouseZone.map((data) => (
                                 data.hz_status === 1 ? (
                                     <option key={data.hz_id} value={data.hz_id}>{data.name}</option>
@@ -227,8 +229,6 @@ export default function ModalEdit({ show, handleClose, id }) {
                             ))}
 
                         </Form.Select>
-
-
                     </div>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleRestore}>
