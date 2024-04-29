@@ -7,14 +7,14 @@ import {
     POST_API_LOGIN,
 } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
-import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
+import { useAuth } from '@/app/componnent/AuthContext/AuthContext';
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    const { authData, setAuthData } = UseAuth();
+    const { authData, setAuthData } = useAuth();
 
     const token = localStorage.getItem('token');
 
@@ -59,63 +59,66 @@ export default function Login() {
     };
 
     return (
-        <div className='text-white' style={{ backgroundColor: '#47345F', minHeight: '100vh' }}>
-            <div className='container'>
-                <div className='row justify-content-center'>
-                    <div className='col-md-6'>
-                        <h2 className='mt-5 mb-3 text-center'>Profile</h2>
-                        <div>
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group controlId='formBasicEmail'>
-                                    <Form.Label>อีเมลผู้ใช้</Form.Label>
-                                    <Form.Control
-                                        type='username'
-                                        placeholder='ชื่อผู้ใช้'
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                    <Form.Text className='text-white'>
-                                        We'll never share your email with anyone else.
-                                    </Form.Text>
-                                </Form.Group>
-                                <br />
-                                <Form.Group controlId='formBasicPassword'>
-                                    <Form.Label>รหัสผ่าน</Form.Label>
-                                    <Form.Control
-                                        type='password'
-                                        placeholder='รหัสผ่าน'
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </Form.Group>
-                                <br />
-                                <Form.Group controlId='formBasicCheckbox'>
-                                    <Form.Check
-                                        type='checkbox'
-                                        label='จดจำรหัสผ่าน'
-                                        checked={rememberMe}
-                                        onChange={(e) => setRememberMe(e.target.checked)}
-                                    />
-                                </Form.Group>
-                                <br />
-                                <button className='button' type='submit'>
-                                    เข้าสู่ระบบ
-                                </button>
-                            </Form>
-                        </div>
+        <div className='text-white'>
+
+            <div className='row justify-content-center'>
+
+                <div className='col-md-4'>
+                    <br />  <br />  <br />  <br /> <br />  <br />  <br />  <br /> <br />  <br />
+                    <h2 className='mt-5 mb-3 text-center'>Profile</h2>
+                    <div>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId='formBasicEmail'>
+                                <Form.Label>อีเมลผู้ใช้</Form.Label>
+                                <Form.Control
+                                    type='username'
+                                    placeholder='ชื่อผู้ใช้'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <Form.Text className='text-white'>
+                                    We'll never share your email with anyone else.
+                                </Form.Text>
+                            </Form.Group>
+                            <br />
+                            <Form.Group controlId='formBasicPassword'>
+                                <Form.Label>รหัสผ่าน</Form.Label>
+                                <Form.Control
+                                    type='password'
+                                    placeholder='รหัสผ่าน'
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </Form.Group>
+                            <br />
+                            <Form.Group controlId='formBasicCheckbox'>
+                                <Form.Check
+                                    type='checkbox'
+                                    label='จดจำรหัสผ่าน'
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                />
+                            </Form.Group>
+                            <br />
+                            <button className='button' type='submit'>
+                                เข้าสู่ระบบ
+                            </button>
+                        </Form>
                     </div>
-                    <div className='col-md-6'>
-                        <div className='mt-5 mb-3 text-center'>
-                            <h1>
-                                พวงเพชร 4
-                            </h1>
-                            <p>“พวกเพชร บ้านเลอค่าดุจอัญมณี”</p>
-                            <h1>
-                                จองได้แล้ววันนี้ !!!
-                            </h1>
-                        </div>
+                    <br />
+                </div>
+                <div className='col-md-7 mt-4 ms-3' style={{ backgroundImage: `url('/images/Life.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '95vh' }}>
+                    <div className='mt-5 mb-3 text-center'>
+                        <h1>
+                            พวงเพชร 4
+                        </h1>
+                        <p>“พวกเพชร บ้านเลอค่าดุจอัญมณี”</p>
+                        <h1>
+                            จองได้แล้ววันนี้ !!!
+                        </h1>
                     </div>
                 </div>
+
             </div>
         </div>
     );
