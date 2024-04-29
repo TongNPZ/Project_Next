@@ -58,9 +58,13 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="col d-flex justify-content-center">
-            <a style={{ cursor: 'pointer' }}>
-              <Sidebar />
-            </a>
+
+            {authData.token ? (
+              <a style={{ cursor: 'pointer' }}>
+                <Sidebar />
+              </a>
+            ) : null}
+
           </div>
         </div>
       </div>

@@ -123,7 +123,7 @@ export default function HouseStyle() {
                                     <th>รหัสแบบบ้าน</th>
                                     <th>ชื่อแบบบ้าน</th>
                                     <th>ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)</th>
-                                    <th>ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</th>
+                                    <th>ราคาขายบ้าน</th>
                                     <th>ภาพบ้าน 3 มิติ</th>
                                     <th>โซนบ้าน</th>
                                     <th>สถานะ</th>
@@ -135,8 +135,8 @@ export default function HouseStyle() {
                                     <tr key={data.hs_id}>
                                         <td>{data.hs_id}</td>
                                         <td>{data.house_name}</td>
-                                        <td>{data.hsUsable_space.toLocaleString()}</td>
-                                        <td>{data.hsLand_space.toLocaleString()}</td>
+                                        <td>{data.usable_space.toLocaleString()}</td>
+                                        <td>{data.house_price.toLocaleString()}</td>
                                         <td>
                                             <OverlayTrigger overlay={renderTooltip3D}>
                                                 <a href={data.image3d} target="_blank" rel="noreferrer">

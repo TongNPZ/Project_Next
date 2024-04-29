@@ -21,7 +21,7 @@ import {
     BsFillHouseSlashFill,
     BsFillHouseAddFill,
     BsFillHouseUpFill,
-    BsBadge3DFill,
+    BsFillInfoCircleFill,
     BsCardImage,
     BsCalendar2PlusFill
 } from "react-icons/bs";
@@ -96,9 +96,9 @@ export default function House() {
         </Tooltip>
     );
 
-    const renderTooltip3D = (props) => (
+    const renderTooltipDetail = (props) => (
         <Tooltip {...props}>
-            ดูบ้าน 3 มิติ
+            ดูรายละเอียด
         </Tooltip>
     );
 
@@ -170,18 +170,13 @@ export default function House() {
                                     <th>เลขที่โฉนดที่ดิน</th>
                                     <th>เลขที่หน้าสำรวจ</th>
                                     <th>
-                                        ขนาดพื้นที่ใช้สอย <br />
-                                        (ตารางเมตร)
-                                    </th>
-                                    <th>
                                         ขนาดพื้นที่ดิน <br />
                                         (ตารางวา)
                                     </th>
-                                    <th>ราคาขายบ้าน</th>
                                     <th>ราคาบ้านพร้อมที่ดิน</th>
                                     <th>หมายเหตุ</th>
                                     <th>รูปภาพบ้าน</th>
-                                    <th>ภาพบ้าน 3 มิติ</th>
+                                    <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -196,9 +191,7 @@ export default function House() {
                                             <td>{data.house_name}</td>
                                             <td>{data.num_deed}</td>
                                             <td>{data.num_survey}</td>
-                                            <td>{data.hUsable_space.toLocaleString()}</td>
                                             <td>{data.hLand_space.toLocaleString()}</td>
-                                            <td>{data.houseSale_price.toLocaleString()}</td>
                                             <td>{data.price.toLocaleString()}</td>
                                             <td>{data.note}</td>
                                             <td>
@@ -209,16 +202,16 @@ export default function House() {
                                                 </OverlayTrigger>
                                             </td>
                                             <td>
-                                                <OverlayTrigger overlay={renderTooltip3D}>
-                                                    <a href={data.image3d_edit} target="_blank" rel="noreferrer">
-                                                        <BsBadge3DFill style={{ fontSize: '28px' }} />
+                                                <OverlayTrigger overlay={renderTooltipDetail}>
+                                                    <a style={{ cursor: 'pointer' }}>
+                                                        <BsFillInfoCircleFill className='text-primary' style={{ fontSize: '28px' }} />
                                                     </a>
                                                 </OverlayTrigger>
                                             </td>
 
                                             {data.h_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="success">กำลังขาย</Badge>
+                                                    <Badge bg="success">ว่าง</Badge>
                                                 </td>
                                             ) : data.h_status === 2 ? (
                                                 <td>
@@ -240,14 +233,14 @@ export default function House() {
 
                                             {data.h_status === 1 ? (
                                                 <td>
-                                                    <OverlayTrigger overlay={renderTooltipEdit}>
-                                                        <a onClick={() => handleEditShow(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipBook}>
                                                         <a onClick={() => handleBookAddShow(data.h_id, data.house_no)} style={{ cursor: 'pointer' }}>
                                                             <BsCalendar2PlusFill className='me-2 text-primary' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                    <OverlayTrigger overlay={renderTooltipEdit}>
+                                                        <a onClick={() => handleEditShow(data.h_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipClose}>
