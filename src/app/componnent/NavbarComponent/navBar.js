@@ -2,7 +2,7 @@
 "use client"
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { UseAuth } from '@/app/componnent/AuthContext/AuthContext';
+import { useAuth } from '@/app/componnent/AuthContext/AuthContext';
 import Image from 'react-bootstrap/Image';
 import React, { useState, useEffect } from 'react';
 import NavDropdown from 'react-bootstrap/NavDropdown';
@@ -11,15 +11,21 @@ import {
   GET_API_DATA_USER,
 } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
-
+import { Link as ScrollLink } from 'react-scroll';
 const Navbar = () => {
   const router = useRouter();
-  const { authData, setAuthData } = UseAuth();
+  const { authData, setAuthData } = useAuth();
   const [userData, setUserData] = useState('');
   const id = authData.id;
   // console.log(id)
   console.log(userData)
-
+  const scrollToSection = (sectionId) => {
+    scroller.scrollTo(sectionId, {
+      duration: 800,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+    });
+  };
   useEffect(() => {
     async function fetchUserData() {
       try {
@@ -44,7 +50,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color">
+
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-color" style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}>
       <div className="Nav-container">
         <div className="row align-items-center">
           <div className="col d-flex justify-content-center">
@@ -76,18 +83,38 @@ const Navbar = () => {
               <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/')}>หน้าหลัก</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/house_estate')}>โครงการ</a>
+              <ScrollLink
+                activeClass="active"
+                to="section1"
+                spy={true}
+                smooth={true}
+                offset={-70}
+                duration={500}
+                className="nav-link mx-4"
+              >
+                โครงการ
+              </ScrollLink>
+            </li>
+            <li>
+              <ScrollLink
+                activeClass="active"
+                to="section2"
+                spy={true}
+                smooth={true}
+                offset={-70}
+                duration={500}
+                className="nav-link mx-4"
+              >
+                ติดต่อเรา
+              </ScrollLink>
             </li>
 
-            <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/about')}>ติดต่อเรา</a>
-            </li>
           </ul>
+
         </div>
       </div>
       <div className="Nav-container">
         {/* เช็คว่ามี token หรือไม่ */}
-
         {authData.token ? (
           <NavDropdown
             id="nav-dropdown-dark-example"
