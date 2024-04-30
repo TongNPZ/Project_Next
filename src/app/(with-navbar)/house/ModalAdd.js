@@ -18,29 +18,27 @@ import {
 } from 'react-bootstrap';
 
 export default function ModalAdd({ show, handleClose }) {
+    const [showInputHLandSpace, setShowInputHLandSpace] = useState(false);
+
     const [houseNo, setHouseNo] = useState('');
     const [numDeed, setNumDeed] = useState('');
     const [numSurvey, setNumSurvey] = useState('');
-    const [usableSpace, setUsableSpace] = useState(0);
-    const [landSpace, setLandSpace] = useState(0);
-    const [houseSalePrice, setHouseSalePrice] = useState(0);
+    const [hLandSpace, setHLandSpace] = useState('');
     const [note, setNote] = useState('');
     const [image, setImage] = useState('');
-    const [image3DEdit, setImage3DEdit] = useState('');
-    const [hsId, setHsId] = useState(0);
+    const [hsId, setHsId] = useState('');
 
     // *** function *** //
     const ResetData = () => {
         setHouseNo('');
         setNumDeed('');
         setNumSurvey('');
-        setUsableSpace(0);
-        setLandSpace(0);
-        setHouseSalePrice(0);
+        setHLandSpace('');
         setNote('');
         setImage('');
-        setImage3DEdit('');
-        setHsId(0);
+        setHsId('');
+
+        setShowInputHLandSpace(false);
     }
 
     const handleCloseResetData = () => {
@@ -49,7 +47,9 @@ export default function ModalAdd({ show, handleClose }) {
     }
     // *** //
 
-    // fetch house style //
+    // fetch //
+
+    // +++ house style +++ //
     const [showHouseStyle, setShowHouseStyle] = useState([]);
 
     const fecthHouseStyle = async () => {
@@ -64,6 +64,30 @@ export default function ModalAdd({ show, handleClose }) {
     useEffect(() => {
         fecthHouseStyle();
     }, [showHouseStyle]);
+    // +++ //
+
+    // +++ house style by id +++ //
+    const [showHouseStyleById, setShowHouseStyleById] = useState({});
+
+    const fecthHouseStyleById = async () => {
+        try {
+            const result = await GetRequest(`${API_HOUSE_STYLE}/${hsId}`, 'GET', null);
+            setShowHouseStyleById(result);
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+
+    useEffect(() => {
+
+        if (hsId === '') {
+            setHLandSpace('');
+        }
+
+        fecthHouseStyleById();
+    }, [hsId]);
+    // +++ //
+
     // --- //
 
     // submit //
@@ -78,13 +102,16 @@ export default function ModalAdd({ show, handleClose }) {
                         formdata.append("houseNo", houseNo);
                         formdata.append("numDeed", numDeed);
                         formdata.append("numSurvey", numSurvey);
-                        formdata.append("usableSpace", usableSpace);
-                        formdata.append("landSpace", landSpace);
-                        formdata.append("houseSalePrice", houseSalePrice);
-                        formdata.append("note", note);
+                        formdata.append("hLandSpace", parseFloat(hLandSpace));
+
+                        if (note === '') {
+                            formdata.append("note", '-');
+                        } else {
+                            formdata.append("note", note);
+                        }
+
                         formdata.append("image", image);
-                        formdata.append("image3DEdit", image3DEdit);
-                        formdata.append("hsId", hsId);
+                        formdata.append("hsId", parseFloat(hsId));
 
                         const response = await GetRequest(API_HOUSE, 'POST', formdata)
 
@@ -137,11 +164,11 @@ export default function ModalAdd({ show, handleClose }) {
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="col-form-label">เลขที่บ้าน</label>
+                        <label className="col-form-label">บ้านเลขที่</label>
                         <div className="mt-1">
                             <Form.Control
                                 type="text"
-                                placeholder="เลขที่บ้าน"
+                                placeholder="บ้านเลขที่"
                                 value={houseNo}
                                 onChange={(e) => setHouseNo(e.target.value)}
                                 maxLength={6}
@@ -177,78 +204,10 @@ export default function ModalAdd({ show, handleClose }) {
                             </div>
                         </div>
                     </div>
-                    <div className="row mb-3">
-                        <div className='col-md-6'>
-                            <label className="col-form-label">
-                                ขนาดพื้นที่ใช้สอย (ตารางเมตร)
-                                <p className='text-secondary mb-1' style={{ fontSize: '14px' }}>ถ้าต้องการขนาดพื้นที่ใช้สอยเริ่มต้นให้กรอกเลข 0</p>
-                            </label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="number"
-                                    placeholder="ขนาดพื้นที่ใช้สอย (ตารางเมตร)"
-                                    value={usableSpace}
-                                    onChange={(e) => setUsableSpace(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <div className='col-md-6'>
-                            <label className="col-form-label">
-                                ขนาดพื้นที่ดิน (ตารางวา)
-                                <p className='text-secondary mb-1' style={{ fontSize: '14px' }}>ถ้าต้องการขนาดพื้นที่ดินเริ่มต้นให้กรอกเลข 0</p>
-                            </label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="number"
-                                    placeholder="ขนาดพื้นที่ดิน (ตารางวา)"
-                                    value={landSpace}
-                                    onChange={(e) => setLandSpace(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className="col-form-label">ราคาขายบ้าน</label>
-                        <div className="mt-1">
-                            <Form.Control
-                                type="number"
-                                placeholder="ราคาขายบ้าน"
-                                value={houseSalePrice}
-                                onChange={(e) => setHouseSalePrice(e.target.value)}
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className="col-form-label">หมายเหตุ</label>
-                        <div className="mt-1">
-                            <Form.Control
-                                as='textarea'
-                                placeholder="หมายเหตุ (ถ้าไม่มีหมายเหตุให้ใส่ - ช่องกรอกนี้)"
-                                value={note}
-                                onChange={(e) => setNote(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className="col-form-label">
-                            ภาพ 3 มิติ (URL)
-                            <p className='text-secondary mb-1' style={{ fontSize: '14px' }}>ภาพสามมิติที่มีการแก้ไขเพิ่มเติม</p>
-                        </label>
-                        <div className="mt-1">
-                            <Form.Control
-                                type="url"
-                                placeholder="URL ภาพ 3 มิติ (ถ้าไม่มีภาพสามมิติที่แก้ไขเพิ่มเติมให้เว้นว่างช่องกรอกนี้)"
-                                value={image3DEdit}
-                                onChange={(e) => setImage3DEdit(e.target.value)}
-                            />
-                        </div>
-                    </div>
                     <div className='mb-3'>
                         <label className="col-form-label">แบบบ้าน</label>
-
                         <Form.Select value={hsId} onChange={(e) => setHsId(e.target.value)}>
-                            <option>กรุณาเลือกแบบบ้าน</option>
+                            <option value={''}>กรุณาเลือกแบบบ้าน</option>
 
                             {showHouseStyle.map((data) => (
                                 data.hs_status === 1 ? (
@@ -257,8 +216,62 @@ export default function ModalAdd({ show, handleClose }) {
                             ))}
 
                         </Form.Select>
+                    </div>
+                    <div className='mb-3'>
+                        <label className="col-form-label">
+                            ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)
+                        </label>
 
+                        {showInputHLandSpace && hLandSpace === 0 && hsId !== '' ? (
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น"
+                                    value={showHouseStyleById.land_space}
+                                    readOnly
+                                />
+                            </div>
+                        ) : (
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)"
+                                    value={hLandSpace}
+                                    onChange={(e) => setHLandSpace(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        )}
 
+                        <div className='mt-2'>
+                            <Form.Check
+                                inline
+                                type='switch'
+                                label="ขนาดพื้นที่ดินเริ่มต้น"
+                                checked={showInputHLandSpace && hLandSpace === 0 && hsId !== ''}
+                                onChange={() => {
+                                    if (showInputHLandSpace && hLandSpace === 0 && hsId !== '') {
+                                        setShowInputHLandSpace(false);
+                                        setHLandSpace('');
+                                    } else {
+                                        setShowInputHLandSpace(true);
+                                        setHLandSpace(0);
+                                    }
+                                }}
+                                disabled={hsId === ''}
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">หมายเหตุ</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                as='textarea'
+                                placeholder="หมายเหตุ (ถ้าไม่ต้องการกรอกหมายเหตุให้เว้นช่องกรอกนี้ไว้)"
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                            />
+                        </div>
                     </div>
                     <div className="mb-3">
                         <label className="col-form-label">รูปภาพบ้าน</label>

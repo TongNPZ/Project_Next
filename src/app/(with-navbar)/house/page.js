@@ -5,6 +5,7 @@ import { API_HOUSE } from './../../../../api';
 import ModalAdd from './ModalAdd'
 import ModalEdit from './ModalEdit'
 import ModalImage from './ModalImage';
+import ModalDetail from './ModalDetail';
 import ModalBookAdd from '../buy/book/ModalAdd';
 import ChangedStatus from './ChangedStatus';
 import {
@@ -76,6 +77,16 @@ export default function House() {
     }
     // +++ //
 
+    // +++ modal detail +++ //
+    const [showDetail, setShowDetail] = useState(false);
+
+    const handleDetailClose = () => setShowDetail(false);
+    const handleDetailShow = (id) => {
+        setSelectedId(id);
+        setShowDetail(true);
+    }
+    // +++ //
+
     // +++ modal book add +++ //
     const [showBookAdd, setShowBookAdd] = useState(false);
 
@@ -133,6 +144,7 @@ export default function House() {
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalImage show={showImage} handleClose={handleImageClose} id={selectedId} />
+            <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
             <ModalBookAdd show={showBookAdd} handleClose={handleBookAddClose} hId={selectedId} houseNo={selectedHouseNo} />
             {/* --- */}
 
@@ -203,7 +215,7 @@ export default function House() {
                                             </td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
-                                                    <a style={{ cursor: 'pointer' }}>
+                                                    <a onClick={() => handleDetailShow(data.h_id)} style={{ cursor: 'pointer' }}>
                                                         <BsFillInfoCircleFill className='text-primary' style={{ fontSize: '28px' }} />
                                                     </a>
                                                 </OverlayTrigger>
@@ -215,11 +227,11 @@ export default function House() {
                                                 </td>
                                             ) : data.h_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="warning">จองแล้ว</Badge>
+                                                    <Badge bg="warning">จอง</Badge>
                                                 </td>
                                             ) : data.h_status === 3 ? (
                                                 <td>
-                                                    <Badge bg="info">ทำสัญญาแล้ว</Badge>
+                                                    <Badge bg="info">ดำเนินการทำสัญญา</Badge>
                                                 </td>
                                             ) : data.h_status === 4 ? (
                                                 <td>
@@ -267,7 +279,7 @@ export default function House() {
                                 ) : (
                                     <tr>
                                         <td colSpan="12" className="text-center">
-                                            <h4>
+                                            <h4 className='mt-5 mb-5'>
                                                 ไม่มีข้อมูลที่แสดง
                                             </h4>
                                         </td>

@@ -51,7 +51,7 @@ const Navbar = () => {
 
   return (
 
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color" style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}>
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-color" style={{ position: 'sticky', top: 0, width: '100%', zIndex: 1000}}>
       <div className="Nav-container">
         <div className="row align-items-center">
           <div className="col d-flex justify-content-center">
