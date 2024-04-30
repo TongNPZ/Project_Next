@@ -38,7 +38,7 @@ export default function ModalImage({ show, handleClose, id }) {
                 {image !== '' ? (
                     <Image src={`${API_URL}${image}`} fluid />
                 ) : (
-                    <h1 className='text-center'>ไม่มีรูปภาพที่แสดง</h1>
+                    <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
                 )}
 
             </Modal.Body>

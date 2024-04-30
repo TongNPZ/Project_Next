@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import DateFormat from '@/app/DateFormat';
 import GetRequest from '@/app/ConfigAPI';
+import { API_URL } from '../../../../../app'
 import { API_BOOK } from '../../../../../api';
 import ModalEdit from './ModalEdit'
 import ChangedStatus from './ChangedStatus';
@@ -18,6 +19,7 @@ import {
     BsPencilSquare,
     BsFillHouseSlashFill,
     BsFillHouseGearFill,
+    BsReceipt
 } from "react-icons/bs";
 
 export default function Book() {
@@ -55,15 +57,9 @@ export default function Book() {
     // --- //
 
     // tooltip //
-    const renderTooltipImage = (props) => (
+    const renderTooltipReceipt = (props) => (
         <Tooltip {...props}>
-            ดูภาพ
-        </Tooltip>
-    );
-
-    const renderTooltip3D = (props) => (
-        <Tooltip {...props}>
-            ดูบ้าน 3 มิติ
+            แสดงใบเสร็จรับเงินจอง
         </Tooltip>
     );
 
@@ -73,15 +69,9 @@ export default function Book() {
         </Tooltip>
     );
 
-    const renderTooltipOpen = (props) => (
-        <Tooltip {...props}>
-            เปิดการขายบ้าน
-        </Tooltip>
-    );
-
     const renderTooltipClose = (props) => (
         <Tooltip {...props}>
-            ปิดการขายบ้าน
+            ยกเลิกจอง
         </Tooltip>
     );
     // --- //
@@ -124,11 +114,11 @@ export default function Book() {
                             <thead>
                                 <tr>
                                     <th>รหัสจอง</th>
+                                    <th>บ้านเลขที่</th>
+                                    <th>ชื่อผู้จอง</th>
                                     <th>จำนวนเงินจอง</th>
                                     <th>วันที่จอง</th>
                                     <th>หมายเหตุ</th>
-                                    <th>บ้านเลขที่</th>
-                                    <th>ชื่อผู้จอง</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -138,11 +128,11 @@ export default function Book() {
                                     showData.map((data) => (
                                         <tr key={data.b_id}>
                                             <td>{data.b_id}</td>
+                                            <td>{data.house_no}</td>
+                                            <td>{data.user_name} {data.user_lastname}</td>
                                             <td>{data.b_amount.toLocaleString()}</td>
                                             <td>{DateFormat(data.b_date)}</td>
                                             <td>{data.b_note}</td>
-                                            <td>{data.house_no}</td>
-                                            <td>{data.user_name} {data.user_lastname}</td>
 
                                             {data.b_status === 1 ? (
                                                 <td>
@@ -165,7 +155,6 @@ export default function Book() {
                                                             <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
-
                                                     <OverlayTrigger overlay={renderTooltipClose}>
                                                         <a onClick={() => ChangedStatus(data.h_id)} style={{ cursor: 'pointer' }}>
                                                             <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
@@ -174,7 +163,11 @@ export default function Book() {
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    {/* null */}
+                                                    <OverlayTrigger overlay={renderTooltipReceipt}>
+                                                        <a href={`${API_URL}${data.b_receipt}`} target="_blank" download style={{ cursor: 'pointer' }}>
+                                                            <BsReceipt className='me-2 text-primary' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
                                                 </td>
                                             )}
                                         </tr>
