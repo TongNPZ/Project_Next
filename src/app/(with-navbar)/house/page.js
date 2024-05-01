@@ -227,7 +227,7 @@ export default function House() {
                                                 </td>
                                             ) : data.h_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="warning">จอง</Badge>
+                                                    <Badge bg="info">จอง</Badge>
                                                 </td>
                                             ) : data.h_status === 3 ? (
                                                 <td>

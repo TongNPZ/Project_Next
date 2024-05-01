@@ -15,19 +15,26 @@ import {
     Modal,
     Button,
     Form,
-    Nav
 } from 'react-bootstrap';
 
 export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
 
     // useState //
 
+    // +++ show input +++ //
+    const [showInputUserId, setShowInputUserId] = useState(false);
+    // +++ //
+
+    // +++ select user id +++ //
+    const [selectUserId, setSelectShowUserId] = useState('');
+    // +++ //
+
     // +++ user +++ //
     const [userId, setUserId] = useState('');
     const [userName, setUserName] = useState('');
     const [userLastname, setUserLastname] = useState('');
     const [userAddress, setUserAddress] = useState('');
-    const [userAge, setUserAge] = useState(0);
+    const [userAge, setUserAge] = useState('');
     const [nationality, setNationality] = useState('');
     const [userPhone, setUserPhone] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -40,10 +47,6 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
     const [bNote, setBNote] = useState('');
     // +++ //
 
-    // +++ event key +++ //
-    const [eventKey, setEventKey] = useState("link-1");
-    // +++ //
-
     // --- //
 
 
@@ -52,12 +55,15 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
     // reset data
     const ResetData = () => {
 
+        // select user id //
+        setSelectShowUserId('');
+
         // user //
         setUserId('');
         setUserName('');
         setUserLastname('');
         setUserAddress('');
-        setUserAge(0);
+        setUserAge('');
         setNationality('');
         setUserPhone('');
         setUserEmail('');
@@ -66,6 +72,9 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
         // book //
         setBAmount(0);
         setBNote('');
+
+        // show input user id //
+        setShowInputUserId(false);
     }
 
     // handle close reset data
@@ -78,9 +87,11 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
 
     // *** //
 
-    // fetch user //
-    const [showUser, setShowUser] = useState([]);
+    // fetch //
 
+    // +++ show user +++ //
+    const [showUser, setShowUser] = useState([]);
+    
     const fecthUser = async () => {
         try {
             const result = await GetRequest(GET_API_DATA_USER, 'GET', null);
@@ -93,13 +104,32 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
     useEffect(() => {
         fecthUser();
     }, [showUser]);
+    // +++ //
+
+    // +++ show user by id +++ //
+    const [showUserById, setShowUserById] = useState({});
+
+    useEffect(() => {
+        const fecthUserById = async () => {
+            try {
+                const result = await GetRequest(`${GET_API_DATA_USER}/${selectUserId}`, 'GET', null);
+                setShowUserById(result);
+            } catch (error) {
+                console.log('error', error);
+            }
+        }
+
+        fecthUserById();
+    }, [selectUserId]);
+    // +++ //
+
     // --- //
 
     // submit //
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (eventKey === 'link-1') {
+        if (!showInputUserId) {
             ConfirmInsert().then((result) => {
                 if (result.isConfirmed) {
                     const addData = async () => {
@@ -119,7 +149,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
 
                             const bookRaw = {
                                 bAmount: parseFloat(bAmount),
-                                bNote: bNote,
+                                bNote: bNote === '' ? '-' : bNote,
                                 hId: parseInt(hId),
                                 userId: userId,
                             }
@@ -155,9 +185,9 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                         try {
                             const raw = {
                                 bAmount: parseFloat(bAmount),
-                                bNote: bNote,
+                                bNote: bNote === '' ? '-' : bNote,
                                 hId: parseInt(hId),
-                                userId: userId,
+                                userId: selectUserId,
                             }
 
                             const response = await GetRequest(API_BOOK, 'POST', raw)
@@ -208,36 +238,30 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
-                <Nav variant="pills" defaultActiveKey="link-1">
-                    <Nav.Item>
-                        <Nav.Link eventKey="link-1" active={eventKey === "link-1"} onClick={() => setEventKey("link-1")}>ผู้ซื้อใหม่</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="link-2" active={eventKey === "link-2"} onClick={() => setEventKey("link-2")}>ผู้ซื้อเก่า</Nav.Link>
-                    </Nav.Item>
-                </Nav>
+                <Modal.Title>กรอกข้อมูลจอง</Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
-                {/* link-1 */}
-                {eventKey === 'link-1' && (
-                    <Form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label className="col-form-label">บ้านเลขที่</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={houseNo}
-                                    disabled
-                                />
-                            </div>
+                <Form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="col-form-label">บ้านเลขที่</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={houseNo}
+                                disabled
+                            />
                         </div>
+                    </div>
+
+                    {/* show input user id */}
+                    {!showInputUserId ? (
                         <div className="mb-3">
-                            <label className="col-form-label">รหัสบัตรประชาชน</label>
+                            <label className="col-form-label">เลขบัตรประจำตัวประชาชน</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="text"
-                                    placeholder="รหัสบัตรประชาชน"
+                                    placeholder="เลขบัตรประจำตัวประชาชน"
                                     value={userId}
                                     onChange={(e) => setUserId(e.target.value)}
                                     maxLength={13}
@@ -245,6 +269,41 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 />
                             </div>
                         </div>
+                    ) : (
+                        <div className='mb-3'>
+                            <label className="col-form-label">เลขบัตรประจำตัวประชาชน</label>
+                            <Form.Select value={selectUserId} onChange={(e) => setSelectShowUserId(e.target.value)}>
+                                <option value={''}>กรุณาเลือกเลขบัตรประจำตัวประชาชน</option>
+
+                                {showUser.map((data) => (
+                                    data.role !== 1 ? (
+                                        <option key={data.user_id} value={data.user_id}>{data.user_id}</option>
+                                    ) : null
+                                ))}
+
+                            </Form.Select>
+                        </div>
+                    )}
+                    {/* --- */}
+
+                    <div className='mb-3'>
+                        <Form.Check
+                            inline
+                            type='switch'
+                            label="ผู้ใช้เก่า"
+                            checked={showInputUserId}
+                            onChange={() => {
+                                if (showInputUserId) {
+                                    setShowInputUserId(false);
+                                    setSelectShowUserId('');
+                                } else {
+                                    setShowInputUserId(true);
+                                }
+                            }}
+                        />
+                    </div>
+
+                    {!showInputUserId ? (
                         <div className="row mb-3">
                             <div className='col-md-6'>
                                 <label className="col-form-label">ชื่อจริง</label>
@@ -271,18 +330,59 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 </div>
                             </div>
                         </div>
+                    ) : (
+                        <div className="row mb-3">
+                            <div className='col-md-6'>
+                                <label className="col-form-label">ชื่อจริง</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        placeholder="ชื่อจริง"
+                                        value={showUserById.user_name || ''}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                            <div className='col-md-6'>
+                                <label className="col-form-label">นามสกุล</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        placeholder="นามสกุล"
+                                        value={showUserById.user_lastname || ''}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {!showInputUserId ? (
                         <div className="mb-3">
-                            <label className="col-form-label">ที่อยู่</label>
+                            <label className="col-form-label">ที่อยู่ตามทะเบียนบ้าน</label>
                             <div className="mt-1">
                                 <Form.Control
                                     as='textarea'
-                                    placeholder="ที่อยู่"
+                                    placeholder="ที่อยู่ตามทะเบียนบ้าน"
                                     value={userAddress}
                                     onChange={(e) => setUserAddress(e.target.value)}
                                     required
                                 />
                             </div>
                         </div>
+                    ) : (
+                        <div className="mb-3">
+                            <label className="col-form-label">ที่อยู่ตามทะเบียนบ้าน</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    as='textarea'
+                                    placeholder="ที่อยู่ตามทะเบียนบ้าน"
+                                    value={showUserById.user_address || ''}
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {!showInputUserId ? (
                         <div className="row mb-3">
                             <div className='col-md-6'>
                                 <label className="col-form-label">อายุ</label>
@@ -309,6 +409,32 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 </div>
                             </div>
                         </div>
+                    ) : (
+                        <div className="row mb-3">
+                            <div className='col-md-6'>
+                                <label className="col-form-label">อายุ</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        placeholder="อายุ"
+                                        value={showUserById.user_age || ''}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                            <div className='col-md-6'>
+                                <label className="col-form-label">สัญชาติ</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        placeholder="สัญชาติ"
+                                        value={showUserById.nationality || ''}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {!showInputUserId ? (
                         <div className="mb-3">
                             <label className="col-form-label">เบอร์โทรศัพท์</label>
                             <div className="mt-1">
@@ -322,128 +448,80 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 />
                             </div>
                         </div>
+                    ) : (
                         <div className="mb-3">
-                            <label className="col-form-label">อีเมล</label>
+                            <label className="col-form-label">เบอร์โทรศัพท์</label>
                             <div className="mt-1">
                                 <Form.Control
-                                    type='text'
-                                    placeholder="อีเมล"
-                                    value={userEmail}
-                                    onChange={(e) => setUserEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className="col-form-label">รหัสผ่าน</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type='password'
-                                    placeholder="รหัสผ่าน"
-                                    value={userPassword}
-                                    onChange={(e) => setUserPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className="col-form-label">จำนวนเงินจอง</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type='number'
-                                    placeholder="จำนวนเงินจอง"
-                                    value={bAmount}
-                                    onChange={(e) => setBAmount(e.target.value)}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className="col-form-label">หมายเหตุ</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    as='textarea'
-                                    placeholder="หมายเหตุ (ถ้าไม่มีหมายเหตุให้ใส่ - ช่องกรอกนี้)"
-                                    value={bNote}
-                                    onChange={(e) => setBNote(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleRestore}>
-                                คืนค่า
-                            </Button>
-                            <Button variant="success" type='submit'>
-                                เพื่มข้อมูล
-                            </Button>
-                        </Modal.Footer>
-                    </Form>
-                )}
-                {/* --- */}
-
-                {/* link-2 */}
-                {eventKey === 'link-2' && (
-                    <Form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label className="col-form-label">บ้านเลขที่</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={houseNo}
+                                    placeholder="เบอร์โทรศัพท์"
+                                    value={showUserById.user_phone || ''}
                                     disabled
                                 />
                             </div>
                         </div>
-                        <div className='mb-3'>
-                            <label className="col-form-label">ชื่อผู้ซื้อบ้าน</label>
+                    )}
 
-                            <Form.Select value={userId} onChange={(e) => setUserId(e.target.value)}>
-                                <option>กรุณาเลือกผู้ซื้อบ้าน</option>
-
-                                {showUser.map((data) => (
-                                    data.role === 2 || data.role === 3 ? (
-                                        <option key={data.user_id} value={data.user_id}>{data.user_name} {data.user_lastname}</option>
-                                    ) : null
-                                ))}
-
-                            </Form.Select>
-
-
-                        </div>
-                        <div className="mb-3">
-                            <label className="col-form-label">จำนวนเงินจอง</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type='number'
-                                    placeholder="จำนวนเงินจอง"
-                                    value={bAmount}
-                                    onChange={(e) => setBAmount(e.target.value)}
-                                    required
-                                />
+                    {!showInputUserId ? (
+                        <>
+                            <div className="mb-3">
+                                <label className="col-form-label">อีเมล</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type='text'
+                                        placeholder="อีเมล"
+                                        value={userEmail}
+                                        onChange={(e) => setUserEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className="col-form-label">หมายเหตุ</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    as='textarea'
-                                    placeholder="หมายเหตุ (ถ้าไม่มีหมายเหตุให้ใส่ - ช่องกรอกนี้)"
-                                    value={bNote}
-                                    onChange={(e) => setBNote(e.target.value)}
-                                />
+                            <div className="mb-3">
+                                <label className="col-form-label">รหัสผ่าน</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type='password'
+                                        placeholder="รหัสผ่าน"
+                                        value={userPassword}
+                                        onChange={(e) => setUserPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
                             </div>
+                        </>
+                    ) : null}
+
+                    <div className="mb-3">
+                        <label className="col-form-label">จำนวนเงินจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type='number'
+                                placeholder="จำนวนเงินจอง"
+                                value={bAmount}
+                                onChange={(e) => setBAmount(e.target.value)}
+                                required
+                            />
                         </div>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleRestore}>
-                                คืนค่า
-                            </Button>
-                            <Button variant="success" type='submit'>
-                                เพื่มข้อมูล
-                            </Button>
-                        </Modal.Footer>
-                    </Form>
-                )}
-                {/* --- */}
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">หมายเหตุ</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                as='textarea'
+                                placeholder="หมายเหตุ (ถ้าไม่ต้องการกรอกหมายเหตุให้เว้นช่องกรอกนี้ไว้)"
+                                value={bNote}
+                                onChange={(e) => setBNote(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleRestore}>
+                            คืนค่า
+                        </Button>
+                        <Button variant="success" type='submit'>
+                            เพื่มข้อมูล
+                        </Button>
+                    </Modal.Footer>
+                </Form>
 
             </Modal.Body>
         </Modal>
