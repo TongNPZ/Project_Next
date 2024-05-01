@@ -306,7 +306,6 @@ export default function ModalEdit({ show, handleClose, id }) {
 
                         </Form.Select>
 
-
                     </div>
                     <div className="mb-3">
                         <label className="col-form-label">รูปภาพบ้าน</label>
