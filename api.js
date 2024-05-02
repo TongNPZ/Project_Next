@@ -14,6 +14,7 @@ import {
 
   // buy
   export const API_BOOK = `${API_URL}/book`
+  export const API_CONTRACT = `${API_URL}/contract`
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`
 //   export const POST_API_CHECK_TOKEN_VALIDATE = `${API_URL}${AUTH_SERVICE}/checkTokenValidity`

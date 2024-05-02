@@ -20,6 +20,28 @@ export function ConfirmInsert() {
     });
 }
 
+export function ConfirmUpload() {
+    return Swal.fire({
+        icon: "question",
+        title: "คุณต้องการเพิ่มไฟล์ใช่ไหม?",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#87adbd",
+        cancelButtonText: "ยกเลิก"
+    });
+}
+
+export function ConfirmRole() {
+    return Swal.fire({
+        icon: "question",
+        title: "คุณต้องการเพิ่มสิทธิ์ใช่ไหม?",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#87adbd",
+        cancelButtonText: "ยกเลิก"
+    });
+}
+
 export function ConfirmUpdate() {
     return Swal.fire({
         icon: "warning",

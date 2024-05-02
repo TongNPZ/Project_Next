@@ -276,7 +276,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 <option value={''}>กรุณาเลือกเลขบัตรประจำตัวประชาชน</option>
 
                                 {showUser.map((data) => (
-                                    data.role !== 1 ? (
+                                    data.role !== 1 && data.role !== 0 ? (
                                         <option key={data.user_id} value={data.user_id}>{data.user_id}</option>
                                     ) : null
                                 ))}

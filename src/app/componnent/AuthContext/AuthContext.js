@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
 
     const [authData, setAuthData] = useState({
         id: localStorage.getItem('id') || null,
-        role: localStorage.getItem('role') || null,
+        role: parseInt(localStorage.getItem('role')) || null,
         token: localStorage.getItem('token') || null,
     });
 
