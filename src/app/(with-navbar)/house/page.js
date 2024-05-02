@@ -24,7 +24,8 @@ import {
     BsFillHouseUpFill,
     BsFillInfoCircleFill,
     BsCardImage,
-    BsCalendar2PlusFill
+    BsCalendar2PlusFill,
+    BsCaretRightFill
 } from "react-icons/bs";
 
 export default function House() {
@@ -247,7 +248,7 @@ export default function House() {
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipBook}>
                                                         <a onClick={() => handleBookAddShow(data.h_id, data.house_no)} style={{ cursor: 'pointer' }}>
-                                                            <BsCalendar2PlusFill className='me-2 text-primary' style={{ fontSize: '24px' }} />
+                                                            <BsCalendar2PlusFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipEdit}>
@@ -260,6 +261,13 @@ export default function House() {
                                                             <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
+                                                </td>
+                                            ) : data.h_status === 2 ? (
+                                                <td>
+                                                    <Button href="/buy/book" variant="success" size="sm">
+                                                        <span>ไปยังหน้าจอง</span> &nbsp;
+                                                        <BsCaretRightFill />
+                                                    </Button>
                                                 </td>
                                             ) : data.h_status === 0 ? (
                                                 <td>

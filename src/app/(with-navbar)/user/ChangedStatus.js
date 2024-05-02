@@ -1,5 +1,5 @@
 import GetRequest from '@/app/ConfigAPI';
-import { API_BOOK } from '../../../../../api';
+import { GET_API_DATA_USER } from './../../../../api';
 import {
     Success,
     ConfirmChanged
@@ -11,7 +11,7 @@ export default function ChangedStatus(id) {
         if (result.isConfirmed) {
             const changedStatus = async () => {
                 try {
-                    const response = await GetRequest(`${API_BOOK}/${id}`, 'PATCH', null);
+                    const response = await GetRequest(`${GET_API_DATA_USER}/${id}`, 'PATCH', null);
 
                     if (response.message === 'Update Successfully!') {
                         Success("เปลี่ยนสถานะสำเร็จ!")
