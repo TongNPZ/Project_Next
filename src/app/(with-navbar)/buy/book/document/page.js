@@ -17,7 +17,7 @@ export default function DocumentPage() {
                 <div className='row'>
                     <div className='col-md-12 mb-4' >
                         <h1>About Page</h1>
-                        {loading ? (
+                        {/* {loading ? (
                             <p>กำลังโหลด PDF...</p>
                         ) : (
                             <PDFDownloadLink document={<MyDocument />} fileName="mypdf.pdf">
@@ -25,7 +25,7 @@ export default function DocumentPage() {
                                     loading ? 'กำลังโหลด...' : 'ดาวน์โหลด PDF'
                                 )}
                             </PDFDownloadLink>
-                        )}
+                        )} */}
                     </div>
                     <div className='col-md-12'>
                         <div className='container-fluid px-5'>
