@@ -6,11 +6,13 @@ import {
   BsFillHouseFill,
   BsCaretRightFill,
   BsCaretDownFill,
-  BsCoin
+  BsCoin,
+  BsFillPersonFill
 } from "react-icons/bs";
 import {
   Collapse,
-  Offcanvas
+  Offcanvas,
+  ListGroup
 } from 'react-bootstrap';
 
 
@@ -39,75 +41,96 @@ function SideBar() {
           <Offcanvas.Title>พวงเพชร 4</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <a className="nav-link mx-4 mb-4" aria-current="page" onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>หน้าหลัก</a>
-          <a
-            className="nav-link mx-4  mb-4" aria-current="page"
-            aria-controls="collapse-house"
-            aria-expanded={openHouse}
-            onClick={() => setOpenHouse(!openHouse)}
-            style={{ cursor: 'pointer' }}>
-            <div className='row'>
-              <div className='col-md-6'>
-                <BsFillHouseFill />&nbsp;&nbsp;จัดการข้อมูลบ้าน
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              <div className='my-3'>
+                <a className="nav-link" aria-current="page" onClick={() => router.push('/')} style={{ cursor: 'pointer' }}><strong>หน้าหลัก</strong></a>
               </div>
-
-              {openHouse !== true ? (
-                <div className='col-md-6 text-end'>
-                  <BsCaretRightFill />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <div className='my-3'>
+                <div className='mb-4'>
+                  <p><strong>การจัดการ</strong></p>
                 </div>
-              ) : (
-                <div className='col-md-6 text-end'>
-                  <BsCaretDownFill />
+                <div className='mb-4'>
+                  <a
+                    className="nav-link" aria-current="page"
+                    aria-controls="collapse-house"
+                    aria-expanded={openHouse}
+                    onClick={() => setOpenHouse(!openHouse)}
+                    style={{ cursor: 'pointer' }}>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <BsFillHouseFill className='me-2' />ข้อมูลบ้าน
+                      </div>
+
+                      {openHouse !== true ? (
+                        <div className='col-md-6 text-end'>
+                          <BsCaretRightFill />
+                        </div>
+                      ) : (
+                        <div className='col-md-6 text-end'>
+                          <BsCaretDownFill />
+                        </div>
+                      )}
+
+                    </div>
+                  </a>
+
+                  {/* collapse house */}
+                  <Collapse in={openHouse}>
+                    <div className='mb-3' id="collapse-house">
+                      <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
+                      <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน</a>
+                      <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/zone')} style={{ cursor: 'pointer' }}>โซนบ้าน</a>
+                    </div>
+                  </Collapse>
+                  {/* --- */}
+
                 </div>
-              )}
+                <div className='mb-4'>
+                  <a
+                    className="nav-link" aria-current="page"
+                    aria-controls="collapse-buy"
+                    aria-expanded={openBuy}
+                    onClick={() => setOpenBuy(!openBuy)}
+                    style={{ cursor: 'pointer' }}>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <BsCoin className='me-2' />ข้อมูลการขาย
+                      </div>
 
-            </div>
+                      {openBuy !== true ? (
+                        <div className='col-md-6 text-end'>
+                          <BsCaretRightFill />
+                        </div>
+                      ) : (
+                        <div className='col-md-6 text-end'>
+                          <BsCaretDownFill />
+                        </div>
+                      )}
 
-          </a>
+                    </div>
+                  </a>
 
-          {/* collapse house */}
-          <Collapse in={openHouse}>
-            <div className='mb-3' id="collapse-house">
-              <a className="nav-link mx-4 mt-3 ps-4" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
-              <a className="nav-link mx-4 mt-3 ps-4" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน</a>
-              <a className="nav-link mx-4 mt-3 ps-4" aria-current="page" onClick={() => router.push('/house/zone')} style={{ cursor: 'pointer' }}>โซนบ้าน</a>
-            </div>
-          </Collapse>
-          {/* --- */}
-
-          <a
-            className="nav-link mx-4 mb-4" aria-current="page"
-            aria-controls="collapse-buy"
-            aria-expanded={openBuy}
-            onClick={() => setOpenBuy(!openBuy)}
-            style={{ cursor: 'pointer' }}>
-            <div className='row'>
-              <div className='col-md-6'>
-                <BsCoin  />&nbsp;&nbsp;จัดการข้อมูลขาย
+                  {/* collapse buy */}
+                  <Collapse in={openBuy}>
+                    <div className='mb-3' id="collapse-buy">
+                      <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/buy/book')} style={{ cursor: 'pointer' }}>จอง</a>
+                    </div>
+                  </Collapse>
+                  {/* --- */}
+                </div>
               </div>
-
-              {openBuy !== true ? (
-                <div className='col-md-6 text-end'>
-                  <BsCaretRightFill />
-                </div>
-              ) : (
-                <div className='col-md-6 text-end'>
-                  <BsCaretDownFill />
-                </div>
-              )}
-
-            </div>
-
-          </a>
-
-          {/* collapse buy */}
-          <Collapse in={openBuy}>
-            <div className='mb-3' id="collapse-buy">
-              <a className="nav-link mx-4 mt-3 ps-4" aria-current="page" onClick={() => router.push('/buy/book')} style={{ cursor: 'pointer' }}>จอง</a>
-            </div>
-          </Collapse>
-          {/* --- */}
-
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <div className='my-3'>
+                <a className="nav-link" aria-current="page" onClick={() => router.push('/user')} style={{ cursor: 'pointer' }}>
+                  <BsFillPersonFill className='me-2' /><strong>ข้อมูลผู้ใช้</strong>
+                </a>
+              </div>
+            </ListGroup.Item>
+          </ListGroup>
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -64,7 +64,7 @@ export default async function GetRequest(host, method, body) {
             } else if (data.message === 'Not Found Data!') {
                 Error(
                     "ไม่พบข้อมูล!",
-                    "กรุณากรอก เลือกข้อมูล หรือเพิ่มข้อมูลใหม่อีกครั้ง" 
+                    "กรุณากรอก เลือกข้อมูล หรือเพิ่มข้อมูลใหม่อีกครั้ง"
                 )
             } else if (data.message === 'Password Bad Request!') {
                 Error(
