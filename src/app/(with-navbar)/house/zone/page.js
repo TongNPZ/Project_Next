@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE_ZONE } from '../../../../../api';
 import ModalAdd from './ModalAdd'
@@ -79,7 +80,8 @@ export default function HouseZone() {
     // --- //
 
     return (
-        <>
+        <ProtectRoute requireRoles={[1]}>
+
             {/* modal */}
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
@@ -90,7 +92,7 @@ export default function HouseZone() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลโซนบ้าน</h5>
+                            <h5>ตารางข้อมูลโซนบ้าน (Zone)</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button variant="success" onClick={handleAddShow}>
@@ -116,7 +118,7 @@ export default function HouseZone() {
                                     <th>รหัสโซน</th>
                                     <th>ชื่อโซน</th>
                                     <th>ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</th>
-                                    <th>ราคาบ้านต่อที่ดิน</th>
+                                    <th>ราคาบ้านต่อที่ดิน (ตารางวา)</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -169,6 +171,6 @@ export default function HouseZone() {
                     </div>
                 </Card.Body>
             </Card>
-        </>
+        </ProtectRoute>
     );
 }

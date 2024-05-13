@@ -1,9 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateFormat } from '@/app/Format';
+import Link from 'next/link'
+import { DateTimeFormat } from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../app'
-import { API_BOOK } from '../../../../../api';
+import {
+    API_BOOK,
+    API_CONTRACT
+} from '../../../../../api';
 import ModalDetail from './ModalDetail';
 import ModalEdit from './ModalEdit'
 import ChangedStatus from './ChangedStatus';
@@ -27,12 +31,15 @@ import {
     BsBoxArrowUp,
     BsFileTextFill,
     BsFileEarmarkArrowUpFill,
-    BsDownload
+    BsDownload,
+    BsCaretRightFill
 } from "react-icons/bs";
 
 export default function Book() {
 
     // fecth //
+
+    // + book + //
     const [showData, setShowData] = useState([]);
 
     const fecthBook = async () => {
@@ -47,6 +54,22 @@ export default function Book() {
     useEffect(() => {
         fecthBook();
     }, [showData]);
+
+    // + contract + //
+    const [showContract, setShowContract] = useState([]);
+
+    const fecthContract = async () => {
+        try {
+            const result = await GetRequest(API_CONTRACT, 'GET', null);
+            setShowContract(result.data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
+    useEffect(() => {
+        fecthContract();
+    }, [showContract]);
     // --- //
 
     // function //
@@ -61,6 +84,9 @@ export default function Book() {
 
     // modal //
     const [selectedId, setSelectedId] = useState('');
+    const [selectedHouseNo, setSelectedHouseNo] = useState('');
+    const [selectedUserName, setSelectedUserName] = useState('');
+    const [selectedUserLastname, setSelectedUserLastname] = useState('');
 
     // +++ modal detail +++ //
     const [showDetail, setShowDetail] = useState(false);
@@ -86,8 +112,11 @@ export default function Book() {
     const [showAddContract, setShowAddContract] = useState(false);
 
     const handleAddContractClose = () => setShowAddContract(false);
-    const handleAddContractShow = (id) => {
+    const handleAddContractShow = (id, houseNo, userName, userLastname) => {
         setSelectedId(id);
+        setSelectedHouseNo(houseNo);
+        setSelectedUserName(userName);
+        setSelectedUserLastname(userLastname);
         setShowAddContract(true);
     }
     // +++ //
@@ -109,7 +138,7 @@ export default function Book() {
 
     const renderTooltipChangedUpload = (props) => (
         <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จอีกครั้ง
+            เปลี่ยนเอกสารสัญญา
         </Tooltip>
     );
 
@@ -149,7 +178,7 @@ export default function Book() {
             {/* modal */}
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
-            <ModalContractAdd show={showAddContract} handleClose={handleAddContractClose} id={selectedId} />
+            <ModalContractAdd show={showAddContract} handleClose={handleAddContractClose} id={selectedId} houseNo={selectedHouseNo} userName={selectedUserName} userLastname={selectedUserLastname} />
             {/* --- */}
 
             <Card>
@@ -187,6 +216,7 @@ export default function Book() {
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อผู้จอง</th>
                                     <th>จำนวนเงินจอง</th>
+                                    <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่จอง</th>
                                     <th>หมายเหตุ</th>
                                     <th>รายละเอียด</th>
@@ -203,7 +233,16 @@ export default function Book() {
                                             <td>{data.house_no}</td>
                                             <td>{data.user_name} {data.user_lastname}</td>
                                             <td>{data.b_amount.toLocaleString()}</td>
-                                            <td>{DateFormat(data.b_date)}</td>
+                                            <td>{DateTimeFormat(data.b_record)}</td>
+
+                                            {data.b_date ? (
+                                                <td>{DateTimeFormat(data.b_date)}</td>
+                                            ) : (
+                                                <td>
+                                                    <p className='text-danger'>ไม่มีการจอง</p>
+                                                </td>
+                                            )}
+
                                             <td>{data.b_note}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
@@ -230,9 +269,9 @@ export default function Book() {
                                             {data.b_status === 1 && data.b_receipt === null ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipDownload}>
-                                                        <a target="_blank" style={{ cursor: 'pointer' }}>
+                                                        <Link href={`/buy/document/receipt/book/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                             <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
+                                                        </Link>
                                                     </OverlayTrigger>
                                                 </td>
                                             ) : data.b_status === 1 && data.b_receipt !== null ? (
@@ -289,7 +328,7 @@ export default function Book() {
                                             ) : data.b_status === 1 && data.b_receipt !== null ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipContract}>
-                                                        <a onClick={() => handleAddContractShow(data.b_id)} style={{ cursor: 'pointer' }}>
+                                                        <a onClick={() => handleAddContractShow(data.b_id, data.house_no, data.user_name, data.user_lastname)} style={{ cursor: 'pointer' }}>
                                                             <BsFileTextFill className='me-2 text-secondary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
@@ -315,6 +354,25 @@ export default function Book() {
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
+                                            ) : data.b_status === 2 && data.b_receipt !== null ? (
+                                                <td>
+
+                                                    {showContract.some((contract) => contract.b_id === data.b_id && contract.con_status !== 0 && contract.h_status !== 5) ? (
+                                                        <Button href="/buy/contracted" variant="secondary" size="sm">
+                                                            <span>ไปยังหน้าสัญญา</span> &nbsp;
+                                                            <BsCaretRightFill />
+                                                        </Button>
+                                                    ) : data.h_status === 5 ? (
+                                                        <Button variant="success" size="sm" disabled>
+                                                            ขายสำเร็จ
+                                                        </Button>
+                                                    ) : (
+                                                        <Button variant="danger" size="sm" disabled>
+                                                            ยกเลิกสัญญา
+                                                        </Button>
+                                                    )}
+
+                                                </td>
                                             ) : (
                                                 <td>
                                                     {/* null */}
@@ -336,7 +394,7 @@ export default function Book() {
                         </Table>
                     </div>
                 </Card.Body>
-            </Card>
+            </Card >
         </>
     );
 }

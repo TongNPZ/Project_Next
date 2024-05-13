@@ -467,7 +467,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 <label className="col-form-label">อีเมล</label>
                                 <div className="mt-1">
                                     <Form.Control
-                                        type='text'
+                                        type='email'
                                         placeholder="อีเมล"
                                         value={userEmail}
                                         onChange={(e) => setUserEmail(e.target.value)}

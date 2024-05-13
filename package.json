@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^3.4.4",
+    "async": "^3.2.5",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "dotenv": "^16.4.5",
@@ -22,6 +23,7 @@
     "react-icons": "^5.0.1",
     "react-scroll": "^1.9.0",
     "sweetalert2": "^11.10.8",
+    "thai-baht-text": "^1.0.8",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {

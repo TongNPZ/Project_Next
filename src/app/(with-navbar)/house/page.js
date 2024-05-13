@@ -1,10 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE } from './../../../../api';
 import ModalAdd from './ModalAdd'
 import ModalEdit from './ModalEdit'
-import ModalImage from './ModalImage';
 import ModalDetail from './ModalDetail';
 import ModalBookAdd from '../buy/book/ModalAdd';
 import ChangedStatus from './ChangedStatus';
@@ -23,7 +23,6 @@ import {
     BsFillHouseAddFill,
     BsFillHouseUpFill,
     BsFillInfoCircleFill,
-    BsCardImage,
     BsCalendar2PlusFill,
     BsCaretRightFill
 } from "react-icons/bs";
@@ -68,16 +67,6 @@ export default function House() {
     }
     // +++ //
 
-    // +++ modal image +++ //
-    const [showImage, setShowImage] = useState(false);
-
-    const handleImageClose = () => setShowImage(false);
-    const handleImageShow = (id) => {
-        setSelectedId(id);
-        setShowImage(true);
-    }
-    // +++ //
-
     // +++ modal detail +++ //
     const [showDetail, setShowDetail] = useState(false);
 
@@ -102,12 +91,6 @@ export default function House() {
     // --- //
 
     // tooltip //
-    const renderTooltipImage = (props) => (
-        <Tooltip {...props}>
-            ดูภาพ
-        </Tooltip>
-    );
-
     const renderTooltipDetail = (props) => (
         <Tooltip {...props}>
             ดูรายละเอียด
@@ -140,11 +123,11 @@ export default function House() {
     // --- //
 
     return (
-        <>
+        <ProtectRoute requireRoles={[1]}>
+
             {/* modal */}
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
-            <ModalImage show={showImage} handleClose={handleImageClose} id={selectedId} />
             <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
             <ModalBookAdd show={showBookAdd} handleClose={handleBookAddClose} hId={selectedId} houseNo={selectedHouseNo} />
             {/* --- */}
@@ -179,6 +162,7 @@ export default function House() {
                                 <tr>
                                     <th>รหัสบ้าน</th>
                                     <th>บ้านเลขที่</th>
+                                    <th>โซนบ้าน</th>
                                     <th>ชื่อแบบบ้าน</th>
                                     <th>เลขที่โฉนดที่ดิน</th>
                                     <th>เลขที่หน้าสำรวจ</th>
@@ -186,9 +170,11 @@ export default function House() {
                                         ขนาดพื้นที่ดิน <br />
                                         (ตารางวา)
                                     </th>
+                                    <th>
+                                        ขนาดพื้นที่ใช้สอย <br />
+                                        (ตารางเมตร)
+                                    </th>
                                     <th>ราคาบ้านพร้อมที่ดิน</th>
-                                    <th>หมายเหตุ</th>
-                                    <th>รูปภาพบ้าน</th>
                                     <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
@@ -201,19 +187,13 @@ export default function House() {
                                         <tr key={data.h_id}>
                                             <td>{data.h_id}</td>
                                             <td>{data.house_no}</td>
+                                            <td>{data.name}</td>
                                             <td>{data.house_name}</td>
                                             <td>{data.num_deed}</td>
                                             <td>{data.num_survey}</td>
                                             <td>{data.hLand_space.toLocaleString()}</td>
+                                            <td>{data.usable_space.toLocaleString()}</td>
                                             <td>{data.price.toLocaleString()}</td>
-                                            <td>{data.note}</td>
-                                            <td>
-                                                <OverlayTrigger overlay={renderTooltipImage}>
-                                                    <a onClick={() => handleImageShow(data.h_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsCardImage className='text-primary' style={{ fontSize: '28px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-                                            </td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.h_id)} style={{ cursor: 'pointer' }}>
@@ -232,9 +212,13 @@ export default function House() {
                                                 </td>
                                             ) : data.h_status === 3 ? (
                                                 <td>
-                                                    <Badge bg="info">ดำเนินการทำสัญญา</Badge>
+                                                    <Badge bg="info">ทำสัญญา</Badge>
                                                 </td>
                                             ) : data.h_status === 4 ? (
+                                                <td>
+                                                    <Badge bg="info">โอนกรรมสิทธิ์</Badge>
+                                                </td>
+                                            ) : data.h_status === 5 ? (
                                                 <td>
                                                     <Badge bg="secondary">ขายแล้ว</Badge>
                                                 </td>
@@ -264,8 +248,22 @@ export default function House() {
                                                 </td>
                                             ) : data.h_status === 2 ? (
                                                 <td>
-                                                    <Button href="/buy/book" variant="success" size="sm">
+                                                    <Button href="/buy/book" variant="secondary" size="sm">
                                                         <span>ไปยังหน้าจอง</span> &nbsp;
+                                                        <BsCaretRightFill />
+                                                    </Button>
+                                                </td>
+                                            ) : data.h_status === 3 ? (
+                                                <td>
+                                                    <Button href="/buy/contracted" variant="secondary" size="sm">
+                                                        <span>ไปยังหน้าสัญญา</span> &nbsp;
+                                                        <BsCaretRightFill />
+                                                    </Button>
+                                                </td>
+                                            ) : data.h_status === 4 ? (
+                                                <td>
+                                                    <Button href="/buy/transfer" variant="secondary" size="sm">
+                                                        <span>ไปยังหน้าโอนกรรมสิทธิ์</span> &nbsp;
                                                         <BsCaretRightFill />
                                                     </Button>
                                                 </td>
@@ -299,6 +297,6 @@ export default function House() {
                     </div>
                 </Card.Body>
             </Card>
-        </>
+        </ProtectRoute>
     );
 }

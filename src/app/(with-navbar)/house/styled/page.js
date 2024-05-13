@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE_STYLE } from '../../../../../api';
 import ModalAdd from './ModalAdd'
@@ -86,7 +87,8 @@ export default function HouseStyle() {
     // --- //
 
     return (
-        <>
+        <ProtectRoute requireRoles={[1]}>
+
             {/* modal */}
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
@@ -97,7 +99,7 @@ export default function HouseStyle() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลแบบบ้าน</h5>
+                            <h5>ตารางข้อมูลแบบบ้าน (Type)</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button variant="success" onClick={handleAddShow}>
@@ -122,7 +124,7 @@ export default function HouseStyle() {
                                 <tr>
                                     <th>รหัสแบบบ้าน</th>
                                     <th>ชื่อแบบบ้าน</th>
-                                    <th>ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)</th>
+                                    <th>ขนาดพื้นที่ใช้สอย (ตารางเมตร)</th>
                                     <th>ราคาขายบ้าน</th>
                                     <th>ภาพบ้าน 3 มิติ</th>
                                     <th>โซนบ้าน</th>
@@ -186,6 +188,6 @@ export default function HouseStyle() {
                     </div>
                 </Card.Body>
             </Card>
-        </>
+        </ProtectRoute>
     );
 }

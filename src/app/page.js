@@ -82,21 +82,21 @@ export default function Home() {
               <div className='row'>
 
 
-                <div class="container marketing " id='section1'>
-                  <div class="p-5 mb-4 bg-light rounded-3">
-                    <div class="container-fluid py-5">
+                <div className="container marketing " id='section1'>
+                  <div className="p-5 mb-4 bg-light rounded-3">
+                    <div className="container-fluid py-5">
                       {data[0] && data.map((val, idx) => (
-                        <h1 class="display-5 fw-bold">{val.name}</h1>
+                        <h1 className="display-5 fw-bold">{val.name}</h1>
                       ))}
                       {data[0] && data.map((val, idx) => (
-                        <p class="col-md-8 fs-4">
+                        <p className="col-md-8 fs-4">
                           พิเศษของโครงการนี้ ทำให้คุณได้สัมผัสถึงความอบอุ่นและความเป็นส่วนตัวของบ้านในคำพูดที่เราสร้างขึ้น เข้ามาค้นพบความสุขและความสมบูรณ์ของชีวิตใน '{val.name}' กับเราวันนี้ !!!
                         </p>
                       ))}
                     </div>
                   </div>
-                  <div class="row align-items-md-stretch">
-                    <div class="col-md-6">
+                  <div className="row align-items-md-stretch">
+                    <div className="col-md-6">
                       <div
                         className="h-100 p-5 text-white bg-dark rounded-3"
                         style={{
@@ -105,37 +105,37 @@ export default function Home() {
                         }}
                       >
                         <h2>จองได้แล้ววันนี้ !!!</h2>
-                        <button class="btn btn-outline-light" type="button">
+                        <button className="btn btn-outline-light" type="button">
                           จองเลย
                         </button>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="h-100 p-5 bg-light border rounded-3">
+                    <div className="col-md-6">
+                      <div className="h-100 p-5 bg-light border rounded-3">
                         <h2>แนวคิดของโครงการ</h2>
                         {data[0] && data.map((val, idx) => (
-                          <p class="lead">
+                          <p className="lead">
                             แนวคิดหลักของ "{val.name}" คือการสร้างบ้านที่เป็นที่อยู่อาศัยที่มีคุณภาพและสะดวกสบายตามกระแสสมัยในย่านที่เติบโตอย่างรวดเร็ว ด้วยคำคมที่โดดเด่นเช่น "ความสุขคือการมีบ้านที่สร้างให้เรา" หรือ "บ้านไม่ใช่เพียงแค่สถานที่ แต่เป็นช่องที่อุ่นใจของเรา" เราจะสร้างประสบการณ์ให้กับลูกค้าของเราที่หน้าเว็บไซต์โดยการเน้นที่คำพูดที่สร้างสรรค์และแรงบันดาลใจ เช่น "เราไม่ได้ขายบ้าน แต่เราขายความฝันของคุณ" หรือ "{val.name} สร้างบ้าน เพื่อให้คุณสร้างประสบการณ์ที่ไม่มีวันลืม" ด้วยการใช้คำพูดที่โดดเด่นและชัดเจน เราจะสร้างความประทับใจและเป็นที่จดจำในใจของลูกค้าของเราในทุกการติดต่อที่เกิดขึ้นในหน้าเว็บไซต์ของเรา.
                           </p>))}
 
-                        <button class="btn btn-outline-secondary" type="button">
+                        <button className="btn btn-outline-secondary" type="button">
                           อ่านเพิ่ม
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  <div class="row featurette mt-4 mb-4">
-                    <div class="col-md-7 p-5 bg-light border rounded-3">
-                      <h2 class="featurette-heading">ห้องนอนให้เป็นรองรับทุกสถานการณ์ของชีวิต <span class="text-muted">It’ll blow your mind.</span></h2>
+                  <div className="row featurette mt-4 mb-4">
+                    <div className="col-md-7 p-5 bg-light border rounded-3">
+                      <h2 className="featurette-heading">ห้องนอนให้เป็นรองรับทุกสถานการณ์ของชีวิต <span className="text-muted">It’ll blow your mind.</span></h2>
                       {data[0] && data.map((val, idx) => (
-                        <p class="lead">{val.name} ให้ความสำคัญกับความสบายสบายและความสงบสุข ด้วยการออกแบบที่พิถีพิถันและสม่ำเสมอ เราเชื่อว่าห้องนอนคือศูนย์กลางของความสุขของคุณ ดังนั้นเราได้นำเสนอพื้นที่ที่มอบความสบาย สะดวกสบายและความเป็นส่วนตัวให้กับผู้อยู่อาศัยทุกคน เราให้คำอธิบายถึงห้องนอนใน 'พวงเพรช 4' ว่าเป็นสถานที่ที่ให้คุณเริ่มต้นและสิ้นสุดวันของคุณด้วยความสงบสุขและความเพลิดเพลิน พร้อมทั้งเป็นพื้นที่ที่ทุกคนสามารถหลับใหลในสบายใจได้อย่างแท้จริง.</p>
+                        <p className="lead">{val.name} ให้ความสำคัญกับความสบายสบายและความสงบสุข ด้วยการออกแบบที่พิถีพิถันและสม่ำเสมอ เราเชื่อว่าห้องนอนคือศูนย์กลางของความสุขของคุณ ดังนั้นเราได้นำเสนอพื้นที่ที่มอบความสบาย สะดวกสบายและความเป็นส่วนตัวให้กับผู้อยู่อาศัยทุกคน เราให้คำอธิบายถึงห้องนอนใน 'พวงเพรช 4' ว่าเป็นสถานที่ที่ให้คุณเริ่มต้นและสิ้นสุดวันของคุณด้วยความสงบสุขและความเพลิดเพลิน พร้อมทั้งเป็นพื้นที่ที่ทุกคนสามารถหลับใหลในสบายใจได้อย่างแท้จริง.</p>
                       ))}
-                      <button class="btn btn-outline-secondary" type="button">
+                      <button className="btn btn-outline-secondary" type="button">
                         อ่านเพิ่ม
                       </button>
                     </div>
-                    <div class="col-md-5 order-md-1">
+                    <div className="col-md-5 order-md-1">
                       <Image
                         src="\images\indor2.jpg"
                         width={745}
@@ -145,18 +145,18 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div class="row featurette mt-4 mb-4">
-                    <div class="col-md-7 order-md-2 p-5 bg-light border rounded-3">
-                      <h2 class="featurette-heading">นอกเหนือจากบ้านที่สวยงามและสะดวกสบายที่. <span class="text-muted">See for yourself.</span></h2>
+                  <div className="row featurette mt-4 mb-4">
+                    <div className="col-md-7 order-md-2 p-5 bg-light border rounded-3">
+                      <h2 className="featurette-heading">นอกเหนือจากบ้านที่สวยงามและสะดวกสบายที่. <span className="text-muted">See for yourself.</span></h2>
                       {data[0] && data.map((val, idx) => (
-                        <p class="lead"> '{val.name}' มอบให้กับคุณ เรายังให้ความสำคัญกับห้องครัว เป็นส่วนสำคัญที่จะเป็นศูนย์กลางของครอบครัวและที่มีความสุขของคุณ เราออกแบบห้องครัวให้เป็นที่ที่ทุกคนในครอบครัวมีส่วนร่วมในการทำอาหารและสร้างความสนุกสนาน ด้วยอุปกรณ์ที่ใช้งานง่ายและมีคุณภาพ พร้อมพื้นที่ที่กว้างขวางเพื่อให้คุณมีส่วนที่จะสร้างสรรค์ และสร้างประสบการณ์ครัวที่น่าจดจำได้อย่างที่คุณต้องการ.</p>
+                        <p className="lead"> '{val.name}' มอบให้กับคุณ เรายังให้ความสำคัญกับห้องครัว เป็นส่วนสำคัญที่จะเป็นศูนย์กลางของครอบครัวและที่มีความสุขของคุณ เราออกแบบห้องครัวให้เป็นที่ที่ทุกคนในครอบครัวมีส่วนร่วมในการทำอาหารและสร้างความสนุกสนาน ด้วยอุปกรณ์ที่ใช้งานง่ายและมีคุณภาพ พร้อมพื้นที่ที่กว้างขวางเพื่อให้คุณมีส่วนที่จะสร้างสรรค์ และสร้างประสบการณ์ครัวที่น่าจดจำได้อย่างที่คุณต้องการ.</p>
 
                       ))}
-                      <button class="btn btn-outline-secondary" type="button">
+                      <button className="btn btn-outline-secondary" type="button">
                         อ่านเพิ่ม
                       </button>
                     </div>
-                    <div class="col-md-5 order-md-1">
+                    <div className="col-md-5 order-md-1">
                       <Image
                         src="\images\kit.jpg"
                         width={745}
@@ -168,7 +168,7 @@ export default function Home() {
                   </div>
                   <br />
                   <br />
-                  <div class="container text-center mt-4 mb-4" id='section2'>
+                  <div className="container text-center mt-4 mb-4" id='section2'>
                     <Image
                       src="\images\profile.png"
                       alt="Logo"
@@ -198,7 +198,7 @@ export default function Home() {
                     ))}
                   </div>
                 </div >
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1137.6161183308652!2d102.79695610219576!3d16.45175965944799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x312261dc935121f9%3A0xc255b3873a211c67!2z4Lir4Lih4Li54LmI4Lia4LmJ4Liy4LiZ4Lie4Lin4LiH4LmA4Lie4LiK4LijIDQ!5e0!3m2!1sth!2sth!4v1714397807817!5m2!1sth!2sth" width="100%" height="50%" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1137.6161183308652!2d102.79695610219576!3d16.45175965944799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x312261dc935121f9%3A0xc255b3873a211c67!2z4Lir4Lih4Li54LmI4Lia4LmJ4Liy4LiZ4Lie4Lin4LiH4LmA4Lie4LiK4LijIDQ!5e0!3m2!1sth!2sth!4v1714397807817!5m2!1sth!2sth" width="100%" height="50%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
               </div>
               <br />
             </div>

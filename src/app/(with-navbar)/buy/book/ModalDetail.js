@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    DateFormat,
+    DateTimeFormat,
     FormatThaiNationalID
 } from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
@@ -72,10 +72,26 @@ export default function ModalDetail({ show, handleClose, id }) {
                                         <ListGroup.Item>
                                             <div className='row'>
                                                 <div className='col-md-6'>
+                                                    <p className="col-form-label"><strong>วันที่บันทึกข้อมูล:</strong></p>
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <p className="col-form-label">{DateTimeFormat(showData.b_record)}</p>
+                                                </div>
+                                            </div>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
                                                     <p className="col-form-label"><strong>วันที่จอง:</strong></p>
                                                 </div>
                                                 <div className='col-md-6'>
-                                                    <p className="col-form-label">{DateFormat(showData.b_date)}</p>
+
+                                                    {showData.b_date !== null ? (
+                                                        <p className="col-form-label">{DateTimeFormat(showData.b_date)}</p>
+                                                    ) : (
+                                                        <p className="col-form-label text-danger">ไม่มีการจอง</p>
+                                                    )}
+
                                                 </div>
                                             </div>
                                         </ListGroup.Item>
@@ -166,7 +182,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                     <div className='col-md-6'>
                         <div className='text-center mb-3'>
                             {showData.image !== '' ? (
-                                <Image src={`${API_URL}${showData.image}`} rounded fluid style={{ height: '182px' }} />
+                                <Image src={`${API_URL}${showData.image}`} rounded fluid />
                             ) : (
                                 <Card>
                                     <Card.Body>

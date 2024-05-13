@@ -64,6 +64,17 @@ export function ConfirmChanged() {
     });
 }
 
+export function ConfirmDelete() {
+    return Swal.fire({
+        icon: "warning",
+        title: "คุณต้องการลบข้อมูลใช่ไหม?",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#f8bb86",
+        cancelButtonText: "ยกเลิก"
+    });
+}
+
 export function ConfirmCancel() {
     return Swal.fire({
         icon: "question",

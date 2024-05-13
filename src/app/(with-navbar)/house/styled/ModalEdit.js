@@ -156,7 +156,7 @@ export default function ModalEdit({ show, handleClose, id }) {
     return (
         <Modal show={show} onHide={handleCancel} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>แก้ไขข้อมูลแบบบ้าน</Modal.Title>
+                <Modal.Title>แก้ไขข้อมูลแบบบ้าน (Type)</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
@@ -181,11 +181,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                     </div>
                     <div className="row mb-3">
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)</label>
+                            <label className="col-form-label">ขนาดพื้นที่ใช้สอย (ตารางเมตร)</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)"
+                                    placeholder="ขนาดพื้นที่ใช้สอย (ตารางเมตร)"
                                     value={usableSpace}
                                     onChange={(e) => setUsableSpace(e.target.value)}
                                     required
@@ -221,7 +221,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                         <label className="col-form-label">โซนบ้าน</label>
 
                         <Form.Select value={hzId} onChange={(e) => setHzId(e.target.value)}>
-                            
+
                             {showHouseZone.map((data) => (
                                 data.hz_status === 1 ? (
                                     <option key={data.hz_id} value={data.hz_id}>{data.name}</option>

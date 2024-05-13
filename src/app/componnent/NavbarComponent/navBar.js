@@ -7,8 +7,10 @@ import Image from 'react-bootstrap/Image';
 import React, { useState, useEffect } from 'react';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Sidebar from '@/app/componnent/SidebarComponent/sideBar';
+import { API_URL } from '../../../../app';
 import {
   GET_API_DATA_USER,
+  API_HOUSE_ESTATE
 } from '../../../../api'
 import GetRequest from '../../ConfigAPI'
 import { Link as ScrollLink } from 'react-scroll';
@@ -17,6 +19,7 @@ const Navbar = () => {
   const { authData, setAuthData } = useAuth();
   const [userData, setUserData] = useState('');
   const id = authData.id;
+  const role = authData.role;
   // console.log(id)
   console.log(userData)
   const scrollToSection = (sectionId) => {
@@ -26,6 +29,10 @@ const Navbar = () => {
       smooth: 'easeInOutQuart',
     });
   };
+
+  // - fetch - //
+
+  // user data
   useEffect(() => {
     async function fetchUserData() {
       try {
@@ -35,8 +42,27 @@ const Navbar = () => {
         console.log('error', error);
       }
     }
+
     fetchUserData();
   }, [id]);
+
+  // housing estate
+  const [housingEstate, setHousingEstate] = useState([]);
+
+  useEffect(() => {
+    const fecthHousingEstate = async () => {
+      try {
+        const result = await GetRequest(API_HOUSE_ESTATE, 'GET', null);
+        setHousingEstate(result.data);
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+
+    fecthHousingEstate();
+  }, []);
+
+  // --- //
 
   // Logout!!!!!!
   const handleLogout = () => {
@@ -51,18 +77,22 @@ const Navbar = () => {
 
   return (
 
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-color" style={{ position: 'sticky', top: 0, width: '100%', zIndex: 1000}}>
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-color" style={{ position: 'sticky', top: 0, width: '100%', zIndex: 1000 }}>
       <div className="Nav-container">
         <div className="row align-items-center">
           <div className="col d-flex justify-content-center">
-            <Link href="/">
-              <Image
-                src="\images\Logo.png"
-                alt="Logo"
-                width={130}
-                height={60}
-              />
-            </Link>
+
+            {housingEstate.map((data) => (
+              <Link key={data.he_id} href="/">
+                <Image
+                  src={`${API_URL}${data.image}`}
+                  alt="Logo"
+                  width={130}
+                  height={60}
+                />
+              </Link>
+            ))}
+
           </div>
           <div className="col d-flex justify-content-center">
 
@@ -119,11 +149,15 @@ const Navbar = () => {
           <NavDropdown
             id="nav-dropdown-dark-example"
             menuVariant="dark"
-            title={'คุณ ' + userData.user_name + ' ' + userData.user_lastname}
+            title={userData.user_name + ' ' + userData.user_lastname}
             style={{ color: 'white' }}
           >
             <NavDropdown.Item onClick={() => router.push('/profile')}>ข้อมูลผู้ใช้</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => router.push('/house_estate')}>โครงการ</NavDropdown.Item>
+
+            {role === 1 && (
+              <NavDropdown.Item onClick={() => router.push('/housing_estate')}>โครงการ</NavDropdown.Item>
+            )}
+
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={handleLogout}>ออกจากระบบ</NavDropdown.Item>
           </NavDropdown>

@@ -12,9 +12,10 @@ import {
     Modal,
     Button,
     Form,
+    FloatingLabel
 } from 'react-bootstrap';
 
-export default function ModalContractAdd({ show, handleClose, id }) {
+export default function ModalContractAdd({ show, handleClose, id, houseNo, userName, userLastname }) {
     const router = useRouter();
 
     // useState //
@@ -66,7 +67,7 @@ export default function ModalContractAdd({ show, handleClose, id }) {
                                     handleCloseResetData();
                                 })
                                 .then(() => {
-                                    router.push('/buy/contract');
+                                    router.push('/buy/contracted');
                                 })
                         }
                     } catch (error) {
@@ -109,6 +110,27 @@ export default function ModalContractAdd({ show, handleClose, id }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="รหัสจอง"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={id} disabled />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="บ้านเลขที่"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={houseNo} disabled />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="ชื่อผู้จอง"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={`${userName} ${userLastname}`} disabled />
+                    </FloatingLabel>
                     <div className="row mb-3">
                         <div className='col-md-6'>
                             <label className="col-form-label">ชื่อพยานคนที่หนึ่ง</label>

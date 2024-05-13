@@ -9,7 +9,11 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <AuthProvider>
-      <html lang="en">
+      <html lang="th">
+        <head>
+          <meta charSet="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </head>
         <body className={inter.className}>
           {children}
           <footer className="my-5 pt-5 text-muted text-center text-small">
