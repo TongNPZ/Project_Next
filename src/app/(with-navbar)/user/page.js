@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { GET_API_DATA_USER } from './../../../../api';
 import ModalEdit from './ModalEdit'
@@ -80,7 +81,8 @@ export default function HouseZone() {
     // --- //
 
     return (
-        <>
+        <ProtectRoute requireRoles={[1]}>
+
             {/* modal */}
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalAddRole show={showAddRole} handleClose={handleAddRoleClose} id={selectedId} />
@@ -174,6 +176,6 @@ export default function HouseZone() {
                     </div>
                 </Card.Body>
             </Card>
-        </>
+        </ProtectRoute>
     );
 }

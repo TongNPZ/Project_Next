@@ -114,7 +114,7 @@ export default function ModalAdd({ show, handleClose }) {
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>เพิ่มข้อมูลแบบบ้าน</Modal.Title>
+                <Modal.Title>เพิ่มข้อมูลแบบบ้าน (Type)</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
@@ -132,11 +132,11 @@ export default function ModalAdd({ show, handleClose }) {
                     </div>
                     <div className="row mb-3">
                         <div className='col-md-6'>
-                            <label className="col-form-label">ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)</label>
+                            <label className="col-form-label">ขนาดพื้นที่ใช้สอย (ตารางเมตร)</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ขนาดพื้นที่ใช้สอยเริ่มต้น (ตารางเมตร)"
+                                    placeholder="ขนาดพื้นที่ใช้สอย (ตารางเมตร)"
                                     value={usableSpace}
                                     onChange={(e) => setUsableSpace(e.target.value)}
                                     required

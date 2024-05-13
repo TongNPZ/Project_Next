@@ -125,7 +125,21 @@ export default function ModalEdit({ show, handleClose, id }) {
                         label="รหัสจอง"
                         className='mb-3'
                     >
-                        <Form.Control type="text" defaultValue={id} readOnly disabled />
+                        <Form.Control type="text" defaultValue={id} disabled />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="บ้านเลขที่"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={defaultValues.house_no} disabled />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="ชื่อผู้จอง"
+                        className='mb-3'
+                    >
+                        <Form.Control type="text" defaultValue={`${defaultValues.user_name} ${defaultValues.user_lastname}`} disabled />
                     </FloatingLabel>
                     <div className="mb-3">
                         <label className="col-form-label">จำนวนเงินจอง</label>

@@ -82,7 +82,7 @@ export default async function GetRequest(host, method, body) {
                     "กรุณากรอกรหัสผ่านใหม่อีกครั้ง"
                 )
             } else {
-                throw new Error(response.message);
+                throw new Error(response.data);
             }
         }
 

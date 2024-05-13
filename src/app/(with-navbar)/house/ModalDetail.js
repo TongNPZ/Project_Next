@@ -75,19 +75,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                                         <ListGroup.Item>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>ราคาขายบ้าน:</strong></p>
-                                                </div>
-                                                <div className='col-md-4'>
-                                                    <p className="col-form-label">{parseFloat(showData.house_price).toLocaleString()}</p>
-                                                </div>
-                                                <div className='col-md-2 text-end'>
-                                                    <p className="col-form-label">บาท</p>
-                                                </div>
-                                            </div>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
                                                     <p className="col-form-label"><strong>ราคาพร้อมที่ดิน:</strong></p>
                                                 </div>
                                                 <div className='col-md-4'>
@@ -138,6 +125,16 @@ export default function ModalDetail({ show, handleClose, id }) {
                             <Card>
                                 <Card.Body>
                                     <ListGroup variant="flush">
+                                        <ListGroup.Item>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
+                                                    <p className="col-form-label"><strong>โซนบ้าน:</strong></p>
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <p className="col-form-label">{showData.name}</p>
+                                                </div>
+                                            </div>
+                                        </ListGroup.Item>
                                         <ListGroup.Item>
                                             <div className='row'>
                                                 <div className='col-md-6'>

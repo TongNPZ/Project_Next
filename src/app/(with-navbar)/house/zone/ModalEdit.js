@@ -162,11 +162,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ราคาบ้านต่อที่ดิน</label>
+                            <label className="col-form-label">ราคาบ้านต่อที่ดิน (ตารางวา)</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ราคาบ้านต่อที่ดิน"
+                                    placeholder="ราคาบ้านต่อที่ดิน (ตารางวา)"
                                     value={landPrice}
                                     onChange={(e) => setLandPrice(e.target.value)}
                                     required
