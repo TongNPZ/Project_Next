@@ -2,6 +2,7 @@ export const API_URL = process.env.REACT_APP_API_URL ?? 'http://26.90.237.200:30
 export const ADMIN = process.env.REACT_APP_ADMIN ?? '/admin'
 export const USER = process.env.REACT_APP_USER ?? '/user'
 export const OWNER = process.env.REACT_APP_OWNER ?? '/owner'
+export const HOUSE = process.env.REACT_APP_OWNER ?? '/house'
 export const NCF = process.env.REACT_APP_NCF ?? '/notify_common_fee'
 // export const AUTH_SERVICE = process.env.REACT_APP_AUTH_SERVICE ?? 'auth'
 // export const NOTI_SERVICE = process.env.REACT_APP_NOTI_SERVICE ?? 'noti'

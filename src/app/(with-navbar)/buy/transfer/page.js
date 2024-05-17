@@ -228,7 +228,7 @@ export default function Transfer() {
 
                                                     {data.trans_receipt === null || data.trans_receipt === '' ? (
                                                         <OverlayTrigger overlay={renderTooltipDownload}>
-                                                            <a href={`/buy/document/receipt/transfer/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <a href={`/document/receipt/transfer/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                                 <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                             </a>
                                                         </OverlayTrigger>

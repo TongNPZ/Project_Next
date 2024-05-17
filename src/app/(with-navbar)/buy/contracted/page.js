@@ -295,7 +295,7 @@ export default function Book() {
 
                                                     {data.contract === null || data.contract === '' ? (
                                                         <OverlayTrigger overlay={renderTooltipDownloadContract}>
-                                                            <a href={`/buy/document/contracted/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <a href={`/document/contracted/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                                 <BsFileEarmarkArrowDownFill className='me-2 mb-2 text-primary' style={{ fontSize: '28px' }} />
                                                             </a>
                                                         </OverlayTrigger>
@@ -309,7 +309,7 @@ export default function Book() {
 
                                                     {data.con_receipt === null || data.con_receipt === '' ? (
                                                         <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
-                                                            <a href={`/buy/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                                 <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                             </a>
                                                         </OverlayTrigger>

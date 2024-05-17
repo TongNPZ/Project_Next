@@ -1,6 +1,9 @@
 import React from 'react';
 import THBText from 'thai-baht-text'
-import { DateFormat } from '@/app/Format';
+import { 
+    DateFormatNum,
+    DateFormat
+ } from '@/app/Format';
 import { API_URL } from '../../../../app';
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const MyDocument = ({ housingEstate, book, contract, transfer }) => (
+const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
     <Document>
         <Page size="A4" style={styles.body}>
 
@@ -205,11 +208,18 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Text style={styles.textContent}>{contract.user_name} {contract.user_lastname}</Text>
                     </View>
                 </View>
-            ) : (
+            ) : transfer ? (
                 <View style={styles.container}>
                     <Text style={styles.text}>ได้รับเงินจาก</Text>
                     <View style={styles.line}>
                         <Text style={styles.textContent}>{transfer.user_name} {transfer.user_lastname}</Text>
+                    </View>
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.text}>ได้รับเงินจาก</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textContent}>{commonFee.user_name} {commonFee.user_lastname}</Text>
                     </View>
                 </View>
             )}
@@ -228,11 +238,18 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Text style={styles.textContent}>{contract.user_address}</Text>
                     </View>
                 </View>
-            ) : (
+            ) : transfer ? (
                 <View style={styles.container}>
                     <Text style={styles.text}>ที่อยู่</Text>
                     <View style={styles.line}>
                         <Text style={styles.textContent}>{transfer.user_address}</Text>
+                    </View>
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.text}>ที่อยู่</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textContent}>{commonFee.user_address}</Text>
                     </View>
                 </View>
             )}
@@ -267,7 +284,7 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Text style={styles.textContent}>{contract.house_no}</Text>
                     </View>
                 </View>
-            ) : (
+            ) : transfer ? (
                 <View style={[styles.container, { marginBottom: 5 }]}>
                     <Text style={styles.text}>โทรศัพท์</Text>
                     <View style={styles.line}>
@@ -282,6 +299,21 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Text style={styles.textContent}>{transfer.house_no}</Text>
                     </View>
                 </View>
+            ) : (
+                <View style={[styles.container, { marginBottom: 5 }]}>
+                    <Text style={styles.text}>โทรศัพท์</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textContent}>{commonFee.user_phone}</Text>
+                    </View>
+                    <Text style={styles.text}>ตามสัญญาเลขที่</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textUnContent} />
+                    </View>
+                    <Text style={styles.text}>แปลงที่</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textContent}>{commonFee.house_no}</Text>
+                    </View>
+                </View>
             )}
 
             {book ? (
@@ -294,6 +326,8 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                     <Text style={styles.checkboxText}>เงินทำสัญญา&nbsp;</Text>
                     <View style={styles.checkbox} />
                     <Text style={styles.checkboxText}>เงินส่วนที่เหลือ</Text>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>ค่าส่วนกลาง</Text>
                 </View>
             ) : contract ? (
                 <View style={styles.checkboxContainer}>
@@ -305,8 +339,10 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                     <Text style={styles.checkboxText}>เงินทำสัญญา&nbsp;</Text>
                     <View style={styles.checkbox} />
                     <Text style={styles.checkboxText}>เงินส่วนที่เหลือ</Text>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>ค่าส่วนกลาง</Text>
                 </View>
-            ) : (
+            ) : transfer ? (
                 <View style={styles.checkboxContainer}>
                     <View style={styles.checkbox} />
                     <Text style={styles.checkboxText}>เงินจอง</Text>
@@ -316,10 +352,25 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Image src={`/images/check.png`} style={styles.checkIcon} />
                     </View>
                     <Text style={styles.checkboxText}>เงินส่วนที่เหลือ</Text>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>ค่าส่วนกลาง</Text>
+                </View>
+            ) : (
+                <View style={styles.checkboxContainer}>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>เงินจอง</Text>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>เงินทำสัญญา&nbsp;</Text>
+                    <View style={styles.checkbox} />
+                    <Text style={styles.checkboxText}>เงินส่วนที่เหลือ</Text>
+                    <View style={styles.checkbox}>
+                        <Image src={`/images/check.png`} style={styles.checkIcon} />
+                    </View>
+                    <Text style={styles.checkboxText}>ค่าส่วนกลาง</Text>
                 </View>
             )}
 
-            {book || contract || !transfer.bank_name && !transfer.bank_branch && !transfer.bank_num && !transfer.bank_date ? (
+            {book || contract || commonFee || !transfer.bank_name && !transfer.bank_branch && !transfer.bank_num && !transfer.bank_date ? (
                 <View style={styles.checkboxContainer}>
                     <View style={styles.checkbox}>
                         <Image src={`/images/check.png`} style={styles.checkIcon} />
@@ -364,7 +415,7 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                     </View>
                     <Text style={styles.text}>วันที่</Text>
                     <View style={styles.line}>
-                        <Text style={styles.textContent}>{DateFormat(transfer.bank_date)}</Text>
+                        <Text style={styles.textContent}>{DateFormatNum(transfer.bank_date)}</Text>
                     </View>
                 </View>
             )}
@@ -391,7 +442,7 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                         <Text style={styles.text}>{THBText(contract.con_amount)}</Text>
                     </View>
                 </View>
-            ) : (
+            ) : transfer ? (
                 <View style={styles.container}>
                     <Text style={styles.text}>จำนวนเงิน&nbsp;</Text>
                     <View style={styles.line}>
@@ -400,6 +451,17 @@ const MyDocument = ({ housingEstate, book, contract, transfer }) => (
                     <Text style={styles.text}>บาท</Text>
                     <View style={styles.rectangle}>
                         <Text style={styles.text}>{THBText(transfer.trans_amount)}</Text>
+                    </View>
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.text}>จำนวนเงิน&nbsp;</Text>
+                    <View style={styles.line}>
+                        <Text style={styles.textContent}>{parseFloat(commonFee.ncf_amount).toLocaleString()}</Text>
+                    </View>
+                    <Text style={styles.text}>บาท</Text>
+                    <View style={styles.rectangle}>
+                        <Text style={styles.text}>{THBText(commonFee.ncf_amount)}</Text>
                     </View>
                 </View>
             )}

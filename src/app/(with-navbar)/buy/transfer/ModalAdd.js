@@ -4,7 +4,8 @@ import { FormatThaiNationalID } from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_TRANSFER,
-    API_CONTRACT
+    API_CONTRACT,
+    API_HOUSE_ESTATE
 } from '../../../../../api';
 import {
     ConfirmInsert,
@@ -96,6 +97,24 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
     useEffect(() => {
         fecthContract();
     }, [show, id]);
+    // +++ //
+
+    // +++ show housing estate +++ //
+    const [showHousingEstate, setShowHousingEstate] = useState([]);
+
+    useEffect(() => {
+        const fecthHousingEstate = async () => {
+            try {
+                const result = await GetRequest(API_HOUSE_ESTATE, 'GET', null);
+                setShowHousingEstate(result.data);
+            } catch (error) {
+                console.log('error', error);
+            }
+        }
+
+        fecthHousingEstate();
+    }, [showHousingEstate]);
+
     // +++ //
 
     // --- //
@@ -313,53 +332,79 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                         </ListGroup.Item>
                         <ListGroup.Item>
                             <div className='row mt-3 mb-3'>
-                                <div className='col-md-6' />
-                                <div className='col-md-6'>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">ราคาบ้านพร้อมที่ดิน:</p>
+                                <div className='col-md-3' />
+
+                                {showHousingEstate.map((data) => (
+                                    <div key={data.he_id} className='col-md-9'>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">ราคาบ้านพร้อมที่ดิน:</p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <p className="col-form-label">{parseFloat(contract.price).toLocaleString()}</p>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label">บาท</p>
+                                            </div>
                                         </div>
-                                        <div className='col-md-4 text-end'>
-                                            <p className="col-form-label">{parseFloat(contract.price).toLocaleString()}</p>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">หัก ค่าจอง:</p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <p className="col-form-label">{`- ${parseFloat(contract.b_amount).toLocaleString()}`}</p>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label">บาท</p>
+                                            </div>
                                         </div>
-                                        <div className='col-md-2 text-end'>
-                                            <p className="col-form-label">บาท</p>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">หัก ค่ามัดจำ:</p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <p className="col-form-label">{`- ${parseFloat(contract.con_amount).toLocaleString()}`}</p>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label">บาท</p>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">ยอดคงเหลือ:</p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <p className="col-form-label">{parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()}</p>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label">บาท</p>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">บวก ค่าส่วนกลางล่วงหน้า {data.common_firstYear} ปี:</p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <p className="col-form-label">{parseFloat(((contract.hLand_space * data.common_rate) * data.common_month) * data.common_firstYear).toLocaleString()}</p>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label">บาท</p>
+                                            </div>
+                                        </div>
+                                        <div className='row mt-3'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>รวมยอดสุทธิที่ต้องจ่ายชำระทั้งสิ้น:</strong></p>
+                                            </div>
+                                            <div className='col-md-4 text-end'>
+                                                <h4>{parseFloat(((contract.price - contract.b_amount) - contract.con_amount) + (((contract.hLand_space * data.common_rate) * data.common_month) * data.common_firstYear)).toLocaleString()}</h4>
+                                            </div>
+                                            <div className='col-md-2 text-end'>
+                                                <p className="col-form-label"><strong>บาท</strong></p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">จำนวนเงินจอง:</p>
-                                        </div>
-                                        <div className='col-md-4 text-end'>
-                                            <p className="col-form-label">{`- ${parseFloat(contract.b_amount).toLocaleString()}`}</p>
-                                        </div>
-                                        <div className='col-md-2 text-end'>
-                                            <p className="col-form-label">บาท</p>
-                                        </div>
-                                    </div>
-                                    <div className='row mb-3'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">จำนวนเงินทำสัญญา:</p>
-                                        </div>
-                                        <div className='col-md-4 text-end'>
-                                            <p className="col-form-label">{`- ${parseFloat(contract.con_amount).toLocaleString()}`}</p>
-                                        </div>
-                                        <div className='col-md-2 text-end'>
-                                            <p className="col-form-label">บาท</p>
-                                        </div>
-                                    </div>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>จำนวนเงินส่วนที่เหลือ:</strong></p>
-                                        </div>
-                                        <div className='col-md-4 text-end'>
-                                            <h4>{parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()}</h4>
-                                        </div>
-                                        <div className='col-md-2 text-end'>
-                                            <p className="col-form-label"><strong>บาท</strong></p>
-                                        </div>
-                                    </div>
-                                </div>
+                                ))}
+
                             </div>
                         </ListGroup.Item>
                     </ListGroup>

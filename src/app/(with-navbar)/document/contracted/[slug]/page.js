@@ -4,7 +4,7 @@ import GetRequest from '@/app/ConfigAPI';
 import {
     API_CONTRACT,
     API_HOUSE_ESTATE
-} from '../../../../../../../api';
+} from '../../../../../../api';
 import { PDFViewer } from '@react-pdf/renderer';
 import DocContract from '@/app/componnent/pdfComponent/Contract';
 

@@ -37,7 +37,7 @@ export default function ModalEdit({ show, handleClose, id }) {
     const [mdNationality, setMdNationality] = useState('');
     const [mdAddress, setMdAddress] = useState('');
     const [commonRate, setCommonRate] = useState('');
-    const [commonFirstMonth, setCommonFirstMonth] = useState('');
+    const [commonFirstYear, setCommonFirstYear] = useState('');
     const [commonMonth, setCommonMonth] = useState('');
     const [image, setImage] = useState('');
     const [userId, setUserId] = useState('');
@@ -58,7 +58,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                     setMdNationality(result.md_nationality);
                     setMdAddress(result.md_address);
                     setCommonRate(result.common_rate);
-                    setCommonFirstMonth(result.common_firstMonth);
+                    setCommonFirstYear(result.common_firstYear);
                     setCommonMonth(result.common_month);
                     setImage(result.image);
                     setUserId(result.user_id);
@@ -100,7 +100,7 @@ export default function ModalEdit({ show, handleClose, id }) {
         setMdNationality(defaultValues.md_nationality);
         setMdAddress(defaultValues.md_address);
         setCommonRate(defaultValues.common_rate);
-        setCommonFirstMonth(defaultValues.common_firstMonth)
+        setCommonFirstYear(defaultValues.common_firstYear)
         setCommonMonth(defaultValues.common_month);
         setImage(defaultValues.image);
         setUserId(defaultValues.user_id);
@@ -155,7 +155,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                         formdata.append("mdNationality", mdNationality);
                         formdata.append("mdAddress", mdAddress);
                         formdata.append("commonRate", commonRate);
-                        formdata.append("commonFirstMonth", commonFirstMonth);
+                        formdata.append("commonFirstYear", commonFirstYear);
                         formdata.append("commonMonth", commonMonth);
                         formdata.append("image", image);
                         formdata.append("userId", userId);
@@ -322,13 +322,13 @@ export default function ModalEdit({ show, handleClose, id }) {
                             </div>
                             <div className="row mb-3">
                                 <div className='col-md-6'>
-                                    <label className="col-form-label">จำนวนเดือนที่เก็บครั้งแรก</label>
+                                    <label className="col-form-label">จำนวนปีที่เก็บครั้งแรก</label>
                                     <div className="mt-1">
                                         <Form.Control
                                             type="number"
-                                            placeholder="อัตราเก็บค่าส่วนกลางต่อตารางวา"
-                                            value={commonFirstMonth}
-                                            onChange={(e) => setCommonFirstMonth(e.target.value)}
+                                            placeholder="จำนวนปีที่เก็บครั้งแรก"
+                                            value={commonFirstYear}
+                                            onChange={(e) => setCommonFirstYear(e.target.value)}
                                             required
                                         />
                                     </div>

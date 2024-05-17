@@ -190,13 +190,13 @@ export default function housingEstate() {
                                         </div>
                                         <div className='row'>
                                             <div className='col-md-4'>
-                                                <p className="col-form-label"><strong>จำนวนเดือนครั้งแรกที่เก็บ:</strong></p>
+                                                <p className="col-form-label"><strong>จำนวนปีครั้งแรกที่เก็บ:</strong></p>
                                             </div>
                                             <div className='col-md-4 text-center'>
-                                                <p className="col-form-label">{data.common_firstMonth}</p>
+                                                <p className="col-form-label">{data.common_firstYear}</p>
                                             </div>
                                             <div className='col-md-4'>
-                                                <p className="col-form-label">เดือน</p>
+                                                <p className="col-form-label">ปี</p>
                                             </div>
                                         </div>
                                         <div className='row'>
