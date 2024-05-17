@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     body: {
         paddingTop: '0.95cm',
         paddingBottom: '1.59cm',
-        paddingLeft: '1.9cm',
-        paddingRight: '2.27cm',
+        paddingLeft: '1.27cm',
+        paddingRight: '1.27cm',
         fontFamily: 'Sarabun',
         fontStyle: 'normal',
     },
@@ -53,14 +53,17 @@ const styles = StyleSheet.create({
         textIndent: '1cm',
     },
     textContent: {
-        fontSize: 12,
+        fontSize: 10,
         marginBottom: 10,
         textAlign: 'justify',
+        lineHeight: '1.8', // กำหนดระยะห่างระหว่างบรรทัดที่นี่
+
     },
     textContentBold: {
         fontFamily: 'SarabunBold',
-        fontSize: 12,
-    }
+        fontSize: 10,
+    },
+
 });
 
 const DocContract = ({ housingEstate, contract }) => (
@@ -101,7 +104,7 @@ const DocContract = ({ housingEstate, contract }) => (
                         ข้อ1. ผู้จะขายตกลงจะขายและผู้จะซื้อตกลงจะซื้อที่ดิน โฉนดที่ดินเลขที่ {contract.num_deed} หน้าสำรวจ {contract.num_survey} หมู่บ้าน{data.name} บ้านเลขที่ {data.address} (แปลงเลขที่ {contract.house_no}) ขนาดเนื้อที่ประมาณ {contract.hLand_space} ตารางวา ในราคา {parseFloat(contract.price).toLocaleString()} บาท ({THBText(contract.price)}) หากภายหลังปรากฏว่าที่ดินเพิ่มขึ้นหรือลดลงจากที่ระบุไว้ตามสัญญานี้ คู่สัญญาตกลงเพิ่มหรือลดเงินในราคาตารางวาละ {parseFloat(contract.land_price).toLocaleString()} บาท ({THBText(contract.land_price)})
                     </Text>
                     <Text style={[styles.textContent, styles.textWithIndent]}>
-                        ข้อ2. ผู้จะซื้อตกลงชำระเงินมัดจำค่าที่ดินให้แก่ผู้จะขายและผู้จะขายได้รับเงินมัดจำดังกล่าวไว้แล้วเป็นเงิน {parseFloat(contract.b_amount).toLocaleString()} บาท ({THBText(contract.b_amount)}) และในวันทำสัญญานี้ผู้จะซื้อได้ชำระเงินจำนวน {parseFloat(contract.con_amount).toLocaleString()} บาท ส่วนที่เหลืออีกจำนวน {parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()} บาท ({THBText((contract.price - contract.b_amount) - contract.con_amount)}) ชำระภายในวันโอนหรือภายในเจ็ดวันหลังจากได้รับแจ้งให้ไปชำระส่วนที่เหลือและทำนิติกรรมรับโอนกรรมสิทธิ์ที่ดิน จากผู้จะขายการชำระเงินหากชำระด้วยเช็ค ตั๋วเงิน หรือตราสารใดๆ  นอกจากชำระด้วยเงินสดแล้วจะถือว่าผู้จะซื้อได้ชำระเสร็จเรียบร้อยแล้วในงวดนั้นๆ ต่อเมื่อเช็ค ตั๋วเงิน หรือตราสารใดๆ นั้นขึ้นเงิน และผ่านเข้าบัญชีของผู้จะขายเรียบร้อยแล้ว
+                        ข้อ2. ผู้จะซื้อตกลงชำระเงินมัดจำค่าที่ดินให้แก่ผู้จะขายและผู้จะขายได้รับเงินมัดจำดังกล่าวไว้แล้วเป็นเงิน {parseFloat(contract.b_amount).toLocaleString()} บาท ({THBText(contract.b_amount)}) และในวันทำสัญญานี้ผู้จะซื้อได้ชำระเงินจำนวน {parseFloat(contract.con_amount).toLocaleString()} บาท ส่วนที่เหลืออีกจำนวน {parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()} บาท ({THBText((contract.price - contract.b_amount) - contract.con_amount)}) ชำระภายในวันโอนหรือภายในเจ็ดวันหลังจากได้รับแจ้งให้ไปชำระส่วนที่เหลือและทำนิติกรรมรับโอนกรรมสิทธิ์ที่ดิน จากผู้จะขายการชำระเงินหากชำระด้วยเช็ค ตั๋วเงิน หรือตราสารใดๆ  นอกจากชำระด้วยเงินสดแล้วจะถือว่าผู้จะซื้อได้ชำระเสร็จเรียบร้อยแล้วในงวดนั้นๆ ต่อเมื่อเช็ค ตั๋วเงิน หรือตราสารใดๆ นั้นขึ้นเงิน และผ่านเข้าบัญชีของผู้จะขายเรียบร้อยแล้ว &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </Text>
                 </View>
             ))}
