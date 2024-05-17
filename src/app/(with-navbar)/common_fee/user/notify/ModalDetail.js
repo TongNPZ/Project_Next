@@ -11,6 +11,7 @@ import {
     API_HOUSE_ESTATE
 } from '../../../../../../api';
 import ModalAddSlip from "./ModalAddSlip";
+import ModalChangedSlip from './ModalChangedSlip';
 import {
     Modal,
     Image,
@@ -22,7 +23,7 @@ import {
 export default function ModalDetail({ show, handleClose, id }) {
 
 
-    // fecth //
+    // - fecth - //
 
     // housing estate
     const [housingEstate, setHousingEstate] = useState([]);
@@ -78,10 +79,12 @@ export default function ModalDetail({ show, handleClose, id }) {
     }, [showRcf, showData]);
     // --- //
 
-    // modal
+    // - modal - //
+    const [selectedRcfId, setSelectedRcfId] = useState('')
     const [selectedNcfId, setSelectedNcfId] = useState('')
     const [selectedCommonReceive, setSelectedCommonReceive] = useState('')
 
+    // add slip
     const [showAddSlip, setShowAddSlip] = useState(false);
 
     const handleAddSlipClose = () => setShowAddSlip(false);
@@ -91,11 +94,23 @@ export default function ModalDetail({ show, handleClose, id }) {
         setShowAddSlip(true);
     }
 
+    // changed slip
+    const [showChangedSlip, setShowChangedSlip] = useState(false);
+
+    const handleChangedSlipClose = () => setShowChangedSlip(false);
+    const handleChangedSlipShow = (id) => {
+        setSelectedRcfId(id);
+        setShowChangedSlip(true);
+    }
+
+    // --- //
+
     return (
         <Modal show={show} onHide={handleClose} size="xl">
 
             {/* modal */}
             <ModalAddSlip show={showAddSlip} handleClose={handleAddSlipClose} ncfId={selectedNcfId} commonReceive={selectedCommonReceive} />
+            <ModalChangedSlip show={showChangedSlip} handleClose={handleChangedSlipClose} id={selectedRcfId} />
             {/* --- */}
 
             <Modal.Header closeButton />
@@ -121,7 +136,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                         <div>
                             <p>
                                 <b>เจ้าของบ้าน</b> <br />
-                                {showData.house_no} โซน {showData.name} {showData.house_name} พื้นที่ดิน {showData.hLand_space} ตารางวา พื้นที่ใช้สอย {showData.usable_space} ตารางเมตร <br />
+                                เลขที่ {showData.house_no} โซน {showData.name} {showData.house_name} พื้นที่ดิน {showData.hLand_space} ตารางวา พื้นที่ใช้สอย {showData.usable_space} ตารางเมตร <br />
                             </p>
                         </div>
                     </div>
@@ -143,7 +158,15 @@ export default function ModalDetail({ show, handleClose, id }) {
                                     </div>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>วันที่:</strong></p>
+                                            <p className="col-form-label"><strong>วันที่แจ้งชำระ:</strong></p>
+                                        </div>
+                                        <div className='col-md-6'>
+                                            <p className="col-form-label">{DateFormat(showData.ncf_record)}</p>
+                                        </div>
+                                    </div>
+                                    <div className='row'>
+                                        <div className='col-md-6'>
+                                            <p className="col-form-label"><strong>วันที่กำหนดชำระ:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
                                             <p className="col-form-label">{DateFormat(showData.ncf_date)}</p>
@@ -266,7 +289,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                                     <h3>{parseFloat(showData.ncf_amount).toLocaleString()}</h3>
                                 </div>
                                 <div className='col-md-2 text-end'>
-                                    <p className="col-form-label">บาท</p>
+                                    <p className="col-form-label"><strong>บาท</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -275,8 +298,12 @@ export default function ModalDetail({ show, handleClose, id }) {
                 <Modal.Footer>
 
                     {!showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id) ? (
-                        <Button variant="success" onClick={() => handleAddSlipShow(id, showData.common_receive)}>
+                        <Button variant="success" onClick={() => handleAddSlipShow(showData.ncf_id, showData.common_receive)}>
                             ชำระเงินออนไลน์
+                        </Button>
+                    ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && rcf.rcf_slip) ? (
+                        <Button variant="success" onClick={() => handleChangedSlipShow(showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id)}>
+                            ดูสลิปที่ชำระ
                         </Button>
                     ) : null}
 

@@ -40,7 +40,6 @@ export default function ModalQRCode({ show, handleClose, id }) {
                 } catch (error) {
                     console.log('error', error);
                 }
-
             }
 
             fetchQRCode();
@@ -70,7 +69,7 @@ export default function ModalQRCode({ show, handleClose, id }) {
             }
         });
     }
-    
+
     // cancel
     const handleReturn = () => {
         ConfirmCancel().then((result) => {

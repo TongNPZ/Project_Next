@@ -4,6 +4,7 @@ import { useAuth } from "@/app/componnent/AuthContext/AuthContext";
 import ProtectRoute from "@/app/componnent/ProtectRoute/ProtectRoute";
 import { DateFormat } from "@/app/Format";
 import GetRequest from "@/app/ConfigAPI";
+import { API_URL } from '../../../../../../app';
 import {
     API_USER_COMMON_FEE,
     API_RECEIVE_COMMON_FEE
@@ -131,7 +132,7 @@ export default function NotifyCommonFeeUser() {
                                                     )}
 
                                                 </div>
-                                                <p>เจ้าของบ้านเลขที่ {data.house_no} ตามที่ท่านได้ชำระค่าบริการสาธารณะให้กับโครงการ ได้ครบกำหนดชำระในวันที่ {DateFormat(data.ncf_date)} เลขที่แจ้งชำระ {data.ncf_id} กรุณามาชำระค่าบริการสาธารณะก่อนวันที่ {DateFormat(data.ncf_nextDate)} เพื่อโครงการจะนำไปจัดสรรชำระค่าบริการต่างๆ ต่อไป</p>
+                                                <p>เจ้าของบ้านเลขที่ {data.house_no} ตามที่ท่านได้ชำระค่าบริการสาธารณะให้กับโครงการ ได้ครบกำหนดชำระในวันที่ {DateFormat(data.ncf_date)} เลขที่แจ้งชำระ {data.ncf_id} กรุณามาชำระค่าบริการสาธารณะก่อนวันที่ {DateFormat(data.ncf_nextDate)} เพื่อโครงการจะนำไปจัดสรรชำระค่าบริการอื่นต่อไป</p>
                                             </div>
                                             <div className="col-md-6 text-end">
                                                 ดูรายละเอียด <BsCaretRightFill />
@@ -141,17 +142,17 @@ export default function NotifyCommonFeeUser() {
                                 </ListGroup>
                             ) : (
                                 <ListGroup key={index} className="mb-2">
-                                    <ListGroup.Item action>
+                                    <ListGroup.Item action href={`${API_URL}${showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_receipt}`}>
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <p>ค่าบริการสาธารณะ</p>
                                                 <div className="mb-2">
                                                     <Badge bg="success">ชำระแล้ว</Badge>
                                                 </div>
-                                                {/* <p>เจ้าของบ้านเลขที่ {data.house_no} ตามที่ท่านได้ชำระค่าบริการสาธารณะให้กับโครงการ ได้ครบกำหนดชำระในวันที่ {DateFormat(data.ncf_date)} กรุณามาชำระค่าบริการสาธารณะได้ที่สำนักงานขาย</p> */}
+                                                <p>โครงการขอขอบคุณที่ชำระค่าบริการสาธารณะ จำนวน {parseFloat(data.ncf_amount).toLocaleString()} บาท สำหรับเลขที่ชำระหมายเลข {showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_id} เมื่อวันที่ {DateFormat(showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_date)}</p>
                                             </div>
                                             <div className="col-md-6 text-end">
-                                                ดูรายละเอียด <BsCaretRightFill />
+                                                ดูใบเสร็จรับเงิน <BsCaretRightFill />
                                             </div>
                                         </div>
                                     </ListGroup.Item>
