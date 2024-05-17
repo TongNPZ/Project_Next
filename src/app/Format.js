@@ -15,6 +15,10 @@ export function DateFormat(date) {
     return moment(date).add(543, 'years').format('LL');
 }
 
+export function DateFormatNum(date) {
+    return moment(date).add(543, 'years').format('L');
+}
+
 export function DateTimeFormat(dateTime) {
     return moment(dateTime).add(543, 'years').format('LLL');
 }

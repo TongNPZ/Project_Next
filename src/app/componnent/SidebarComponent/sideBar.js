@@ -32,6 +32,7 @@ function SideBar() {
   // collapse //
   const [openHouse, setOpenHouse] = useState(false);
   const [openBuy, setOpenBuy] = useState(false);
+  const [openCommonFee, setOpenCommonFee] = useState(false);
   // --- //
 
   return (
@@ -147,9 +148,41 @@ function SideBar() {
             {role === 1 ? (
               <ListGroup.Item>
                 <div className='my-3'>
-                  <a className="nav-link" aria-current="page" onClick={() => router.push('/common_fee/admin/notify')} style={{ cursor: 'pointer' }}>
-                    <BsReceiptCutoff className='me-2' /><strong>ข้อมูลค่าส่วนกลาง</strong>
-                  </a>
+                  <div className='mb-4'>
+                    <a
+                      className="nav-link" aria-current="page"
+                      aria-controls="collapse-common-fee"
+                      aria-expanded={openCommonFee}
+                      onClick={() => setOpenCommonFee(!openCommonFee)}
+                      style={{ cursor: 'pointer' }}>
+                      <div className='row'>
+                        <div className='col-md-6'>
+                          <BsReceiptCutoff className='me-2' />ค่าส่วนกลาง
+                        </div>
+
+                        {openHouse !== true ? (
+                          <div className='col-md-6 text-end'>
+                            <BsCaretRightFill />
+                          </div>
+                        ) : (
+                          <div className='col-md-6 text-end'>
+                            <BsCaretDownFill />
+                          </div>
+                        )}
+
+                      </div>
+                    </a>
+
+                    {/* collapse house */}
+                    <Collapse in={openCommonFee}>
+                      <div className='mb-3' id="collapse-common-fee">
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/notify')} style={{ cursor: 'pointer' }}>แจ้งชำระค่าส่วนกลาง</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/receive')} style={{ cursor: 'pointer' }}>รับเงินค่าส่วนกลาง</a>
+                      </div>
+                    </Collapse>
+                    {/* --- */}
+
+                  </div>
                 </div>
               </ListGroup.Item>
             ) : role === 3 ? (

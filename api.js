@@ -2,6 +2,7 @@ import {
   API_URL,
   ADMIN,
   USER,
+  HOUSE,
   OWNER
 } from './app'
 
@@ -9,7 +10,8 @@ import {
   export const POST_API_LOGIN = `${API_URL}/login`
 
   // house
-  export const API_HOUSE = `${API_URL}${ADMIN}/house`
+  export const API_HOUSE = `${API_URL}${ADMIN}${HOUSE}`
+  export const API_HOUSE_OWNER = `${API_URL}${ADMIN}${OWNER}${HOUSE}`
   export const API_HOUSE_ZONE = `${API_URL}${ADMIN}/house_zone`
   export const API_HOUSE_STYLE = `${API_URL}${ADMIN}/house_style`
   export const API_HOUSE_ESTATE = `${API_URL}${ADMIN}/house_estate`
@@ -36,7 +38,6 @@ import {
  export const GET_API_DATA_USER = `${API_URL}${USER}`
  export const API_USER_COMMON_FEE = `${API_URL}${USER}/common_fee`
  export const API_OWNER_COMMON_FEE = `${API_URL}${USER}${OWNER}/common_fee`
- export const API_DATA_OWNER_HOUSE = `${API_URL}${USER}${OWNER}/house`
 //   export const GET_API_ALL_USERS = `${API_URL}${AUTH_SERVICE}/user/all`
 //   export const PUT_API_UPDATE_USER = `${API_URL}${AUTH_SERVICE}/user/edit`
 //   export const GET_API_USER_INFORMATION = `${API_URL}${AUTH_SERVICE}/user/me`

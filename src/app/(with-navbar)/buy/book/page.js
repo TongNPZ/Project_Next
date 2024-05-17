@@ -269,7 +269,7 @@ export default function Book() {
                                             {data.b_status === 1 && data.b_receipt === null ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipDownload}>
-                                                        <Link href={`/buy/document/receipt/book/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                        <Link href={`/document/receipt/book/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                             <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                         </Link>
                                                     </OverlayTrigger>
@@ -311,17 +311,17 @@ export default function Book() {
                                                                     }
                                                                 }}
                                                             />
-                                                            <BsBoxArrowUp className='me-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                            <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
                                                         </label>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipEdit}>
                                                         <a onClick={() => handleEditShow(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
+                                                            <BsPencilSquare className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipClose}>
                                                         <a onClick={() => ChangedStatus(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsFillXSquareFill className='text-danger' style={{ fontSize: '24px' }} />
+                                                            <BsFillXSquareFill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
@@ -329,7 +329,7 @@ export default function Book() {
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipContract}>
                                                         <a onClick={() => handleAddContractShow(data.b_id, data.house_no, data.user_name, data.user_lastname)} style={{ cursor: 'pointer' }}>
-                                                            <BsFileTextFill className='me-2 text-secondary' style={{ fontSize: '28px' }} />
+                                                            <BsFileTextFill className='me-2 mb-2 text-secondary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipChangedUpload}>
@@ -345,12 +345,12 @@ export default function Book() {
                                                                     }
                                                                 }}
                                                             />
-                                                            <BsFileEarmarkArrowUpFill className='me-2 text-warning' style={{ fontSize: '28px' }} />
+                                                            <BsFileEarmarkArrowUpFill className='me-2 mb-2 text-warning' style={{ fontSize: '28px' }} />
                                                         </label>
                                                     </OverlayTrigger>
                                                     <OverlayTrigger overlay={renderTooltipClose}>
                                                         <a onClick={() => ChangedStatus(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsFillXSquareFill className='text-danger' style={{ fontSize: '24px' }} />
+                                                            <BsFillXSquareFill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>

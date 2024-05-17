@@ -1,112 +1,84 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateTimeFormat } from '@/app/Format';
+import { DateFormat } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_NOTIFY_COMMON_FEE,
-    API_RECEIVE_COMMON_FEE
+    API_HOUSE_OWNER
 } from '../../../../../../api';
 import ModalAdd from './ModalAdd';
-import ModalCheckSlip from './ModalCheckSlip';
-import RemoveData from './RemoveData';
 import {
     Table,
     Card,
     Button,
     Form,
-    Badge,
     OverlayTrigger,
     Tooltip
 } from 'react-bootstrap';
 import {
-    BsFillTrash3Fill,
-    BsFileEarmarkCheckFill,
-    BsFileEarmarkFill,
-    BsDownload,
-    BsFileEarmarkTextFill,
-    BsBoxArrowUp
+    BsEnvelopeArrowUpFill
 } from "react-icons/bs";
 
 export default function NotifyCommonFee() {
+    const currentDate = new Date
 
     // - fecth - //
-
-    // notify common fee
     const [showData, setShowData] = useState([]);
-
-    const fetchNotifyCommonFee = async () => {
-        try {
-            const result = await GetRequest(API_NOTIFY_COMMON_FEE, 'GET', null);
-            setShowData(result.data);
-        } catch (error) {
-            console.log('error', error);
-        }
-    }
+    const [showNcf, setShowNcf] = useState([]);
 
     useEffect(() => {
-        fetchNotifyCommonFee();
-    }, [showData]);
-
-    // show rcf
-    const [showRcf, setShowRcf] = useState([]);
-
-    useEffect(() => {
-        const fetchRcf = async () => {
+        const fetchHouseOwner = async () => {
             try {
-                const result = await GetRequest(API_RECEIVE_COMMON_FEE, 'GET', null);
-                setShowRcf(result.data);
+                const result = await GetRequest(API_HOUSE_OWNER, 'GET', null);
+                setShowData(result.data);
             } catch (error) {
                 console.log('error', error);
             }
         }
 
-        fetchRcf();
-    }, [showRcf]);
+        const fetchNcf = async () => {
+            try {
+                const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC`, 'GET', null);
+                setShowNcf(result.data);
+            } catch (error) {
+                console.log('error', error);
+            }
+        }
+
+        const timeout = setTimeout(() => {
+            fetchHouseOwner();
+            fetchNcf();
+        }, 60);
+
+        return () => clearTimeout(timeout);
+    }, [currentDate]);
 
     // --- //
 
-    // - modal - //
-    const [selectedNcfId, setSelectedNcfId] = useState('');
+    // modal
+    const [selected, setSelected] = useState({
+        hId: '',
+        houseNo: '',
+        userName: '',
+        userLastname: '',
+        transDate: '',
+        ncfNextDate: '',
+        ncfAmount: '',
+    });
 
-    // add
     const [showAdd, setShowAdd] = useState(false);
 
     const handleAddClose = () => setShowAdd(false);
-    const handleAddShow = () => setShowAdd(true);
-
-    // check slip
-    const [showCheckSlip, setShowCheckSlip] = useState(false);
-
-    const handleCheckSlipClose = () => setShowCheckSlip(false);
-    const handleCheckSlipShow = (ncfId) => {
-        setSelectedNcfId(ncfId);
-        setShowCheckSlip(true);
+    const handleAddShow = (selected) => {
+        setSelected(selected);
+        setShowAdd(true);
     }
-    // --- //
 
     // tooltip
-    const renderTooltipCheckSlip = (props) => (
+    const renderTooltipAddNotifyCommonFee = (props) => (
         <Tooltip {...props}>
-            ตรวจสอบสลิป
-        </Tooltip>
-    );
-
-    const renderTooltipDownload = (props) => (
-        <Tooltip {...props}>
-            ดาวน์โหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
-    const renderTooltipUpload = (props) => (
-        <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
-    const renderTooltipDelete = (props) => (
-        <Tooltip {...props}>
-            ยกเลิกการแจ้งชำระ
+            แจ้งชำระค่าส่วนกลาง
         </Tooltip>
     );
 
@@ -114,8 +86,7 @@ export default function NotifyCommonFee() {
         <ProtectRoute requireRoles={[1]}>
 
             {/* modal */}
-            <ModalAdd show={showAdd} handleClose={handleAddClose} />
-            <ModalCheckSlip show={showCheckSlip} handleClose={handleCheckSlipClose} ncfId={selectedNcfId} />
+            <ModalAdd show={showAdd} handleClose={handleAddClose} selected={selected} />
             {/* --- */}
 
             <Card>
@@ -123,11 +94,11 @@ export default function NotifyCommonFee() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลค่าส่วนกลาง</h5>
+                            <h5>ตารางข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
-                            <Button variant="success" onClick={handleAddShow}>
-                                แจ้งชำระค่าส่วนกลาง
+                            <Button variant="success" href='/common_fee/admin/receive'>
+                                ตรวจสอบการรับเงินค่าส่วนกลาง
                             </Button>
                         </div>
                     </div>
@@ -146,97 +117,68 @@ export default function NotifyCommonFee() {
                         <Table bordered hover responsive>
                             <thead>
                                 <tr>
-                                    <th>รหัสแจ้งชำระค่าส่วนกลาง</th>
+                                    <th>ลำดับ</th>
                                     <th>บ้านเลขที่</th>
-                                    <th>จำนวนเงิน</th>
-                                    <th>วันที่แจ้งชำระ</th>
-                                    <th>หมายเหตุ</th>
-                                    <th>ตรวจสอบการชำระ</th>
-                                    <th>เอกสาร</th>
-                                    <th>สถานะ</th>
+                                    <th>ชื่อเจ้าของบ้าน</th>
+                                    <th>วันที่โอนกรรมสิทธิ์</th>
+                                    <th>วันที่แจ้งชำระค่าส่วนกลาง</th>
+                                    <th>จำนวนเงินค่าส่วนกลาง</th>
                                     <th>การจัดการ</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 {showData && showData.length > 0 ? (
-                                    showData.map((data) => (
-                                        <tr key={data.ncf_id}>
-                                            <td>{data.ncf_id}</td>
-                                            <td>{data.house_no}</td>
-                                            <td>{parseFloat(data.ncf_amount).toLocaleString()}</td>
-                                            <td>{DateTimeFormat(data.ncf_date)}</td>
-                                            <td>{data.ncf_note}</td>
-                                            <td>
+                                    showData.map((data, index) => {
+                                        const currentDate = new Date();
+                                        const ncfData = showNcf.find((ncf) => ncf.h_id === data.h_id);
+                                        if (!ncfData) {
+                                            return null
+                                        } else {
+                                            const commonRate = ncfData.common_rate;
+                                            const commonMonth = ncfData.common_month;
+                                            const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
-                                                {showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_slip !== null) ? (
-                                                    <OverlayTrigger overlay={renderTooltipCheckSlip}>
-                                                        <a onClick={() => handleCheckSlipShow(data.ncf_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsFileEarmarkCheckFill className='text-danger' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                ) : data.ncf_status === 1 ? (
-                                                    <BsFileEarmarkFill className='text-primary' style={{ fontSize: '28px' }} />
-                                                ) : data.ncf_status === 0 && (
-                                                    <div className='text-danger'>
-                                                        <p>ยังไม่มีการชำระ</p>
-                                                    </div>
-                                                )}
+                                            if (currentDate < new Date(ncfData.ncf_nextDate)) {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{data.house_no}</td>
+                                                        <td>{data.user_name} {data.user_lastname}</td>
+                                                        <td>{DateFormat(data.trans_date)}</td>
+                                                        <td>{DateFormat(ncfData.ncf_nextDate)}</td>
+                                                        <td>{parseFloat(totalPrice).toLocaleString()}</td>
+                                                        <td>
+                                                            <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>
+                                                                <a style={{ cursor: 'pointer' }} onClick={() => handleAddShow({
+                                                                    hId: data.h_id,
+                                                                    houseNo: data.house_no,
+                                                                    userName: data.user_name,
+                                                                    userLastname: data.user_lastname,
+                                                                    transDate: data.trans_date,
+                                                                    ncfNextDate: ncfData.ncf_nextDate,
+                                                                    ncfAmount: totalPrice,
+                                                                })} >
+                                                                    <BsEnvelopeArrowUpFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                                </a>
+                                                            </OverlayTrigger>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            } else {
+                                                return (
+                                                    <tr>
+                                                        <td colSpan="12" className="text-center">
+                                                            <h4 className='mt-5 mb-5'>
+                                                                ยังไม่ถึงเวลาที่แจ้งชำระ
+                                                            </h4>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
 
-                                            </td>
-                                            <td>
-
-                                                {showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_receipt !== null) ? (
-                                                    <BsFileEarmarkTextFill className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                ) : (
-                                                    <OverlayTrigger overlay={renderTooltipDownload}>
-                                                        <a style={{ cursor: 'pointer' }}>
-                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                )}
-
-                                            </td>
-
-                                            {data.ncf_status === 1 ? (
-                                                <td>
-                                                    <Badge bg="success">ชำระแล้ว</Badge>
-                                                </td>
-                                            ) : (
-                                                <td>
-                                                    <Badge bg="danger">ค้างชำระ</Badge>
-                                                </td>
-                                            )}
-
-                                            {showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_receipt !== null) ? (
-                                                <td>
-                                                    <BsFileEarmarkTextFill className='me-2 text-primary' style={{ fontSize: '24px' }} />
-                                                </td>
-                                            ) : showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_slip !== null) ? (
-                                                <td>
-                                                    <OverlayTrigger overlay={renderTooltipUpload}>
-                                                        <a style={{ cursor: 'pointer' }}>
-                                                            <BsBoxArrowUp className='me-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                </td>
-                                            ) : (
-                                                <td>
-                                                    <OverlayTrigger overlay={renderTooltipUpload}>
-                                                        <a style={{ cursor: 'pointer' }}>
-                                                            <BsBoxArrowUp className='me-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                    <OverlayTrigger overlay={renderTooltipDelete}>
-                                                        <a onClick={() => RemoveData(data.ncf_id)} style={{ cursor: 'pointer' }}>
-                                                            <BsFillTrash3Fill className='text-danger' style={{ fontSize: '24px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                </td>
-                                            )}
-
-                                        </tr>
-                                    ))
+                                        }
+                                    })
                                 ) : (
                                     <tr>
                                         <td colSpan="12" className="text-center">
