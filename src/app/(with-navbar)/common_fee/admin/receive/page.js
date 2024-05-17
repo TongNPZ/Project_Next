@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { DateFormat } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
+import { API_URL } from '../../../../../../app';
 import {
     API_NOTIFY_COMMON_FEE,
     API_RECEIVE_COMMON_FEE
 } from '../../../../../../api';
 import ModalCheckSlip from './ModalCheckSlip';
+import AddReceive from './AddReceive';
+import UploadFile from './UploadFile';
 import RemoveData from './RemoveData';
 import {
     Table,
@@ -21,10 +24,11 @@ import {
 import {
     BsFillTrash3Fill,
     BsFileEarmarkCheckFill,
-    BsFileEarmarkFill,
     BsDownload,
-    BsFileEarmarkTextFill,
-    BsBoxArrowUp
+    BsBoxArrowUp,
+    BsReceipt,
+    BsBellFill,
+    BsCheckSquareFill
 } from "react-icons/bs";
 
 export default function ReceiveCommonFee() {
@@ -65,6 +69,15 @@ export default function ReceiveCommonFee() {
 
     // --- //
 
+    // fucntion
+    const [uploadedFile, setUploadedFile] = useState(null);
+
+    useEffect(() => {
+        return () => {
+            setUploadedFile(null);
+        };
+    }, [uploadedFile]);
+
     // - modal - //
     const [selectedNcfId, setSelectedNcfId] = useState('');
 
@@ -81,13 +94,13 @@ export default function ReceiveCommonFee() {
     // tooltip
     const renderTooltipCheckSlip = (props) => (
         <Tooltip {...props}>
-            ตรวจสอบสลิปการชำระ
+            ตรวจสอบสลิปโอนเงิน
         </Tooltip>
     );
 
     const renderTooltipShowSlip = (props) => (
         <Tooltip {...props}>
-            ดูสลิปการชำระ
+            ดูสลิปโอนเงิน
         </Tooltip>
     );
 
@@ -115,6 +128,12 @@ export default function ReceiveCommonFee() {
         </Tooltip>
     );
 
+    const renderTooltipConfirm = (props) => (
+        <Tooltip {...props}>
+            ยืนยันการชำระ
+        </Tooltip>
+    );
+
     const renderTooltipDelete = (props) => (
         <Tooltip {...props}>
             ยกเลิกการแจ้งชำระ
@@ -130,8 +149,18 @@ export default function ReceiveCommonFee() {
 
             <Card>
                 <Card.Header>
-                    <div className='col-md-6 d-flex align-items-center'>
-                        <h5>ตารางข้อมูลรับเงินค่าส่วนกลาง</h5>
+                    <div className='row'>
+                        <div className='col-md-6 d-flex align-items-center'>
+                            <h5>ตารางข้อมูลรับเงินค่าส่วนกลาง</h5>
+                        </div>
+                        <div className='col-md-6 text-md-end'>
+                            <Button href='/common_fee/admin/notify' variant="success">
+                                <BsBellFill style={{
+                                    fontSize: '24px',
+                                    marginRight: '5px'
+                                }} /> แจ้งชำระค่าส่วนกลาง
+                            </Button>
+                        </div>
                     </div>
                 </Card.Header>
                 <Card.Body>
@@ -212,7 +241,7 @@ export default function ReceiveCommonFee() {
 
                                                     {rcfSomeData && rcfFindData.rcf_receipt !== null ? (
                                                         <OverlayTrigger overlay={renderTooltipReceipt}>
-                                                            <a target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <a href={`${API_URL}${rcfFindData.rcf_receipt}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                                 <BsReceipt className='me-2 mb-2 text-primary' style={{ fontSize: '28px' }} />
                                                             </a>
                                                         </OverlayTrigger>
@@ -253,29 +282,104 @@ export default function ReceiveCommonFee() {
                                                 {rcfSomeData && rcfFindData.rcf_receipt !== null && rcfFindData.rcf_status === 1 && data.ncf_status === 1 ? (
                                                     <td>
                                                         <OverlayTrigger overlay={renderTooltipChangedUpload}>
-                                                            <a style={{ cursor: 'pointer' }}>
-                                                                <BsBoxArrowUp className='me-2 text-warning' style={{ fontSize: '24px' }} />
-                                                            </a>
+                                                            <label htmlFor={`fileInput-receipt-${rcfFindData.rcf_id}`} style={{ cursor: 'pointer' }}>
+                                                                <input
+                                                                    id={`fileInput-receipt-${rcfFindData.rcf_id}`}
+                                                                    type="file"
+                                                                    style={{ display: 'none' }}
+                                                                    value={uploadedFile ? uploadedFile.file : ''}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.files.length > 0) {
+                                                                            UploadFile(rcfFindData.rcf_id, e.target.files[0]);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <BsBoxArrowUp className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
+                                                            </label>
                                                         </OverlayTrigger>
                                                     </td>
                                                 ) : rcfSomeData && rcfFindData.rcf_receipt === null && rcfFindData.rcf_status === 1 && data.ncf_status === 1 ? (
                                                     <td>
                                                         <OverlayTrigger overlay={renderTooltipUpload}>
+                                                            <label htmlFor={`fileInput-receipt-${rcfFindData.rcf_id}`} style={{ cursor: 'pointer' }}>
+                                                                <input
+                                                                    id={`fileInput-receipt-${rcfFindData.rcf_id}`}
+                                                                    type="file"
+                                                                    style={{ display: 'none' }}
+                                                                    value={uploadedFile ? uploadedFile.file : ''}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.files.length > 0) {
+                                                                            UploadFile(rcfFindData.rcf_id, e.target.files[0]);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                            </label>
+                                                        </OverlayTrigger>
+                                                    </td>
+                                                ) : rcfSomeData && rcfFindData.rcf_receipt !== null && rcfFindData.rcf_status === 0 && data.ncf_status === 0 ? (
+                                                    <td>
+                                                        <OverlayTrigger overlay={renderTooltipChangedUpload}>
+                                                            <label htmlFor={`fileInput-receipt-${rcfFindData.rcf_id}`} style={{ cursor: 'pointer' }}>
+                                                                <input
+                                                                    id={`fileInput-receipt-${rcfFindData.rcf_id}`}
+                                                                    type="file"
+                                                                    style={{ display: 'none' }}
+                                                                    value={uploadedFile ? uploadedFile.file : ''}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.files.length > 0) {
+                                                                            UploadFile(rcfFindData.rcf_id, e.target.files[0]);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <BsBoxArrowUp className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
+                                                            </label>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger overlay={renderTooltipConfirm}>
                                                             <a style={{ cursor: 'pointer' }}>
-                                                                <BsBoxArrowUp className='me-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                                <BsCheckSquareFill className='me-2 mb-2 text-success' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>
                                                     </td>
-                                                ) : (
+                                                ) : rcfSomeData && rcfFindData.rcf_receipt === null && rcfFindData.rcf_status === 0 && data.ncf_status === 0 ? (
                                                     <td>
                                                         <OverlayTrigger overlay={renderTooltipUpload}>
-                                                            <a style={{ cursor: 'pointer' }}>
-                                                                <BsBoxArrowUp className='me-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                            </a>
+                                                            <label htmlFor={`fileInput-receipt-${rcfFindData.rcf_id}`} style={{ cursor: 'pointer' }}>
+                                                                <input
+                                                                    id={`fileInput-receipt-${rcfFindData.rcf_id}`}
+                                                                    type="file"
+                                                                    style={{ display: 'none' }}
+                                                                    value={uploadedFile ? uploadedFile.file : ''}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.files.length > 0) {
+                                                                            UploadFile(rcfFindData.rcf_id, e.target.files[0]);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                            </label>
                                                         </OverlayTrigger>
+                                                    </td>
+                                                ) : (
+                                                    <td><OverlayTrigger overlay={renderTooltipUpload}>
+                                                        <label htmlFor={`fileInput-receipt-${data.ncf_id}`} style={{ cursor: 'pointer' }}>
+                                                            <input
+                                                                id={`fileInput-receipt-${data.ncf_id}`}
+                                                                type="file"
+                                                                style={{ display: 'none' }}
+                                                                value={uploadedFile ? uploadedFile.file : ''}
+                                                                onChange={(e) => {
+                                                                    if (e.target.files.length > 0) {
+                                                                        AddReceive(data.ncf_id, e.target.files[0]);
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                        </label>
+                                                    </OverlayTrigger>
                                                         <OverlayTrigger overlay={renderTooltipDelete}>
                                                             <a onClick={() => RemoveData(data.ncf_id)} style={{ cursor: 'pointer' }}>
-                                                                <BsFillTrash3Fill className='text-danger' style={{ fontSize: '24px' }} />
+                                                                <BsFillTrash3Fill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>
                                                     </td>

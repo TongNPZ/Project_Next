@@ -228,28 +228,28 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
                 <View style={styles.container}>
                     <Text style={styles.text}>ที่อยู่</Text>
                     <View style={styles.line}>
-                        <Text style={styles.textContent}>{book.user_address}</Text>
+                        <Text style={styles.textContent}>{book.user_address}&nbsp;&nbsp;&nbsp;</Text>
                     </View>
                 </View>
             ) : contract ? (
                 <View style={styles.container}>
                     <Text style={styles.text}>ที่อยู่</Text>
                     <View style={styles.line}>
-                        <Text style={styles.textContent}>{contract.user_address}</Text>
+                        <Text style={styles.textContent}>{contract.user_address}&nbsp;&nbsp;&nbsp;</Text>
                     </View>
                 </View>
             ) : transfer ? (
                 <View style={styles.container}>
                     <Text style={styles.text}>ที่อยู่</Text>
                     <View style={styles.line}>
-                        <Text style={styles.textContent}>{transfer.user_address}</Text>
+                        <Text style={styles.textContent}>{transfer.user_address}&nbsp;&nbsp;&nbsp;</Text>
                     </View>
                 </View>
             ) : (
                 <View style={styles.container}>
                     <Text style={styles.text}>ที่อยู่</Text>
                     <View style={styles.line}>
-                        <Text style={styles.textContent}>{commonFee.user_address}</Text>
+                        <Text style={styles.textContent}>{commonFee.user_address}&nbsp;&nbsp;&nbsp;</Text>
                     </View>
                 </View>
             )}

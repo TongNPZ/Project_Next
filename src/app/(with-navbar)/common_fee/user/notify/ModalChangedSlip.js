@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../../app';
 import {
@@ -8,7 +8,7 @@ import {
     Success,
     ConfirmCancel,
     ConfirmRestore,
-    ConfirmInsert
+    ConfirmUpdate
 } from '@/app/componnent/SweetAlertComponent/ResponseMessage'
 import {
     Modal,
@@ -20,19 +20,40 @@ import {
     BsArrowCounterclockwise
 } from "react-icons/bs";
 
-export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }) {
+export default function ModalChangedSlip({ show, handleClose, id }) {
 
     // show input
     const [showInput, setShowInput] = useState(false);
 
-    // data
+    // image choose
+    const [imageChoose, setImageChoose] = useState(true);
+
+    // fecth
+    const [defaultShowData, setDefaultShowData] = useState({});
     const [rcfSlip, setRcfSlip] = useState('');
+
+    useEffect(() => {
+        if (show) {
+            const fetchSlip = async () => {
+                try {
+                    const result = await GetRequest(`${API_RECEIVE_COMMON_FEE}/${id}`, 'GET', null);
+                    setDefaultShowData(result);
+                    setRcfSlip(result.rcf_slip);
+                } catch (error) {
+                    console.log('error', error);
+                }
+            }
+
+            fetchSlip();
+        }
+    }, [show, id, showInput]);
 
     // - function - //
 
     // reset data
     const ResetData = () => {
-        setRcfSlip('');
+        setRcfSlip(defaultShowData.rcf_slip);
+        setImageChoose(true);
         setShowInput(false);
     }
 
@@ -62,7 +83,8 @@ export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }
 
     // return data
     const ReturnData = () => {
-        setRcfSlip('');
+        setRcfSlip(defaultShowData.rcf_slip);
+        setImageChoose(true);
     }
 
     // handle restore
@@ -83,25 +105,25 @@ export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        ConfirmInsert().then((result) => {
+        ConfirmUpdate().then((result) => {
             if (result.isConfirmed) {
-                const addData = async () => {
+                const editData = async () => {
                     try {
                         const formdata = new FormData();
+                        formdata.append("id", id);
                         formdata.append("rcfSlip", rcfSlip);
-                        formdata.append("ncfId", ncfId);
 
-                        const response = await GetRequest(API_RECEIVE_COMMON_FEE, 'POST', formdata)
+                        const response = await GetRequest(API_RECEIVE_COMMON_FEE, 'PATCH', formdata)
 
-                        if (response.message === 'Insert Successfully!') {
-                            Success("เพิ่มข้อมูลสำเร็จ!").then(() => handleCloseResetData())
+                        if (response.message === 'Update Successfully!') {
+                            Success("แก้ไขข้อมูลสำเร็จ!").then(() => ResetData())
                         }
                     } catch (error) {
                         console.log('error', error);
                     }
                 }
 
-                addData()
+                editData()
             }
         });
     }
@@ -117,30 +139,43 @@ export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }
             }
         }} size="md">
             <Modal.Header closeButton>
-                <Modal.Title>ชำระเงินออนไลน์</Modal.Title>
+                <Modal.Title>สลิปที่ชำระ</Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
                 {!showInput ? (
-                    <Image src={`${API_URL}${commonReceive}`} fluid />
+                    <Image src={`${API_URL}${defaultShowData.rcf_slip}`} fluid />
                 ) : (
                     <Form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label className="col-form-label">อัพโหลดรูปสลิปที่ชำระ</label>
                             <div className="mt-3">
 
-                                {rcfSlip && (
-                                    <div className='text-center mb-3'>
-                                        <Image src={URL.createObjectURL(new Blob([rcfSlip], { type: rcfSlip.type }))} style={{ maxWidth: 250 }} />
-                                    </div>
+                                {imageChoose ? (
+                                    rcfSlip ? (
+                                        <div className='text-center mb-3'>
+                                            <Image src={`${API_URL}${rcfSlip}`} style={{ maxWidth: 250 }} />
+                                        </div>
+                                    ) : (
+                                        <p>ไม่มีข้อมูลที่แสดง</p>
+                                    )
+                                ) : (
+                                    rcfSlip && (
+                                        <div className='text-center mb-3'>
+                                            <Image src={URL.createObjectURL(new Blob([rcfSlip], { type: rcfSlip.type }))} style={{ maxWidth: 250 }} />
+                                        </div>
+                                    )
                                 )}
 
                                 <Form.Control
                                     type="file"
                                     accept='image/*'
                                     key={keyImage}
-                                    placeholder="เลือกรูปภาพ"
-                                    onChange={(e) => setRcfSlip(e.target.files[0])}
+                                    placeholder="เลือกรูปภาพสลิปโอนเงิน"
+                                    onChange={(e) => {
+                                        setImageChoose(false)
+                                        setRcfSlip(e.target.files[0])
+                                    }}
                                 />
                             </div>
                         </div>
@@ -153,8 +188,8 @@ export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }
                                 <Button variant="secondary" onClick={handleReturn}>
                                     ย้อนกลับ
                                 </Button>
-                                <Button variant="success" type='submit'>
-                                    บันทึกข้อมูล
+                                <Button variant="warning" type='submit'>
+                                    แก้ไขข้อมูล
                                 </Button>
                             </Modal.Footer>
                         )}
@@ -165,8 +200,8 @@ export default function ModalAddSlip({ show, handleClose, ncfId, commonReceive }
 
             {!showInput && (
                 <Modal.Footer>
-                    <Button variant="success" onClick={() => setShowInput(true)}>
-                        อัพโหลดสลิป
+                    <Button variant="warning" onClick={() => setShowInput(true)}>
+                        อัพโหลดสลิปใหม่
                     </Button>
                 </Modal.Footer>
             )}

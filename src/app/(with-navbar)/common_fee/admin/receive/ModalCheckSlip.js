@@ -37,7 +37,7 @@ export default function ModalCheckSlip({ show, handleClose, ncfId }) {
     return (
         <Modal show={show} onHide={handleClose} size="md">
             <Modal.Header closeButton>
-                <Modal.Title>ตรวจสอบสลิป</Modal.Title>
+                <Modal.Title>ตรวจสอบสลิปโอนเงิน</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className='text-center'>

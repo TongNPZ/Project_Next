@@ -142,7 +142,6 @@ export default function Transfer() {
 
             <Card>
                 <Card.Header>
-
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
                             <h5>ตารางข้อมูลโอนกรรมสิทธิ์</h5>

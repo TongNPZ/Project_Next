@@ -17,7 +17,8 @@ import {
     Tooltip
 } from 'react-bootstrap';
 import {
-    BsEnvelopeArrowUpFill
+    BsEnvelopeArrowUpFill,
+    BsCardChecklist
 } from "react-icons/bs";
 
 export default function NotifyCommonFee() {
@@ -97,8 +98,11 @@ export default function NotifyCommonFee() {
                             <h5>ตารางข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
-                            <Button variant="success" href='/common_fee/admin/receive'>
-                                ตรวจสอบการรับเงินค่าส่วนกลาง
+                            <Button href='/common_fee/admin/receive' variant="success">
+                                <BsCardChecklist style={{
+                                    fontSize: '24px',
+                                    marginRight: '5px'
+                                }} /> ตรวจสอบการรับเงินค่าส่วนกลาง
                             </Button>
                         </div>
                     </div>
