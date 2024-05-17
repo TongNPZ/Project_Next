@@ -3,11 +3,9 @@ import { DateFormat } from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_NOTIFY_COMMON_FEE,
-    API_HOUSE,
-    API_DATA_OWNER_HOUSE
 } from '../../../../../../api';
 import {
-    ConfirmInsert,
+    ConfirmSend,
     ConfirmCancel,
     ConfirmRestore,
     Success
@@ -16,17 +14,14 @@ import {
     Modal,
     Button,
     Form,
-    Card,
 } from 'react-bootstrap';
 
-export default function ModalAdd({ show, handleClose }) {
+export default function ModalAdd({ show, handleClose, selected }) {
     const [ncfNote, setNcfNote] = useState('');
-    const [hId, setHId] = useState('');
 
     // *** function *** //
     const ResetData = () => {
         setNcfNote('');
-        setHId('');
     }
 
     const handleCloseResetData = () => {
@@ -35,65 +30,23 @@ export default function ModalAdd({ show, handleClose }) {
     }
     // *** //
 
-    // fetch //
-
-    // +++ house +++ //
-    const [showHouse, setShowHouse] = useState([]);
-
-    const fecthHouse = async () => {
-        try {
-            const result = await GetRequest(API_HOUSE, 'GET', null);
-            setShowHouse(result.data);
-        } catch (error) {
-            console.log('error', error);
-        }
-    }
-
-    useEffect(() => {
-        fecthHouse();
-    }, [showHouse]);
-    // +++ //
-
-    // +++ house owner +++ //
-    const [showHouseOwner, setShowHouseOwner] = useState({});
-
-    const fecthHouseOwner = async () => {
-        try {
-            const result = await GetRequest(`${API_DATA_OWNER_HOUSE}/${hId}`, 'GET', null);
-            setShowHouseOwner(result);
-        } catch (error) {
-            console.log('error', error);
-        }
-    }
-
-    useEffect(() => {
-
-        if (hId !== '') {
-            fecthHouseOwner();
-        }
-
-    }, [hId]);
-    // +++ //
-
-    // --- //
-
     // submit //
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        ConfirmInsert().then((result) => {
+        ConfirmSend().then((result) => {
             if (result.isConfirmed) {
                 const addData = async () => {
                     try {
                         const raw = {
                             "ncfNote": ncfNote === '' ? '-' : ncfNote,
-                            "hId": parseInt(hId)
+                            "hId": selected.hId
                         };
 
                         const response = await GetRequest(API_NOTIFY_COMMON_FEE, 'POST', raw)
 
                         if (response.message === 'Insert Successfully!') {
-                            Success("เพิ่มข้อมูลสำเร็จ!").then(() => {
+                            Success("ส่งข้อมูลสำเร็จ!").then(() => {
                                 handleCloseResetData();
                             })
                         }
@@ -131,108 +84,81 @@ export default function ModalAdd({ show, handleClose }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel} size='xl'>
+        <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
                 <Modal.Title>แจ้งชำระค่าส่วนกลาง</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <div className='row'>
+                    <div className="mb-3">
+                        <label className="col-form-label">บ้านเลขที่</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={selected.houseNo}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อเจ้าของบ้าน</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={`${selected.userName} ${selected.userLastname}`}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="row mb-3">
                         <div className='col-md-6'>
-
-                            {hId !== '' ? (
-                                <Card className='mb-3'>
-                                    <Card.Body>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label"><strong>บ้านเลขที่:</strong></p>
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label">{showHouseOwner.house_no}</p>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label"><strong>โซนบ้าน:</strong></p>
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label">{showHouseOwner.name}</p>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label"><strong>แบบบ้าน:</strong></p>
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label">{showHouseOwner.house_name}</p>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label"><strong>ชื่อเจ้าของบ้าน:</strong></p>
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label">{`${showHouseOwner.user_name} ${showHouseOwner.user_lastname}`}</p>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label"><strong>วันที่ได้รับกรรมสิทธิ์:</strong></p>
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <p className="col-form-label">{DateFormat(showHouseOwner.trans_date)}</p>
-                                            </div>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            ) : (
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                }}>
-                                    <h1>ไม่มีข้อมูลที่แสดง</h1>
-                                </div>
-                            )}
-
+                            <label className="col-form-label">วันที่โอนกรรมสิทธิ์</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="text"
+                                    value={DateFormat(selected.transDate)}
+                                    disabled
+                                />
+                            </div>
                         </div>
                         <div className='col-md-6'>
-                            <div className='mb-3'>
-                                <label className="col-form-label">บ้านเลขที่</label>
-                                <Form.Select value={hId} onChange={(e) => {
-                                    setHId(e.target.value)
-                                }}>
-                                    <option value={''}>กรุณาเลือกบ้านที่ต้องการแจ้งชำระ</option>
-
-                                    {showHouse.map((data) => (
-                                        data.h_status === 5 ? (
-                                            <option key={data.h_id} value={data.h_id}>{data.house_no}</option>
-                                        ) : null
-                                    ))}
-
-                                </Form.Select>
-                            </div>
-                            <div className="mb-3">
-                                <label className="col-form-label">หมายเหตุ</label>
-                                <div className="mt-1">
-                                    <Form.Control
-                                        as='textarea'
-                                        placeholder="หมายเหตุ (ถ้าไม่ต้องการกรอกหมายเหตุให้เว้นช่องกรอกนี้ไว้)"
-                                        value={ncfNote}
-                                        onChange={(e) => setNcfNote(e.target.value)}
-                                    />
-                                </div>
+                            <label className="col-form-label">วันที่แจ้งชำระค่าส่วนกลาง</label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="text"
+                                    value={DateFormat(selected.ncfNextDate)}
+                                    disabled
+                                />
                             </div>
                         </div>
                     </div>
-
+                    <div className="mb-3">
+                        <label className="col-form-label">จำนวนเงินค่าส่วนกลาง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={parseFloat(selected.ncfAmount).toLocaleString()}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">หมายเหตุ</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                as='textarea'
+                                placeholder="หมายเหตุ (ถ้าไม่ต้องการกรอกหมายเหตุให้เว้นช่องกรอกนี้ไว้)"
+                                value={ncfNote}
+                                onChange={(e) => setNcfNote(e.target.value)}
+                            />
+                        </div>
+                    </div>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleRestore}>
                             คืนค่า
                         </Button>
                         <Button variant="success" type='submit'>
-                            เพื่มข้อมูล
+                            ส่งข้อมูล
                         </Button>
                     </Modal.Footer>
                 </Form>
