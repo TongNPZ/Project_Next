@@ -53,6 +53,17 @@ export function ConfirmSend() {
     });
 }
 
+export function ConfirmNotify() {
+    return Swal.fire({
+        icon: "question",
+        title: "คุณต้องการแจ้งข้อมูลใช่ไหม?",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#87adbd",
+        cancelButtonText: "ยกเลิก"
+    });
+}
+
 export function ConfirmUpdate() {
     return Swal.fire({
         icon: "warning",
