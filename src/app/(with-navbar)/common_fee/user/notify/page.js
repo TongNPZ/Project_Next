@@ -183,8 +183,13 @@ export default function NotifyCommonFeeUser() {
                     )}
 
                     {activeKey === 'paid' && showData.every(data => data.ncf_status !== 1) && (
-                        <div className="text-center mt-5 mb-5">
-                            <h1>ไม่มีข้อมูลที่ชำระแล้ว</h1>
+                        <div className="mt-5 mb-5" style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                        }}>
+                            <h1>ไม่มีข้อมูลที่ชำระ</h1>
                         </div>
                     )}
 

@@ -9,7 +9,8 @@ import {
   BsCaretDownFill,
   BsCoin,
   BsFillPersonFill,
-  BsReceiptCutoff
+  BsReceiptCutoff,
+  BsChatRightDotsFill
 } from "react-icons/bs";
 import {
   Collapse,
@@ -194,6 +195,25 @@ function SideBar() {
                 </div>
               </ListGroup.Item>
             ) : null}
+
+            {role === 1 ? (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/admin')} style={{ cursor: 'pointer' }}>
+                    <BsChatRightDotsFill className='me-2' /><strong>แจ้งปัญหา</strong>
+                  </a>
+                </div>
+              </ListGroup.Item>
+            ) : (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/user')} style={{ cursor: 'pointer' }}>
+                    <BsChatRightDotsFill className='me-2' /><strong>แจ้งปัญหา</strong>
+                  </a>
+                </div>
+              </ListGroup.Item>
+            )}
+
 
           </ListGroup>
         </Offcanvas.Body>

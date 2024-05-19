@@ -3,7 +3,8 @@ import {
   ADMIN,
   USER,
   HOUSE,
-  OWNER
+  OWNER,
+  REPORT_PROBLEM
 } from './app'
 
   //authservice
@@ -26,6 +27,9 @@ import {
   // common fee
   export const API_NOTIFY_COMMON_FEE = `${API_URL}/notify_common_fee`
   export const API_RECEIVE_COMMON_FEE = `${API_URL}/receive_common_fee`
+
+  // report problem
+  export const API_REPORT_PROBLEM = `${API_URL}${REPORT_PROBLEM}`
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`
 //   export const POST_API_REGISTER = `${API_URL}${AUTH_SERVICE}/Register`
 //   export const POST_API_CHECK_TOKEN_VALIDATE = `${API_URL}${AUTH_SERVICE}/checkTokenValidity`
@@ -34,10 +38,11 @@ import {
 //   export const POST_API_CHANGE_PASSWORD = `${API_URL}${AUTH_SERVICE}/resetPasswordbylogin`
 //   export const POST_API_CHECK_PASSWORD = `${API_URL}${AUTH_SERVICE}/checkPassword`
   
-// User
- export const GET_API_DATA_USER = `${API_URL}${USER}`
- export const API_USER_COMMON_FEE = `${API_URL}${USER}/common_fee`
- export const API_OWNER_COMMON_FEE = `${API_URL}${USER}${OWNER}/common_fee`
+  // User
+  export const GET_API_DATA_USER = `${API_URL}${USER}`
+  export const API_USER_HOUSE = `${API_URL}${USER}${HOUSE}`
+  export const API_USER_COMMON_FEE = `${API_URL}${USER}/common_fee`
+  export const API_OWNER_COMMON_FEE = `${API_URL}${USER}${OWNER}/common_fee`
 //   export const GET_API_ALL_USERS = `${API_URL}${AUTH_SERVICE}/user/all`
 //   export const PUT_API_UPDATE_USER = `${API_URL}${AUTH_SERVICE}/user/edit`
 //   export const GET_API_USER_INFORMATION = `${API_URL}${AUTH_SERVICE}/user/me`
