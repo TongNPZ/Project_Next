@@ -179,7 +179,7 @@ export default function housingEstate() {
                                     <div className="ms-3 mt-3 mb-5">
                                         <div className='row'>
                                             <div className='col-md-4'>
-                                                <p className="col-form-label"><strong>อัตราเก็บค่าส่วนกลางตารางวาละ:</strong></p>
+                                                <p className="col-form-label"><strong>อัตราเก็บค่าส่วนกลางตารางวา</strong></p>
                                             </div>
                                             <div className='col-md-4 text-center'>
                                                 <p className="col-form-label">{parseFloat(data.common_rate).toLocaleString()}</p>

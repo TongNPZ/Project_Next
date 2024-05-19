@@ -12,6 +12,7 @@ import ModalCheckSlip from './ModalCheckSlip';
 import AddReceive from './AddReceive';
 import UploadFile from './UploadFile';
 import RemoveData from './RemoveData';
+import ChangedStatus from './ChangedStatus';
 import {
     Table,
     Card,
@@ -30,6 +31,7 @@ import {
     BsBellFill,
     BsCheckSquareFill
 } from "react-icons/bs";
+import { ConfirmChanged } from '@/app/componnent/SweetAlertComponent/ResponseMessage';
 
 export default function ReceiveCommonFee() {
 
@@ -336,7 +338,7 @@ export default function ReceiveCommonFee() {
                                                             </label>
                                                         </OverlayTrigger>
                                                         <OverlayTrigger overlay={renderTooltipConfirm}>
-                                                            <a style={{ cursor: 'pointer' }}>
+                                                            <a onClick={() => ChangedStatus(rcfFindData.rcf_id)} style={{ cursor: 'pointer' }}>
                                                                 <BsCheckSquareFill className='me-2 mb-2 text-success' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>

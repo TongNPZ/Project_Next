@@ -22,6 +22,8 @@ import {
 } from "react-icons/bs";
 
 export default function NotifyCommonFee() {
+
+    // current date
     const currentDate = new Date
 
     // - fecth - //
