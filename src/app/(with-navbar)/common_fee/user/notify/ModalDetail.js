@@ -120,7 +120,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                         <div className='mb-4'>
 
                             {housingEstate.map((data) => (
-                                <div className='mb-3 text-center'>
+                                <div key={data.he_id} className='mb-3 text-center'>
                                     <Image src={`${API_URL}${data.image}`} style={{ width: '40%' }} fluid />
                                 </div>
                             ))}
