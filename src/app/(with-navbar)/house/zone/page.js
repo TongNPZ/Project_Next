@@ -13,33 +13,51 @@ import {
     Form,
     Badge,
     OverlayTrigger,
-    Tooltip
+    Tooltip,
+    Pagination,
+    InputGroup
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
     BsFillHouseSlashFill,
     BsFillHouseAddFill,
-    BsFillHouseUpFill
+    BsFillHouseUpFill,
+    BsSearch
 } from "react-icons/bs";
 
 export default function HouseZone() {
 
     // fecth //
     const [showData, setShowData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState('');
 
     const fecthHouseZone = async () => {
         try {
-            const result = await GetRequest(API_HOUSE_ZONE, 'GET', null);
+            const result = await GetRequest(`${API_HOUSE_ZONE}?page=${currentPage}&limit=15&search=${search}&status=${status}`, 'GET', null);
             setShowData(result.data);
+            setTotalPage(result.totalPage);
         } catch (error) {
             console.log('error', error);
         }
     }
 
     useEffect(() => {
+
+        if (search !== "") {
+            setCurrentPage(1);
+        }
+
         fecthHouseZone();
-    }, [showData]);
+    }, [showData, currentPage, search, status]);
     // --- //
+
+    // function
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     // modal add //
     const [showAdd, setShowAdd] = useState(false);
@@ -89,7 +107,6 @@ export default function HouseZone() {
 
             <Card>
                 <Card.Header>
-
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
                             <h5>ตารางข้อมูลโซนบ้าน (Zone)</h5>
@@ -103,12 +120,32 @@ export default function HouseZone() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '150px' }}>
+                                <option value={''}>สถานะทั้งหมด</option>
+                                <option value={'open'}>โซนเปิดใช้งาน</option>
+                                <option value={'close'}>โซนปิดใช้งาน</option>
+                            </Form.Select>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -124,51 +161,80 @@ export default function HouseZone() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {showData.map((data) => (
-                                    <tr key={data.hz_id}>
-                                        <td>{data.hz_id}</td>
-                                        <td>{data.name}</td>
-                                        <td>{data.land_space.toLocaleString()}</td>
-                                        <td>{data.land_price.toLocaleString()}</td>
 
-                                        {data.hz_status === 1 ? (
-                                            <td>
-                                                <Badge bg="success">โซนเปิดใช้งาน</Badge>
-                                            </td>
-                                        ) : (
-                                            <td>
-                                                <Badge bg="danger">โซนปิดใช้งาน</Badge>
-                                            </td>
-                                        )}
+                                {showData && showData.length > 0 ? (
+                                    showData.map((data) => (
+                                        <tr key={data.hz_id}>
+                                            <td>{data.hz_id}</td>
+                                            <td>{data.name}</td>
+                                            <td>{data.land_space.toLocaleString()}</td>
+                                            <td>{data.land_price.toLocaleString()}</td>
 
-                                        {data.hz_status !== 0 ? (
-                                            <td>
-                                                <OverlayTrigger overlay={renderTooltipEdit}>
-                                                    <a onClick={() => handleEditShow(data.hz_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
+                                            {data.hz_status === 1 ? (
+                                                <td>
+                                                    <Badge bg="success">โซนเปิดใช้งาน</Badge>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    <Badge bg="danger">โซนปิดใช้งาน</Badge>
+                                                </td>
+                                            )}
 
-                                                <OverlayTrigger overlay={renderTooltipClose}>
-                                                    <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-                                            </td>
-                                        ) : (
-                                            <td>
-                                                <OverlayTrigger overlay={renderTooltipOpen}>
-                                                    <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
-                                                        <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
-                                                    </a>
-                                                </OverlayTrigger>
-                                            </td>
-                                        )}
+                                            {data.hz_status !== 0 ? (
+                                                <td>
+                                                    <OverlayTrigger overlay={renderTooltipEdit}>
+                                                        <a onClick={() => handleEditShow(data.hz_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsPencilSquare className='me-2 text-warning' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+
+                                                    <OverlayTrigger overlay={renderTooltipClose}>
+                                                        <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsFillHouseSlashFill className='text-danger' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    <OverlayTrigger overlay={renderTooltipOpen}>
+                                                        <a onClick={() => ChangedStatus(data.hz_id)} style={{ cursor: 'pointer' }}>
+                                                            <BsFillHouseUpFill className='text-success' style={{ fontSize: '24px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                </td>
+                                            )}
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="12" className="text-center">
+                                            <h4 className='mt-5 mb-5'>
+                                                ไม่มีข้อมูลที่แสดง
+                                            </h4>
+                                        </td>
                                     </tr>
-                                ))}
+                                )}
+
                             </tbody>
                         </Table>
                     </div>
+
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+                        {[...Array(totalPage)].map((_, index) => (
+                            <Pagination.Item
+                                key={index + 1}
+                                active={index + 1 === currentPage}
+                                onClick={() => handlePageClick(index + 1)}
+                            >
+                                {index + 1}
+                            </Pagination.Item>
+                        ))}
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
+
                 </Card.Body>
             </Card>
         </ProtectRoute>

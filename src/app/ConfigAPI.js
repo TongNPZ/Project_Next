@@ -35,7 +35,7 @@ export default async function GetRequest(host, method, body) {
                 null
             )
         } else if (response.status === 500) {
-            null
+            // Noting
         } else {
             data = await response.json();
         }
@@ -66,6 +66,8 @@ export default async function GetRequest(host, method, body) {
                     "ไม่พบข้อมูล!",
                     "กรุณากรอก เลือกข้อมูล หรือเพิ่มข้อมูลใหม่อีกครั้ง"
                 )
+            } else if (data.message === 'Not Found Get Data!') {
+                // status 404 Not Found Get Data
             } else if (data.message === 'Password Bad Request!') {
                 Error(
                     "รหัสผ่านไม่ถูกต้อง!",
