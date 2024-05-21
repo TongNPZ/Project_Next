@@ -27,7 +27,7 @@ import {
   // common fee
   export const API_NOTIFY_COMMON_FEE = `${API_URL}/notify_common_fee`
   export const API_RECEIVE_COMMON_FEE = `${API_URL}/receive_common_fee`
-
+  export const API_EXPENSES_COMMON_FEE = `${API_URL}/expenses`
   // report problem
   export const API_REPORT_PROBLEM = `${API_URL}${REPORT_PROBLEM}`
 //   export const GET_API_LOGOUT = `${API_URL}${AUTH_SERVICE}/logout`

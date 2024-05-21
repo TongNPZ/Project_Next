@@ -179,6 +179,7 @@ function SideBar() {
                       <div className='mb-3' id="collapse-common-fee">
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/notify')} style={{ cursor: 'pointer' }}>แจ้งชำระค่าส่วนกลาง</a>
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/receive')} style={{ cursor: 'pointer' }}>รับเงินค่าส่วนกลาง</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/record')} style={{ cursor: 'pointer' }}>บันทึกค่าใช้จ่ายโครงการ</a>
                       </div>
                     </Collapse>
                     {/* --- */}
