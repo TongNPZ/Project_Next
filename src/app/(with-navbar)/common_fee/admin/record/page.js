@@ -111,7 +111,8 @@ export default function ReceiveCommonFee() {
                             <thead>
                                 <tr>
                                     <th style={{ width: '100px', textAlign: 'center' }}>ลำดับที่</th>
-                                    <th style={{ width: '400px', textAlign: 'center' }}>วันที่ลงบันทึก</th>
+                                    <th style={{ width: '300px', textAlign: 'center' }}>วันที่ลงบันทึก</th>
+                                    <th style={{ width: '300px', textAlign: 'center' }}>วันที่ชำระ</th>
                                     <th style={{ textAlign: 'center' }}>รายการ</th>
                                     <th style={{ width: '250px', textAlign: 'center' }}>จำนวนเงิน</th>
                                     <th style={{ width: '200px', textAlign: 'center' }}>การจัดการ</th>
@@ -125,6 +126,7 @@ export default function ReceiveCommonFee() {
                                         return (
                                             <tr key={data.ncf_id}>
                                                 <td style={{ textAlign: 'center' }} >{data.ex_id}</td>
+                                                <td style={{ textAlign: 'center' }} >{DateFormat(data.ex_record)}</td>
                                                 <td style={{ textAlign: 'center' }} >{DateFormat(data.ex_date)}</td>
                                                 <td >{data.ex_list}</td>
                                                 <td style={{ textAlign: 'right' }}>{formattedAmount}</td>

@@ -183,7 +183,7 @@ export default function ReceiveCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>จำนวนเงิน</th>
                                     <th>วันที่แจ้งชำระ</th>
-                                    <th>วันที่รับเงินชำระ</th>
+                                    <th>วันที่ชำระ</th>
                                     <th>หมายเหตุ</th>
                                     <th>ตรวจสอบการชำระ</th>
                                     <th>เอกสาร</th>

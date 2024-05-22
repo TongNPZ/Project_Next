@@ -179,7 +179,6 @@ function SideBar() {
                       <div className='mb-3' id="collapse-common-fee">
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/notify')} style={{ cursor: 'pointer' }}>แจ้งชำระค่าส่วนกลาง</a>
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/receive')} style={{ cursor: 'pointer' }}>รับเงินค่าส่วนกลาง</a>
-                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/common_fee/admin/record')} style={{ cursor: 'pointer' }}>บันทึกค่าใช้จ่ายโครงการ</a>
                       </div>
                     </Collapse>
                     {/* --- */}
@@ -196,6 +195,25 @@ function SideBar() {
                 </div>
               </ListGroup.Item>
             ) : null}
+
+            {role === 1 ? (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  <a className="nav-link" aria-current="page" onClick={() => router.push('/common_fee/admin/record')} style={{ cursor: 'pointer' }}>
+                    <BsReceiptCutoff className='me-2' /><strong>บันทึกค่าใช้จ่ายโครงการ</strong>
+                  </a>
+                </div>
+              </ListGroup.Item>
+            ) : (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  {/* <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/user')} style={{ cursor: 'pointer' }}>
+                    <BsReceiptCutoff className='me-2' /><strong>บันทึกค่าใช้จ่ายโครงการ</strong>
+                  </a> */}
+                </div>
+              </ListGroup.Item>
+            )}
+
 
             {role === 1 ? (
               <ListGroup.Item>
