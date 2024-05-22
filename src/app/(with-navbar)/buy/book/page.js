@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'
 import { DateTimeFormat } from '@/app/Format';
+import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../app'
 import {
@@ -21,6 +22,8 @@ import {
     Badge,
     OverlayTrigger,
     Tooltip,
+    InputGroup,
+    Pagination,
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
@@ -32,7 +35,9 @@ import {
     BsFileTextFill,
     BsFileEarmarkArrowUpFill,
     BsDownload,
-    BsCaretRightFill
+    BsCaretRightFill,
+    BsArrowCounterclockwise,
+    BsSearch
 } from "react-icons/bs";
 
 export default function Book() {
@@ -41,19 +46,31 @@ export default function Book() {
 
     // + book + //
     const [showData, setShowData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const fecthBook = async () => {
         try {
-            const result = await GetRequest(API_BOOK, 'GET', null);
+            const result = await GetRequest(`${API_BOOK}?page=${currentPage}&limit=15&order=DESC&search=${search}&status=${status}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
             setShowData(result.data);
+            setTotalPage(result.totalPage);
         } catch (error) {
             console.log('error', error);
         }
     }
 
     useEffect(() => {
+
+        if (search !== '') {
+            setCurrentPage(1);
+        }
+
         fecthBook();
-    }, [showData]);
+    }, [showData, currentPage, search, status, startDate, endDate]);
 
     // + contract + //
     const [showContract, setShowContract] = useState([]);
@@ -80,6 +97,17 @@ export default function Book() {
             setUploadedFile(null);
         };
     }, [uploadedFile]);
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStatus('');
+        setStartDate('');
+        setEndDate('');
+    };
     // --- //
 
     // modal //
@@ -174,7 +202,8 @@ export default function Book() {
     // --- //
 
     return (
-        <>
+        <ProtectRoute requireRoles={[1]}>
+
             {/* modal */}
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
@@ -183,12 +212,14 @@ export default function Book() {
 
             <Card>
                 <Card.Header>
-
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
                             <h5>ตารางข้อมูลจองบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button href='/house' variant="success">
                                 <BsFillHouseGearFill style={{
                                     fontSize: '24px',
@@ -200,12 +231,57 @@ export default function Book() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <div className="d-flex align-items-center mb-3">
+                                <InputGroup className='me-2' style={{ width: '350px' }}>
+                                    <InputGroup.Text>
+                                        ค้นหาจากวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                                <InputGroup style={{ width: '300px' }}>
+                                    <InputGroup.Text>
+                                        ถึงวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </div>
+                            <div className='mb-3'>
+                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '160px' }}>
+                                    <option value={''}>สถานะทั้งหมด</option>
+                                    <option value={'booked'}>จองสำเร็จ</option>
+                                    <option value={'processing'}>กำลังดำเนินการ</option>
+                                    <option value={'cancel'}>ยกเลิกจอง</option>
+                                </Form.Select>
+                            </div>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -393,8 +469,45 @@ export default function Book() {
                             </tbody>
                         </Table>
                     </div>
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
                 </Card.Body>
             </Card >
-        </>
+        </ProtectRoute>
     );
 }

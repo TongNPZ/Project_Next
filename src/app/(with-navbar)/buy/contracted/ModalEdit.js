@@ -86,7 +86,8 @@ export default function ModalEdit({ show, handleClose, id }) {
                         const response = await GetRequest(API_CONTRACT, 'PATCH', formdata)
 
                         if (response.message === 'Update Successfully!') {
-                            Success("แก้ไขข้อมูลสำเร็จ!").then(() => handleClose())
+                            Success("แก้ไขข้อมูลสำเร็จ!")
+                                .then(() => handleClose())
                         }
                     } catch (error) {
                         console.log('error', error);

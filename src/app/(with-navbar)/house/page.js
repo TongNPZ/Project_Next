@@ -16,6 +16,8 @@ import {
     Badge,
     OverlayTrigger,
     Tooltip,
+    InputGroup,
+    Pagination,
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
@@ -24,27 +26,49 @@ import {
     BsFillHouseUpFill,
     BsFillInfoCircleFill,
     BsCalendar2PlusFill,
-    BsCaretRightFill
+    BsCaretRightFill,
+    BsArrowCounterclockwise,
+    BsSearch
 } from "react-icons/bs";
 
 export default function House() {
 
     // fecth //
     const [showData, setShowData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState('');
 
     const fecthHouse = async () => {
         try {
-            const result = await GetRequest(API_HOUSE, 'GET', null);
+            const result = await GetRequest(`${API_HOUSE}?page=${currentPage}&limit=15&order=DESC&search=${search}&status=${status}`, 'GET', null);
             setShowData(result.data);
+            setTotalPage(result.totalPage);
         } catch (error) {
             console.log('error', error);
         }
     }
 
     useEffect(() => {
+
+        if (search !== '') {
+            setCurrentPage(1);
+        }
+
         fecthHouse();
-    }, [showData]);
+    }, [showData, currentPage, search, status]);
     // --- //
+
+    // function
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStatus('');
+    };
 
     // modal //
     const [selectedId, setSelectedId] = useState('');
@@ -140,6 +164,9 @@ export default function House() {
                             <h5>ตารางข้อมูลบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button variant="success" onClick={handleAddShow}>
                                 <BsFillHouseAddFill style={{ fontSize: '24px' }} />
                             </Button>
@@ -148,12 +175,36 @@ export default function House() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '150px' }}>
+                                <option value={''}>สถานะทั้งหมด</option>
+                                <option value={'vacant'}>ว่าง</option>
+                                <option value={'book'}>จอง</option>
+                                <option value={'contract'}>ทำสัญญา</option>
+                                <option value={'transfer'}>โอนกรรมสิทธิ์</option>
+                                <option value={'sold'}>ขายแล้ว</option>
+                                <option value={'cancel'}>ยกเลิกขาย</option>
+                            </Form.Select>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -295,6 +346,43 @@ export default function House() {
                             </tbody>
                         </Table>
                     </div>
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
                 </Card.Body>
             </Card>
         </ProtectRoute>
