@@ -22,7 +22,8 @@ import {
     BsFillHouseSlashFill,
     BsFillHouseAddFill,
     BsFillHouseUpFill,
-    BsSearch
+    BsSearch,
+    BsArrowCounterclockwise
 } from "react-icons/bs";
 
 export default function HouseZone() {
@@ -36,7 +37,7 @@ export default function HouseZone() {
 
     const fecthHouseZone = async () => {
         try {
-            const result = await GetRequest(`${API_HOUSE_ZONE}?page=${currentPage}&limit=15&search=${search}&status=${status}`, 'GET', null);
+            const result = await GetRequest(`${API_HOUSE_ZONE}?page=${currentPage}&limit=15&order=DESC&search=${search}&status=${status}`, 'GET', null);
             setShowData(result.data);
             setTotalPage(result.totalPage);
         } catch (error) {
@@ -57,6 +58,11 @@ export default function HouseZone() {
     // function
     const handlePageClick = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStatus('');
     };
 
     // modal add //
@@ -112,6 +118,9 @@ export default function HouseZone() {
                             <h5>ตารางข้อมูลโซนบ้าน (Zone)</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button variant="success" onClick={handleAddShow}>
                                 <BsFillHouseAddFill style={{ fontSize: '24px' }} />
                             </Button>
@@ -123,8 +132,8 @@ export default function HouseZone() {
                         <div className='col-md-8'>
                             <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '150px' }}>
                                 <option value={''}>สถานะทั้งหมด</option>
-                                <option value={'open'}>โซนเปิดใช้งาน</option>
-                                <option value={'close'}>โซนปิดใช้งาน</option>
+                                <option value={'open'}>เปิดใช้งาน</option>
+                                <option value={'close'}>ปิดใช้งาน</option>
                             </Form.Select>
                         </div>
                         <div className='col-md-4 text-md-end mb-3'>
@@ -218,23 +227,43 @@ export default function HouseZone() {
                             </tbody>
                         </Table>
                     </div>
-
                     <Pagination className="float-end">
                         <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
                         <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
-                        {[...Array(totalPage)].map((_, index) => (
-                            <Pagination.Item
-                                key={index + 1}
-                                active={index + 1 === currentPage}
-                                onClick={() => handlePageClick(index + 1)}
-                            >
-                                {index + 1}
-                            </Pagination.Item>
-                        ))}
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
                         <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
                         <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
                     </Pagination>
-
                 </Card.Body>
             </Card>
         </ProtectRoute>

@@ -183,7 +183,7 @@ export default function ReceiveCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>จำนวนเงิน</th>
                                     <th>วันที่แจ้งชำระ</th>
-                                    <th>วันที่รับเงินชำระ</th>
+                                    <th>วันที่ยืนยันรับเงินชำระ</th>
                                     <th>หมายเหตุ</th>
                                     <th>ตรวจสอบการชำระ</th>
                                     <th>เอกสาร</th>
@@ -209,7 +209,7 @@ export default function ReceiveCommonFee() {
                                                         DateFormat(rcfFindData.rcf_date)
                                                     ) : (
                                                         <div className='text-danger'>
-                                                            <p>ยังไม่มีการชำระ</p>
+                                                            <p>-</p>
                                                         </div>
                                                     )}
                                                 </td>
@@ -273,7 +273,7 @@ export default function ReceiveCommonFee() {
                                                     </td>
                                                 ) : rcfSomeData && rcfFindData.rcf_status === 0 && data.ncf_status === 0 ? (
                                                     <td>
-                                                        <Badge bg="info">กำลังดำเนินการ</Badge>
+                                                        <Badge bg="info">รอตรวจสอบหลักฐาน</Badge>
                                                     </td>
                                                 ) : (
                                                     <td>
