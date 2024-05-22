@@ -135,56 +135,63 @@ export default function NotifyCommonFee() {
                             <tbody>
 
                                 {showData && showData.length > 0 ? (
-                                    showData.map((data, index) => {
-                                        const currentDate = new Date();
-                                        const ncfData = showNcf.find((ncf) => ncf.h_id === data.h_id);
-                                        if (!ncfData) {
-                                            return null
-                                        } else {
-                                            const commonRate = ncfData.common_rate;
-                                            const commonMonth = ncfData.common_month;
-                                            const totalPrice = (data.hLand_space * commonRate) * commonMonth;
-
-                                            if (currentDate < new Date(ncfData.ncf_nextDate)) {
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>{data.house_no}</td>
-                                                        <td>{data.user_name} {data.user_lastname}</td>
-                                                        <td>{DateFormat(data.trans_date)}</td>
-                                                        <td>{DateFormat(ncfData.ncf_nextDate)}</td>
-                                                        <td>{parseFloat(totalPrice).toLocaleString()}</td>
-                                                        <td>
-                                                            <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>
-                                                                <a style={{ cursor: 'pointer' }} onClick={() => handleAddShow({
-                                                                    hId: data.h_id,
-                                                                    houseNo: data.house_no,
-                                                                    userName: data.user_name,
-                                                                    userLastname: data.user_lastname,
-                                                                    transDate: data.trans_date,
-                                                                    ncfNextDate: ncfData.ncf_nextDate,
-                                                                    ncfAmount: totalPrice,
-                                                                })} >
-                                                                    <BsEnvelopeArrowUpFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                                </a>
-                                                            </OverlayTrigger>
-                                                        </td>
-                                                    </tr>
-                                                );
+                                    (() => {
+                                        const rows = showData.map((data, index) => {
+                                            const currentDate = new Date();
+                                            const ncfData = showNcf.find((ncf) => ncf.h_id === data.h_id);
+                                            if (!ncfData) {
+                                                return null;
                                             } else {
-                                                return (
-                                                    <tr>
-                                                        <td colSpan="12" className="text-center">
-                                                            <h4 className='mt-5 mb-5'>
-                                                                ยังไม่ถึงเวลาที่แจ้งชำระ
-                                                            </h4>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
+                                                const commonRate = ncfData.common_rate;
+                                                const commonMonth = ncfData.common_month;
+                                                const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
+                                                if (currentDate < new Date(ncfData.ncf_nextDate)) {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{data.house_no}</td>
+                                                            <td>{data.user_name} {data.user_lastname}</td>
+                                                            <td>{DateFormat(data.trans_date)}</td>
+                                                            <td>{DateFormat(ncfData.ncf_nextDate)}</td>
+                                                            <td>{parseFloat(totalPrice).toLocaleString()}</td>
+                                                            <td>
+                                                                <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>
+                                                                    <a style={{ cursor: 'pointer' }} onClick={() => handleAddShow({
+                                                                        hId: data.h_id,
+                                                                        houseNo: data.house_no,
+                                                                        userName: data.user_name,
+                                                                        userLastname: data.user_lastname,
+                                                                        transDate: data.trans_date,
+                                                                        ncfNextDate: ncfData.ncf_nextDate,
+                                                                        ncfAmount: totalPrice,
+                                                                    })} >
+                                                                        <BsEnvelopeArrowUpFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                                    </a>
+                                                                </OverlayTrigger>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            }
+                                        }).filter(row => row !== null);
+
+                                        if (rows.length > 0) {
+                                            return rows;
+                                        } else {
+                                            return (
+                                                <tr>
+                                                    <td colSpan="12" className="text-center">
+                                                        <h4 className='mt-5 mb-5'>
+                                                            ยังไม่ถึงเวลาที่แจ้งชำระ
+                                                        </h4>
+                                                    </td>
+                                                </tr>
+                                            );
                                         }
-                                    })
+                                    })()
                                 ) : (
                                     <tr>
                                         <td colSpan="12" className="text-center">
