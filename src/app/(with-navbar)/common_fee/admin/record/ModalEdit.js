@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import Select from 'react-select';
 import { API_EXPENSES_COMMON_FEE } from '../../../../../../api';
 import GetRequest from '@/app/ConfigAPI';
 import {
@@ -9,26 +10,29 @@ import { DateInputFormat } from '@/app/Format';
 
 export default function ModalEdit({ show, handleClose, id }) {
     const [defaultValues, setDefaultValues] = useState({});
-
     const [exList, setExList] = useState('');
     const [exAmount, setExAmount] = useState('');
     const [recordDate, setRecordDate] = useState('');
+    const [options, setOptions] = useState([
+        { value: 'ค่าไฟ', label: 'ค่าไฟ' },
+        { value: 'ค่านํ้า', label: 'ค่านํ้า' },
+        { value: 'ค่าจ้าง', label: 'ค่าจ้าง' }
+    ]);
 
     const ResetData = () => {
         setExList(defaultValues.ex_list);
         setExAmount(defaultValues.ex_amount);
         setRecordDate(defaultValues.ex_date);
-    }
+    };
 
     const handleCloseResetData = () => {
         ResetData();
         handleClose();
-    }
+    };
 
     const fetchExpensesRecord = async () => {
         try {
             const result = await GetRequest(`${API_EXPENSES_COMMON_FEE}/${id}`, 'GET', null);
-
             setDefaultValues(result);
             setExList(result.ex_list);
             setExAmount(result.ex_amount);
@@ -36,7 +40,7 @@ export default function ModalEdit({ show, handleClose, id }) {
         } catch (error) {
             console.log('error', error);
         }
-    }
+    };
 
     useEffect(() => {
         if (show) {
@@ -50,17 +54,16 @@ export default function ModalEdit({ show, handleClose, id }) {
                 handleCloseResetData();
             }
         });
-    }
+    };
 
     const handleRestore = (event) => {
         event.preventDefault();
-
         ConfirmRestore().then((result) => {
             if (result.isConfirmed) {
                 ResetData();
             }
         });
-    }
+    };
 
     useEffect(() => {
         setRecordDate(DateInputFormat(recordDate));
@@ -68,7 +71,6 @@ export default function ModalEdit({ show, handleClose, id }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         ConfirmUpdate().then((result) => {
             if (result.isConfirmed) {
                 const editData = async () => {
@@ -78,26 +80,33 @@ export default function ModalEdit({ show, handleClose, id }) {
                             exList: exList,
                             exAmount: exAmount,
                             exDate: recordDate
-                        }
+                        };
 
-                        const response = await GetRequest(API_EXPENSES_COMMON_FEE, 'PATCH', data)
-
+                        const response = await GetRequest(API_EXPENSES_COMMON_FEE, 'PATCH', data);
                         if (response.message === 'Update Successfully!') {
                             Success("แก้ไขข้อมูลสำเร็จ!").then(() => {
                                 handleClose();
-                            })
+                            });
                         }
                     } catch (error) {
                         console.log('error', error);
                     }
-                }
-
-                editData()
+                };
+                editData();
             }
         });
-    }
+    };
 
-    console.log(defaultValues)
+    const handleExListChange = (selectedOption) => {
+        setExList(selectedOption ? selectedOption.value : '');
+    };
+
+    const handleCreateOption = (inputValue) => {
+        const newOption = { value: inputValue, label: inputValue };
+        setOptions([...options, newOption]);
+        setExList(inputValue);
+    };
+
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
@@ -105,16 +114,18 @@ export default function ModalEdit({ show, handleClose, id }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-
                     <div className="mb-3">
                         <label className="col-form-label">รายการ</label>
                         <div className="mt-1">
-                            <Form.Control
-                                type="text"
-                                placeholder="รายการ"
-                                value={exList}
-                                onChange={(e) => setExList(e.target.value)}
-                                required
+                            <Select
+                                value={options.find(option => option.value === exList)}
+                                onChange={handleExListChange}
+                                onCreateOption={handleCreateOption}
+                                options={options}
+                                isClearable
+                                isSearchable
+                                placeholder="เลือกรายการหรือพิมพ์เพื่อเพิ่มใหม่"
+                                formatCreateLabel={(inputValue) => `สร้าง "${inputValue}"`}
                             />
                         </div>
                     </div>
@@ -133,7 +144,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">วันที่ลงบันทึก</label>
+                            <label className="col-form-label">วันที่ชำระ</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="date"

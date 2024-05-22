@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import Select from 'react-select';
 import { API_EXPENSES_COMMON_FEE } from '../../../../../../api';
 import GetRequest from '@/app/ConfigAPI';
 import { ConfirmInsert, ConfirmCancel, Success, ConfirmRestore } from '@/app/componnent/SweetAlertComponent/ResponseMessage';
@@ -8,6 +9,11 @@ export default function ModalAdd({ show, handleClose }) {
     const [exList, setExList] = useState('');
     const [exAmount, setExAmount] = useState('');
     const [recordDateTime, setRecordDateTime] = useState('');
+    const [options, setOptions] = useState([
+        { value: 'ค่าไฟ', label: 'ค่าไฟ' },
+        { value: 'ค่านํ้า', label: 'ค่านํ้า' },
+        { value: 'ค่าจ้าง', label: 'ค่าจ้าง' }
+    ]);
 
     const ResetData = () => {
         setExList('');
@@ -68,6 +74,16 @@ export default function ModalAdd({ show, handleClose }) {
         });
     }
 
+    const handleExListChange = (selectedOption) => {
+        setExList(selectedOption ? selectedOption.value : '');
+    };
+
+    const handleCreateOption = (inputValue) => {
+        const newOption = { value: inputValue, label: inputValue };
+        setOptions([...options, newOption]);
+        setExList(inputValue);
+    };
+
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
@@ -78,12 +94,15 @@ export default function ModalAdd({ show, handleClose }) {
                     <div className="mb-3">
                         <label className="col-form-label">รายการ</label>
                         <div className="mt-1">
-                            <Form.Control
-                                type="text"
-                                placeholder="รายการ"
-                                value={exList}
-                                onChange={(e) => setExList(e.target.value)}
-                                required
+                            <Select
+                                value={options.find(option => option.value === exList)}
+                                onChange={handleExListChange}
+                                onCreateOption={handleCreateOption}
+                                options={options}
+                                isClearable
+                                isSearchable
+                                placeholder="เลือกรายการหรือพิมพ์เพื่อเพิ่มใหม่"
+                                formatCreateLabel={(inputValue) => `สร้าง "${inputValue}"`}
                             />
                         </div>
                     </div>
@@ -102,7 +121,7 @@ export default function ModalAdd({ show, handleClose }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">วันที่ลงบันทึก</label>
+                            <label className="col-form-label">วันที่ชำระ</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="date"
