@@ -10,7 +10,8 @@ import {
   BsCoin,
   BsFillPersonFill,
   BsReceiptCutoff,
-  BsChatRightDotsFill
+  BsChatRightDotsFill,
+  BsFileEarmarkBarGraphFill
 } from "react-icons/bs";
 import {
   Collapse,
@@ -215,6 +216,15 @@ function SideBar() {
               </ListGroup.Item>
             )}
 
+            {role === 1 && (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  <a className="nav-link" aria-current="page" onClick={() => router.push('/report')} style={{ cursor: 'pointer' }}>
+                    <BsFileEarmarkBarGraphFill className='me-2' /><strong>รายงาน</strong>
+                  </a>
+                </div>
+              </ListGroup.Item>
+            )}
 
           </ListGroup>
         </Offcanvas.Body>
