@@ -206,13 +206,9 @@ function SideBar() {
                 </div>
               </ListGroup.Item>
             ) : (
-              <ListGroup.Item>
-                <div className='my-3'>
-                  {/* <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/user')} style={{ cursor: 'pointer' }}>
-                    <BsReceiptCutoff className='me-2' /><strong>บันทึกค่าใช้จ่ายโครงการ</strong>
-                  </a> */}
-                </div>
-              </ListGroup.Item>
+              <div>
+
+              </div>
             )}
 
 
