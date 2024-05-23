@@ -79,7 +79,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
 
     useEffect(() => {
         fecthTransfer();
-    }, [showTransfer]);
+    }, []);
     // +++ //
 
     // +++ show transfer +++ //
@@ -113,7 +113,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
         }
 
         fecthHousingEstate();
-    }, [showHousingEstate]);
+    }, []);
 
     // +++ //
 

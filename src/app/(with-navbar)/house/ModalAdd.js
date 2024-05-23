@@ -63,7 +63,7 @@ export default function ModalAdd({ show, handleClose }) {
 
     useEffect(() => {
         fecthHouseStyle();
-    }, [showHouseStyle]);
+    }, []);
     // +++ //
 
     // +++ house style by id +++ //
