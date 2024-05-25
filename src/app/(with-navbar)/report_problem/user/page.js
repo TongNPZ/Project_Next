@@ -150,7 +150,18 @@ export default function reportProblemUser() {
                                 )}
 
                             </div>
-                            <Card.Img src={`${API_URL}${data.rp_problem_image}`} />
+                            <p>{data.rp_problem_details}</p>
+
+                            {data.rp_problem_image !== '' ? (
+                                <Card.Img src={`${API_URL}${data.rp_problem_image}`} rounded fluid />
+                            ) : (
+                                <Card>
+                                    <Card.Body>
+                                        <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
+                                    </Card.Body>
+                                </Card>
+                            )}
+
                         </Card.Body>
 
                         {data.rp_status === 1 ? (

@@ -161,6 +161,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     }, 0);
     const totalPricePaidFormatted = totalPricePaid.toLocaleString();
 
+    // expenses
+    const filteredDataExpenses = showData.filter(data => data.ex_id);
+
+    const totalPriceExpenses = filteredDataExpenses.reduce((sum, data) => {
+        return sum + parseFloat(data.ex_amount);
+    }, 0);
+    const totalPriceExpensesFormatted = totalPriceExpenses.toLocaleString();
+
     return (
         <Document>
             <Page size="A4" style={styles.body}>
@@ -184,6 +192,8 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <Text style={styles.title}>รายงานข้อมูลบ้าน</Text>
                         ) : activeKey === 'commonFee' ? (
                             <Text style={styles.title}>รายงานค่าส่วนกลาง</Text>
+                        ) : activeKey === 'expenses' ? (
+                            <Text style={styles.title}>รายงานค่าใช้จ่ายโครงการ</Text>
                         ) : null}
                     </div>
                 ))}
@@ -848,6 +858,73 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     <View style={styles.row}>
                                         <Text style={styles.textContentRow}>รวมจำนวนเงินชำระแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPricePaidFormatted}</Text>
+                                        <Text style={styles.textContentRow}>บาท</Text>
+                                    </View>
+                                    <View style={styles.horizontalLineDotted} />
+                                </>
+                            ) : null}
+                        </>
+                    ) : null
+                ) : activeKey === 'expenses' ? (
+                    tempStatus === 'default' ? (
+                        <>
+                            <View style={styles.horizontalLine} />
+                            <View style={styles.table}>
+                                <View style={styles.tableRow}>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>รายการ</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>จำนวนเงิน&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>วันที่ลงบันทึก&nbsp;&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>วันที่ชำระ&nbsp;</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={styles.horizontalLine} />
+
+                            {filteredDataExpenses && filteredDataExpenses.length > 0 ? (
+                                <>
+                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ทั้งหมด&nbsp;</Text>
+
+                                    {showData.map((data, index) => (
+                                        <View key={index} style={styles.table}>
+                                            <View style={styles.tableRow}>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{data.ex_list}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{parseFloat(data.ex_amount).toLocaleString()}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{DateTimeFormat(data.ex_record)}&nbsp;</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{DateFormat(data.ex_date)}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
+                                    <View style={styles.horizontalLineDotted} />
+                                    <View style={styles.row}>
+                                        <Text style={styles.textContentRow}>รวมรายการค่าใช้จ่าย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{filteredDataExpenses.length}</Text>
+                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.textContentRow}>รวมจำนวนเงินค่าใช้จ่าย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{totalPriceExpensesFormatted}</Text>
                                         <Text style={styles.textContentRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />

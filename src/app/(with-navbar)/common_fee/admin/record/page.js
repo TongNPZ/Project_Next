@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateFormat } from '@/app/Format';
+import {
+    DateFormat,
+    DateTimeFormat
+} from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import ModalAdd from './ModalAdd'
@@ -16,29 +19,54 @@ import {
     Form,
     OverlayTrigger,
     Tooltip,
+    InputGroup,
+    Pagination,
 } from 'react-bootstrap';
 import {
     BsPencilSquare,
     BsFillXSquareFill,
-
+    BsArrowCounterclockwise,
+    BsSearch
 } from "react-icons/bs";
 import { IoAddCircle } from "react-icons/io5";
 
 export default function ReceiveCommonFee() {
     const [record, setRecord] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const fetcExpensesRecord = async () => {
         try {
-            const result = await GetRequest(API_EXPENSES_COMMON_FEE, 'GET', null);
+            const result = await GetRequest(`${API_EXPENSES_COMMON_FEE}?page=${currentPage}&limit=15&order=DESC&search=${search}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
             setRecord(result.data);
+            setTotalPage(result.totalPage);
         } catch (error) {
             console.log('error', error);
         }
     }
 
     useEffect(() => {
+
+        if (search !== '') {
+            setCurrentPage(1);
+        }
+
         fetcExpensesRecord();
-    }, [record]);
+    }, [record, currentPage, search, startDate, endDate]);
+
+    // function
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStartDate('');
+        setEndDate('');
+    };
 
     // modal //
 
@@ -86,6 +114,9 @@ export default function ReceiveCommonFee() {
                             <h5>ตารางบันทึกค่าใช้จ่ายส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button variant="success" onClick={handleAddShow}>
                                 <IoAddCircle style={{
                                     fontSize: '24px',
@@ -98,12 +129,49 @@ export default function ReceiveCommonFee() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <div className="d-flex align-items-center mb-3">
+                                <InputGroup className='me-2' style={{ width: '350px' }}>
+                                    <InputGroup.Text>
+                                        ค้นหาจากวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                                <InputGroup style={{ width: '300px' }}>
+                                    <InputGroup.Text>
+                                        ถึงวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </div>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -121,12 +189,12 @@ export default function ReceiveCommonFee() {
                             <tbody>
 
                                 {record && record.length > 0 ? (
-                                    record.map((data) => {
+                                    record.map((data, index) => {
                                         const formattedAmount = parseFloat(data.ex_amount).toLocaleString();
                                         return (
-                                            <tr key={data.ncf_id}>
+                                            <tr key={index}>
                                                 <td style={{ textAlign: 'center' }} >{data.ex_id}</td>
-                                                <td style={{ textAlign: 'center' }} >{DateFormat(data.ex_record)}</td>
+                                                <td style={{ textAlign: 'center' }} >{DateTimeFormat(data.ex_record)}</td>
                                                 <td style={{ textAlign: 'center' }} >{DateFormat(data.ex_date)}</td>
                                                 <td >{data.ex_list}</td>
                                                 <td style={{ textAlign: 'right' }}>{formattedAmount}</td>
@@ -158,6 +226,43 @@ export default function ReceiveCommonFee() {
                             </tbody>
                         </Table>
                     </div>
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
                 </Card.Body>
             </Card>
         </ProtectRoute >

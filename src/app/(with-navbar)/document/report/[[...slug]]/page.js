@@ -55,6 +55,8 @@ export default function DocumentReceipt({ params }) {
     const activeKey = params.slug[1]
     let tempStatus = params.slug[3]
 
+    console.log(showData);
+    
     const [showHousingEstate, setShowHousingEstate] = useState([]);
 
     useEffect(() => {
