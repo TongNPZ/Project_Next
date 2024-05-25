@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { DateFormat } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
@@ -7,21 +8,28 @@ import {
     API_NOTIFY_COMMON_FEE,
     API_HOUSE_OWNER
 } from '../../../../../../api';
-import ModalAdd from './ModalAdd';
+import AddNotify from './AddNotify';
 import {
     Table,
     Card,
     Button,
     Form,
     OverlayTrigger,
-    Tooltip
+    Tooltip,
+    InputGroup,
+    Pagination
 } from 'react-bootstrap';
 import {
     BsEnvelopeArrowUpFill,
-    BsCardChecklist
+    BsCardChecklist,
+    BsArrowCounterclockwise,
+    BsSearch
 } from "react-icons/bs";
 
 export default function NotifyCommonFee() {
+
+    // router
+    const router = useRouter();
 
     // current date
     const currentDate = new Date
@@ -29,12 +37,18 @@ export default function NotifyCommonFee() {
     // - fecth - //
     const [showData, setShowData] = useState([]);
     const [showNcf, setShowNcf] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     useEffect(() => {
         const fetchHouseOwner = async () => {
             try {
-                const result = await GetRequest(API_HOUSE_OWNER, 'GET', null);
+                const result = await GetRequest(`${API_HOUSE_OWNER}?page=${currentPage}&limit=15&order=DESC&search=${search}`, 'GET', null);
                 setShowData(result.data);
+                setTotalPage(result.totalPage);
             } catch (error) {
                 console.log('error', error);
             }
@@ -42,11 +56,15 @@ export default function NotifyCommonFee() {
 
         const fetchNcf = async () => {
             try {
-                const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC`, 'GET', null);
+                const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
                 setShowNcf(result.data);
             } catch (error) {
                 console.log('error', error);
             }
+        }
+
+        if (search !== '') {
+            setCurrentPage(1);
         }
 
         const timeout = setTimeout(() => {
@@ -55,28 +73,20 @@ export default function NotifyCommonFee() {
         }, 60);
 
         return () => clearTimeout(timeout);
-    }, [currentDate]);
+    }, [currentDate, currentPage, search, startDate, endDate]);
 
     // --- //
 
-    // modal
-    const [selected, setSelected] = useState({
-        hId: '',
-        houseNo: '',
-        userName: '',
-        userLastname: '',
-        transDate: '',
-        ncfNextDate: '',
-        ncfAmount: '',
-    });
+    // function
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
-    const [showAdd, setShowAdd] = useState(false);
-
-    const handleAddClose = () => setShowAdd(false);
-    const handleAddShow = (selected) => {
-        setSelected(selected);
-        setShowAdd(true);
-    }
+    const handleSortReset = () => {
+        setSearch('');
+        setStartDate('');
+        setEndDate('');
+    };
 
     // tooltip
     const renderTooltipAddNotifyCommonFee = (props) => (
@@ -87,11 +97,6 @@ export default function NotifyCommonFee() {
 
     return (
         <ProtectRoute requireRoles={[1]}>
-
-            {/* modal */}
-            <ModalAdd show={showAdd} handleClose={handleAddClose} selected={selected} />
-            {/* --- */}
-
             <Card>
                 <Card.Header>
 
@@ -100,6 +105,9 @@ export default function NotifyCommonFee() {
                             <h5>ตารางข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button href='/common_fee/admin/receive' variant="success">
                                 <BsCardChecklist style={{
                                     fontSize: '24px',
@@ -111,12 +119,49 @@ export default function NotifyCommonFee() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <div className="d-flex align-items-center mb-3">
+                                <InputGroup className='me-2' style={{ width: '350px' }}>
+                                    <InputGroup.Text>
+                                        ค้นหาจากวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                                <InputGroup style={{ width: '300px' }}>
+                                    <InputGroup.Text>
+                                        ถึงวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </div>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -127,7 +172,7 @@ export default function NotifyCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อเจ้าของบ้าน</th>
                                     <th>วันที่โอนกรรมสิทธิ์</th>
-                                    <th>วันที่แจ้งชำระค่าส่วนกลาง</th>
+                                    <th>วันที่กำหนดชำระค่าส่วนกลาง</th>
                                     <th>จำนวนเงินค่าส่วนกลาง</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -138,7 +183,7 @@ export default function NotifyCommonFee() {
                                     (() => {
                                         const rows = showData.map((data, index) => {
                                             const currentDate = new Date();
-                                            const ncfData = showNcf.find((ncf) => ncf.h_id === data.h_id);
+                                            const ncfData = showNcf && showNcf.find((ncf) => ncf.h_id === data.h_id);
                                             if (!ncfData) {
                                                 return null;
                                             } else {
@@ -157,15 +202,7 @@ export default function NotifyCommonFee() {
                                                             <td>{parseFloat(totalPrice).toLocaleString()}</td>
                                                             <td>
                                                                 <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>
-                                                                    <a style={{ cursor: 'pointer' }} onClick={() => handleAddShow({
-                                                                        hId: data.h_id,
-                                                                        houseNo: data.house_no,
-                                                                        userName: data.user_name,
-                                                                        userLastname: data.user_lastname,
-                                                                        transDate: data.trans_date,
-                                                                        ncfNextDate: ncfData.ncf_nextDate,
-                                                                        ncfAmount: totalPrice,
-                                                                    })} >
+                                                                    <a style={{ cursor: 'pointer' }} onClick={() => AddNotify(data.h_id, router)} >
                                                                         <BsEnvelopeArrowUpFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
                                                                     </a>
                                                                 </OverlayTrigger>
@@ -205,6 +242,43 @@ export default function NotifyCommonFee() {
                             </tbody>
                         </Table>
                     </div>
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
                 </Card.Body>
             </Card>
         </ProtectRoute>
