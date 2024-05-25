@@ -15,10 +15,7 @@ export default function ModalAdd({ show, handleClose }) {
         { value: 'ค่าเก็บขยะ', label: 'ค่าเก็บขยะ' },
         { value: 'ค่าคนสวน', label: 'ค่าคนสวน' }
     ]);
-    ค่าไฟถนน
-    ค่าพนักงานรักษาความปลอดภัย
-    ค่าเก็บขยะ
-    ค่าคนสวน
+    
     const ResetData = () => {
         setExList('');
         setExAmount('');

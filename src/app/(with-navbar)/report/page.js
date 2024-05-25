@@ -12,7 +12,8 @@ import {
     API_CONTRACT,
     API_TRANSFER,
     API_NOTIFY_COMMON_FEE,
-    API_RECEIVE_COMMON_FEE
+    API_RECEIVE_COMMON_FEE,
+    API_EXPENSES_COMMON_FEE
 } from "../../../../api"
 import {
     Nav,
@@ -97,6 +98,15 @@ export default function report() {
         }
     }
 
+    const fetcExpenses = async () => {
+        try {
+            const result = await GetRequest(`${API_EXPENSES_COMMON_FEE}?order=DESC&search=${search}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
+            setShowData(result.data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
     // function
     const filteredShowData = showData && showData.filter(data => {
         const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
@@ -140,6 +150,10 @@ export default function report() {
             if (status === '' || status === 'overdue' || status === 'paid') {
                 fetchNcf(search, status)
                 fetchRcf(startDate, endDate)
+            }
+        } else if (activeKey === 'expenses') {
+            if (status === '') {
+                fetcExpenses(search, startDate, endDate);
             }
         }
 
@@ -214,8 +228,8 @@ export default function report() {
                             </div>
                             <div className="col-md-6">
 
-                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'paid' ? (
-                                    <div className="d-flex align-items-center">
+                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'paid' || activeKey === 'expenses' && status === '' ? (
+                                    <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
                                                 ค้นหาจากวันที่
@@ -238,7 +252,7 @@ export default function report() {
                                         </InputGroup>
                                     </div>
                                 ) : (
-                                    <div className="d-flex align-items-center">
+                                    <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
                                                 ค้นหาจากวันที่
@@ -264,7 +278,7 @@ export default function report() {
                                     </div>
                                 )}
 
-                                <InputGroup className="mt-3">
+                                <InputGroup>
                                     <InputGroup.Text>
                                         <BsSearch />
                                     </InputGroup.Text>
@@ -540,8 +554,52 @@ export default function report() {
                                 </h2>
                             </div>
                         )
-                    ) : null}
+                    ) : activeKey === 'expenses' ? (
+                        showData && showData.length > 0 ? (
+                            <>
+                                <div className="text-end mb-3">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                        <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
+                                        ส่งออกข้อมูล
+                                    </Button>
+                                </div>
 
+                                {tempStatus === '' ? (
+                                    <Table bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>รายการ</th>
+                                                <th>จำนวนเงิน</th>
+                                                <th>วันที่ลงบันทึก</th>
+                                                <th>วันที่ชำระ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {showData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{data.ex_list}</td>
+                                                    <td>{parseFloat(data.ex_amount).toLocaleString()}</td>
+                                                    <td>{DateTimeFormat(data.ex_record)}</td>
+                                                    <td>{DateFormat(data.ex_date)}</td>
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </Table>
+                                ) : null}
+
+                            </>
+                        ) : (
+                            <div className="text-center">
+                                <h2 className="mt-5 mb-5">
+                                    ไม่มีข้อมูลที่จะแสดง
+                                </h2>
+                            </div>
+                        )
+                    ) : null}
 
                 </Card.Body>
             </Card>
