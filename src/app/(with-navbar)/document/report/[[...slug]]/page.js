@@ -12,6 +12,9 @@ export default function DocumentReceipt({ params }) {
 
     const [showData, setShowData] = useState([]);
     const [search, setSearch] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [showRcf, setShowRcf] = useState([]);
 
     useEffect(() => {
 
@@ -25,19 +28,32 @@ export default function DocumentReceipt({ params }) {
             const decodedArray = decodeURIComponent(params.slug[2]);
             setSearch(decodedArray);
         }
-    }, [params.slug[0], params.slug[2]]);
+
+        if (params.slug[4]) {
+            const decodedArray = decodeURIComponent(params.slug[4]);
+            setStartDate(decodedArray);
+        }
+
+        if (params.slug[5]) {
+            const decodedArray = decodeURIComponent(params.slug[5]);
+            setEndDate(decodedArray);
+        }
+
+        if (params.slug[6]) {
+            const decodedArray = decodeURIComponent(params.slug[6]);
+
+            if (decodedArray !== 'default') {
+                const parsedArray = JSON.parse(decodedArray);
+                setShowRcf(parsedArray);
+            } else {
+                setShowRcf([]);
+            }
+        }
+
+    }, [params.slug[0], params.slug[2], params.slug[4], params.slug[5], params.slug[6]]);
 
     const activeKey = params.slug[1]
     let tempStatus = params.slug[3]
-    let startDate = params.slug[4]
-    let endDate = params.slug[5]
-
-    console.log('showData = ', showData)
-    console.log('activeKey = ', activeKey)
-    console.log('search = ', search)
-    console.log('tempStatus = ', tempStatus)
-    console.log('startDate = ', startDate)
-    console.log('endDate = ', endDate)
 
     const [showHousingEstate, setShowHousingEstate] = useState([]);
 
@@ -58,7 +74,7 @@ export default function DocumentReceipt({ params }) {
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
             <PDFViewer width="94%" height="100%">
-                <DocReport showData={showData} activeKey={activeKey} search={search} tempStatus={tempStatus} startDate={startDate} endDate={endDate} housingEstate={showHousingEstate} />
+                <DocReport showData={showData} showRcf={showRcf} activeKey={activeKey} search={search} tempStatus={tempStatus} startDate={startDate} endDate={endDate} housingEstate={showHousingEstate} />
             </PDFViewer>
         </div>
     );
