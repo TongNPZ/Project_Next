@@ -32,7 +32,7 @@ export default function Profile() {
             }
         }
         fecthUsers();
-    }, []);
+    }, [showData]);
     // console.log(showData)
     // modal //
     const [selectedId, setSelectedId] = useState('');

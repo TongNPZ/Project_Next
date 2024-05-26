@@ -14,9 +14,10 @@ export default function ModalEdit({ show, handleClose, id }) {
     const [exAmount, setExAmount] = useState('');
     const [recordDate, setRecordDate] = useState('');
     const [options, setOptions] = useState([
-        { value: 'ค่าไฟ', label: 'ค่าไฟ' },
-        { value: 'ค่านํ้า', label: 'ค่านํ้า' },
-        { value: 'ค่าจ้าง', label: 'ค่าจ้าง' }
+        { value: 'ค่าไฟถนน', label: 'ค่าไฟถนน' },
+        { value: 'ค่าพนักงานรักษาความปลอดภัย', label: 'ค่าพนักงานรักษาความปลอดภัย' },
+        { value: 'ค่าเก็บขยะ', label: 'ค่าเก็บขยะ' },
+        { value: 'ค่าคนสวน', label: 'ค่าคนสวน' }
     ]);
 
     const ResetData = () => {
