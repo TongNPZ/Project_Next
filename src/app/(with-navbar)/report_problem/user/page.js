@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from "react";
 import { DateTimeFormat } from "@/app/Format";
+import { useAuth } from '@/app/componnent/AuthContext/AuthContext';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from "../../../../../app";
@@ -15,24 +16,31 @@ import {
     Badge,
     OverlayTrigger,
     Tooltip,
-    Form
+    Form,
+    InputGroup
 } from 'react-bootstrap';
 import {
     BsExclamationTriangleFill,
     BsPencilSquare,
-    BsXLg
+    BsXLg,
+    BsSearch,
+    BsArrowCounterclockwise,
+    BsPersonExclamation
 } from "react-icons/bs";
 
 export default function reportProblemUser() {
+    const { authData } = useAuth();
 
     // fetch
     const [showData, setShowData] = useState([]);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState('');
+    const [selectUser, setSelectUser] = useState('');
 
     useEffect(() => {
         const fecthReportProblem = async () => {
             try {
-
-                const result = await GetRequest(API_REPORT_PROBLEM, 'GET', null);
+                const result = await GetRequest(`${API_REPORT_PROBLEM}?order=DESC&search=${search}&status=${status}&selectUser=${selectUser}`, 'GET', null);
                 setShowData(result.data);
             } catch (error) {
                 console.log('error', error);
@@ -40,7 +48,18 @@ export default function reportProblemUser() {
         }
 
         fecthReportProblem()
-    }, [showData]);
+    }, [search, status, selectUser]);
+
+    // function
+    const handleShowMyReportProblem = () => {
+        setSelectUser(authData.id)
+    }
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStatus('');
+        setSelectUser('');
+    };
 
     // - modal -
     const [selectedId, setSelectedId] = useState('');
@@ -95,27 +114,63 @@ export default function reportProblemUser() {
             <div className="container ps-5 pe-5">
                 <Card className="mb-3">
                     <Card.Header>
-                        <div className="text-end">
-                            <Button variant="success" onClick={handleAddShow}>
-                                <BsExclamationTriangleFill style={{
-                                    fontSize: '24px',
-                                    marginRight: '5px'
-                                }} />แจ้งปัญหา
-                            </Button>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className='d-flex align-items-center'>
+                                    <Button className="me-2" variant="primary" onClick={handleShowMyReportProblem}>
+                                        <BsPersonExclamation style={{
+                                            fontSize: '24px',
+                                            marginRight: '5px'
+                                        }} />แจ้งปัญหาของฉัน
+                                    </Button>
+                                    <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '190px' }}>
+                                        <option value={''}>ทั้งหมด</option>
+                                        <option value={'pending'}>รอการแก้ไข</option>
+                                        <option value={'resolved'}>แก้ไขแล้ว</option>
+                                    </Form.Select>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className='d-flex align-items-center justify-content-end'>
+                                    <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                        <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                                    </Button>
+                                    <Button variant="success" onClick={handleAddShow}>
+                                        <BsExclamationTriangleFill style={{
+                                            fontSize: '24px',
+                                            marginRight: '5px'
+                                        }} />แจ้งปัญหา
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </Card.Header>
                     <Card.Body>
                         <div className='mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </Card.Body>
                 </Card>
 
-                {showData.map((data) => (
-                    <Card className="mb-3" >
+                {showData.map((data, index) => (
+                    <Card key={index} className="mb-3" >
                         <Card.Body>
                             <div className="row">
                                 <div className="col-md-6">
@@ -153,7 +208,7 @@ export default function reportProblemUser() {
                             <p>{data.rp_problem_details}</p>
 
                             {data.rp_problem_image !== '' ? (
-                                <Card.Img src={`${API_URL}${data.rp_problem_image}`} rounded fluid />
+                                <Card.Img src={`${API_URL}${data.rp_problem_image}`} />
                             ) : (
                                 <Card>
                                     <Card.Body>

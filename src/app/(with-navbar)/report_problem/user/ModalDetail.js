@@ -39,102 +39,121 @@ export default function ModalDetail({ show, handleClose, id }) {
             </Modal.Header>
             <Modal.Body>
                 <div className='row'>
-                    <div className='col-md-7'>
-                        <div className='text-center mb-3'>
-                            {showData.rp_problem_image !== '' ? (
-                                <Image src={`${API_URL}${showData.rp_problem_image}`} rounded fluid />
-                            ) : (
-                                <Card>
-                                    <Card.Body>
-                                        <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
-                                    </Card.Body>
-                                </Card>
-                            )}
-                        </div>
+                    <div className='col-md-6'>
+                        <Card style={{ height: '100%' }}>
+                            <Card.Header>ข้อมูลผู้แจ้งปัญหา</Card.Header>
+                            <Card.Body>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>รหัสแจ้งปัญหา:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.rp_id}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>บ้านเลขที่:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.house_no}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>ชื่อผู้แจ้ง:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.user_name} {showData.user_lastname}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>รายละเอียด:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.rp_problem_details}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>วันที่แจ้งข้อมูล:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{DateTimeFormat(showData.rp_problem_date)}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='mb-3'>
+                                            <p className="col-form-label"><strong>รูปภาพการแก้ไข</strong></p>
+                                        </div>
+                                        {showData.rp_problem_image !== '' ? (
+                                            <Image src={`${API_URL}${showData.rp_problem_image}`} rounded fluid />
+                                        ) : (
+                                            <Card>
+                                                <Card.Body>
+                                                    <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
+                                                </Card.Body>
+                                            </Card>
+                                        )}
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </Card.Body>
+                        </Card>
                     </div>
-                    <div className='col-md-5'>
-                        <div className='mb-3'>
-                            <Card>
-                                <Card.Header>ข้อมูลผู้แจ้งปัญหา</Card.Header>
-                                <Card.Body>
-                                    <ListGroup variant="flush">
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>รหัสแจ้งปัญหา:</strong></p>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label">{showData.rp_id}</p>
-                                                </div>
+                    <div className='col-md-6'>
+                        <Card style={{ height: '100%' }}>
+                            <Card.Header>ผลการแก้ไขปัญหา</Card.Header>
+                            <Card.Body>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>รายละเอียด:</strong></p>
                                             </div>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>รายละเอียด:</strong></p>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label">{showData.rp_problem_details}</p>
-                                                </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.rp_solved_details}</p>
                                             </div>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>วันที่แจ้งข้อมูล:</strong></p>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label">{DateTimeFormat(showData.rp_problem_date)}</p>
-                                                </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>วันที่แก้ไข:</strong></p>
                                             </div>
-                                        </ListGroup.Item>
-                                    </ListGroup>
-                                </Card.Body>
-                            </Card>
-                        </div>
-                        <div>
-                            <Card>
-                                <Card.Header>ผลการแก้ไขปัญหา</Card.Header>
-                                <Card.Body>
-                                    <ListGroup variant="flush">
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>รายละเอียด:</strong></p>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label">{showData.rp_solved_details}</p>
-                                                </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{DateTimeFormat(showData.rp_solved_date)}</p>
                                             </div>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label"><strong>วันที่แก้ไข:</strong></p>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <p className="col-form-label">{DateTimeFormat(showData.rp_solved_date)}</p>
-                                                </div>
-                                            </div>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <div className='mb-3'>
-                                                <p className="col-form-label"><strong>รูปภาพการแก้ไข</strong></p>
-                                            </div>
-                                            {showData.rp_solved_image !== '' ? (
-                                                <Image src={`${API_URL}${showData.rp_solved_image}`} rounded fluid />
-                                            ) : (
-                                                <Card>
-                                                    <Card.Body>
-                                                        <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
-                                                    </Card.Body>
-                                                </Card>
-                                            )}
-                                        </ListGroup.Item>
-                                    </ListGroup>
-                                </Card.Body>
-                            </Card>
-                        </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='mb-3'>
+                                            <p className="col-form-label"><strong>รูปภาพการแก้ไข</strong></p>
+                                        </div>
+                                        {showData.rp_solved_image !== '' ? (
+                                            <Card.Img src={`${API_URL}${showData.rp_solved_image}`} />
+                                        ) : (
+                                            <Card>
+                                                <Card.Body>
+                                                    <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
+                                                </Card.Body>
+                                            </Card>
+                                        )}
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </Card.Body>
+                        </Card>
                     </div>
                 </div>
             </Modal.Body>

@@ -131,7 +131,7 @@ export default function NotifyCommonFeeUser() {
                                                 )}
 
                                             </div>
-                                            <p>เจ้าของบ้านเลขที่ {data.house_no} ตามที่ท่านได้ชำระค่าบริการสาธารณะให้กับโครงการ ได้ครบกำหนดชำระในวันที่ {DateFormat(data.ncf_date)} เลขที่แจ้งชำระ {data.ncf_id} กรุณามาชำระค่าบริการสาธารณะก่อนวันที่ {DateFormat(data.ncf_nextDate)} เพื่อโครงการจะนำไปจัดสรรชำระค่าบริการอื่นต่อไป</p>
+                                            <p>เจ้าของบ้านเลขที่ {data.house_no} ตามที่ท่านได้ชำระค่าบริการสาธารณะให้กับโครงการ ได้ครบกำหนดชำระในวันที่ {DateFormat(data.ncf_date)} เลขที่แจ้งชำระ {data.ncf_id} จำนวน {parseFloat(data.ncf_amount).toLocaleString()} บาท กรุณามาชำระค่าบริการสาธารณะก่อนวันที่ {DateFormat(data.ncf_nextDate)} เพื่อโครงการจะนำไปจัดสรรชำระค่าบริการอื่นต่อไป</p>
                                         </div>
                                         <div className="col-md-6 text-end">
                                             ดูรายละเอียด <BsCaretRightFill />

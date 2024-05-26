@@ -43,7 +43,7 @@ export default function ModalAdd({ show, handleClose }) {
         }
 
         fecthUser()
-    }, [showUser]);
+    }, []);
 
     const [showUserHouse, setShowUserHouse] = useState([]);
 
@@ -58,7 +58,7 @@ export default function ModalAdd({ show, handleClose }) {
         }
 
         fecthUserHouse()
-    }, [showUserHouse]);
+    }, []);
 
     // *** function *** //
     const ResetData = () => {
@@ -151,8 +151,10 @@ export default function ModalAdd({ show, handleClose }) {
                         <Form.Select value={hId} onChange={(e) => setHId(e.target.value)} required>
                             <option value={''}>กรุณาเลือกบ้านเลขที่</option>
 
-                            {showUserHouse.map((data) => (
-                                <option key={data.h_id} value={data.h_id}>{data.house_no}</option>
+                            {showUserHouse.map((data, index) => (
+                                data.h_status === 5 && (
+                                    <option key={index} value={data.h_id}>{data.house_no}</option>
+                                )
                             ))}
 
                         </Form.Select>
