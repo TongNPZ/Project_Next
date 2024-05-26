@@ -20,7 +20,9 @@ import {
     Form,
     Badge,
     OverlayTrigger,
-    Tooltip
+    Tooltip,
+    InputGroup,
+    Pagination
 } from 'react-bootstrap';
 import {
     BsFillTrash3Fill,
@@ -29,9 +31,10 @@ import {
     BsBoxArrowUp,
     BsReceipt,
     BsBellFill,
-    BsCheckSquareFill
+    BsCheckSquareFill,
+    BsArrowCounterclockwise,
+    BsSearch,
 } from "react-icons/bs";
-import { ConfirmChanged } from '@/app/componnent/SweetAlertComponent/ResponseMessage';
 
 export default function ReceiveCommonFee() {
 
@@ -39,27 +42,39 @@ export default function ReceiveCommonFee() {
 
     // notify common fee
     const [showData, setShowData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState('');
 
     const fetchNotifyCommonFee = async () => {
         try {
-            const result = await GetRequest(API_NOTIFY_COMMON_FEE, 'GET', null);
+            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?page=${currentPage}&limit=15&order=DESC&search=${search}&status=${status}`, 'GET', null);
             setShowData(result.data);
+            setTotalPage(result.totalPage);
         } catch (error) {
             console.log('error', error);
         }
     }
 
     useEffect(() => {
+
+        if (search !== '') {
+            setCurrentPage(1);
+        }
+
         fetchNotifyCommonFee();
-    }, [showData]);
+    }, [showData, currentPage, search, status]);
 
     // show rcf
     const [showRcf, setShowRcf] = useState([]);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     useEffect(() => {
         const fetchRcf = async () => {
             try {
-                const result = await GetRequest(API_RECEIVE_COMMON_FEE, 'GET', null);
+                const result = await GetRequest(`${API_RECEIVE_COMMON_FEE}?order=DESC&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
                 setShowRcf(result.data);
             } catch (error) {
                 console.log('error', error);
@@ -67,11 +82,22 @@ export default function ReceiveCommonFee() {
         }
 
         fetchRcf();
-    }, [showRcf]);
+    }, [showRcf, startDate, endDate]);
 
     // --- //
 
     // fucntion
+    const filteredShowData = showData && showData.filter(data => {
+        const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
+
+        if (startDate === '' && endDate === '') {
+            return rcfFindData || data.ncf_status === 0;
+        } else {
+            return rcfFindData
+        }
+
+    });
+
     const [uploadedFile, setUploadedFile] = useState(null);
 
     useEffect(() => {
@@ -79,6 +105,17 @@ export default function ReceiveCommonFee() {
             setUploadedFile(null);
         };
     }, [uploadedFile]);
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleSortReset = () => {
+        setSearch('');
+        setStatus('');
+        setStartDate('');
+        setEndDate('');
+    };
 
     // - modal - //
     const [selectedNcfId, setSelectedNcfId] = useState('');
@@ -156,6 +193,9 @@ export default function ReceiveCommonFee() {
                             <h5>ตารางข้อมูลรับเงินค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
+                            <Button className='me-2' variant="secondary" onClick={handleSortReset}>
+                                <BsArrowCounterclockwise style={{ fontSize: '22px' }} />
+                            </Button>
                             <Button href='/common_fee/admin/notify' variant="success">
                                 <BsBellFill style={{
                                     fontSize: '24px',
@@ -167,12 +207,56 @@ export default function ReceiveCommonFee() {
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>
-                        <div className='col-md-8' />
+                        <div className='col-md-8'>
+                            <div className="d-flex align-items-center mb-3">
+                                <InputGroup className='me-2' style={{ width: '350px' }}>
+                                    <InputGroup.Text>
+                                        ค้นหาจากวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                                <InputGroup style={{ width: '300px' }}>
+                                    <InputGroup.Text>
+                                        ถึงวันที่
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="datetime-local"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </div>
+                            <div className='mb-3'>
+                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '190px' }}>
+                                    <option value={''}>สถานะทั้งหมด</option>
+                                    <option value={'overdue'}>ค้างจ่าย</option>
+                                    <option value={'paid'}>ชำระเงินแล้ว</option>
+                                </Form.Select>
+                            </div>
+                        </div>
                         <div className='col-md-4 text-md-end mb-3'>
-                            <Form.Control
-                                type="search"
-                                placeholder="ค้นหา"
-                            />
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <BsSearch />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type="search"
+                                    placeholder="ค้นหา"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setSearch(e.target.value)
+                                        } else {
+                                            setSearch(e.target.value)
+                                        }
+                                    }}
+                                />
+                            </InputGroup>
                         </div>
                     </div>
                     <div>
@@ -182,9 +266,8 @@ export default function ReceiveCommonFee() {
                                     <th>รหัสแจ้งชำระค่าส่วนกลาง</th>
                                     <th>บ้านเลขที่</th>
                                     <th>จำนวนเงิน</th>
-                                    <th>วันที่แจ้งชำระ</th>
+                                    <th>วันที่กำหนดชำระ</th>
                                     <th>วันที่ชำระ</th>
-                                    <th>หมายเหตุ</th>
                                     <th>ตรวจสอบการชำระ</th>
                                     <th>เอกสาร</th>
                                     <th>สถานะ</th>
@@ -193,10 +276,10 @@ export default function ReceiveCommonFee() {
                             </thead>
                             <tbody>
 
-                                {showData && showData.length > 0 ? (
-                                    showData.map((data) => {
-                                        const rcfSomeData = showRcf.some((rcf) => rcf.ncf_id === data.ncf_id);
-                                        const rcfFindData = showRcf.find((rcf) => rcf.ncf_id === data.ncf_id);
+                                {filteredShowData && filteredShowData.length > 0 ? (
+                                    filteredShowData.map((data) => {
+                                        const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
+                                        const rcfSomeData = rcfFindData !== undefined;
 
                                         return (
                                             <tr key={data.ncf_id}>
@@ -208,12 +291,9 @@ export default function ReceiveCommonFee() {
                                                     {rcfSomeData && rcfFindData.rcf_date ? (
                                                         DateFormat(rcfFindData.rcf_date)
                                                     ) : (
-                                                        <div className='text-danger'>
-                                                            <p>-</p>
-                                                        </div>
+                                                        <p>-</p>
                                                     )}
                                                 </td>
-                                                <td>{data.ncf_note}</td>
                                                 <td>
 
                                                     {rcfSomeData && rcfFindData.rcf_slip !== null && data.ncf_status === 0 ? (
@@ -229,13 +309,9 @@ export default function ReceiveCommonFee() {
                                                             </a>
                                                         </OverlayTrigger>
                                                     ) : rcfSomeData && rcfFindData.rcf_slip === null && data.ncf_status === 1 ? (
-                                                        <div className='text-success'>
-                                                            <p>ชำระแล้ว</p>
-                                                        </div>
+                                                        <p>-</p>
                                                     ) : (
-                                                        <div className='text-danger'>
-                                                            <p>ยังไม่มีการชำระ</p>
-                                                        </div>
+                                                        <p>-</p>
                                                     )}
 
                                                 </td>
@@ -403,6 +479,43 @@ export default function ReceiveCommonFee() {
                             </tbody>
                         </Table>
                     </div>
+                    <Pagination className="float-end">
+                        <Pagination.First disabled={currentPage === 1} onClick={() => handlePageClick(1)} />
+                        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageClick(Math.max(1, currentPage - 1))} />
+
+                        {currentPage > 3 && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageClick(1)}>1</Pagination.Item>
+                                {currentPage > 4 && <Pagination.Ellipsis />}
+                            </>
+                        )}
+
+                        {[...Array(totalPage)].slice(
+                            Math.max(0, currentPage - 3),
+                            Math.min(totalPage, currentPage + 2)
+                        ).map((_, index) => {
+                            const pageIndex = index + Math.max(0, currentPage - 3) + 1;
+                            return (
+                                <Pagination.Item
+                                    key={pageIndex}
+                                    active={pageIndex === currentPage}
+                                    onClick={() => handlePageClick(pageIndex)}
+                                >
+                                    {pageIndex}
+                                </Pagination.Item>
+                            );
+                        })}
+
+                        {currentPage < totalPage - 2 && (
+                            <>
+                                {currentPage < totalPage - 3 && <Pagination.Ellipsis />}
+                                <Pagination.Item onClick={() => handlePageClick(totalPage)}>{totalPage}</Pagination.Item>
+                            </>
+                        )}
+
+                        <Pagination.Next disabled={currentPage === totalPage} onClick={() => handlePageClick(Math.min(totalPage, currentPage + 1))} />
+                        <Pagination.Last disabled={currentPage === totalPage} onClick={() => handlePageClick(totalPage)} />
+                    </Pagination>
                 </Card.Body>
             </Card>
         </ProtectRoute>

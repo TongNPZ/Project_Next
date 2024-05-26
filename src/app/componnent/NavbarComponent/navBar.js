@@ -21,7 +21,7 @@ const Navbar = () => {
   const id = authData.id;
   const role = authData.role;
   // console.log(id)
-  console.log(userData)
+  // console.log(userData)
   const scrollToSection = (sectionId) => {
     scroller.scrollTo(sectionId, {
       duration: 800,
