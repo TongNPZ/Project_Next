@@ -110,7 +110,7 @@ const Navbar = () => {
         <div className="navbar-collapse justify-content-center" id="navbarTogglerDemo03">
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link mx-4" aria-current="page" onClick={() => router.push('/')}>หน้าหลัก</a>
+              <a className="nav-link mx-4" style={{ cursor: 'pointer' }} aria-current="page" onClick={() => router.push('/')}>หน้าหลัก</a>
             </li>
             <li className="nav-item">
               <ScrollLink
@@ -121,6 +121,7 @@ const Navbar = () => {
                 offset={-70}
                 duration={500}
                 className="nav-link mx-4"
+                style={{ cursor: 'pointer' }}
               >
                 โครงการ
               </ScrollLink>
@@ -134,6 +135,7 @@ const Navbar = () => {
                 offset={-70}
                 duration={500}
                 className="nav-link mx-4"
+                style={{ cursor: 'pointer' }}
               >
                 ติดต่อเรา
               </ScrollLink>
@@ -153,6 +155,10 @@ const Navbar = () => {
             style={{ color: 'white' }}
           >
             <NavDropdown.Item onClick={() => router.push('/profile')}>ข้อมูลผู้ใช้</NavDropdown.Item>
+
+            {role === 2 || role === 3 && (
+              <NavDropdown.Item onClick={() => router.push('/buy_process')}>การซื้อของฉัน</NavDropdown.Item>
+            )}
 
             {role === 1 && (
               <NavDropdown.Item onClick={() => router.push('/housing_estate')}>โครงการ</NavDropdown.Item>
