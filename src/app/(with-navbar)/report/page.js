@@ -13,7 +13,8 @@ import {
     API_TRANSFER,
     API_NOTIFY_COMMON_FEE,
     API_RECEIVE_COMMON_FEE,
-    API_EXPENSES_COMMON_FEE
+    API_EXPENSES_COMMON_FEE,
+    API_REPORT_PROBLEM
 } from "../../../../api"
 import {
     Nav,
@@ -98,9 +99,18 @@ export default function report() {
         }
     }
 
-    const fetcExpenses = async () => {
+    const fetcExpenses = async (search, startDate, endDate) => {
         try {
             const result = await GetRequest(`${API_EXPENSES_COMMON_FEE}?order=DESC&search=${search}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
+            setShowData(result.data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
+    const fecthReportProblem = async (search, status, startDate, endDate) => {
+        try {
+            const result = await GetRequest(`${API_REPORT_PROBLEM}?order=DESC&search=${search}&status=${status}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
             setShowData(result.data);
         } catch (error) {
             console.log('error', error);
@@ -155,6 +165,8 @@ export default function report() {
             if (status === '') {
                 fetcExpenses(search, startDate, endDate);
             }
+        } else if (status === '' || status === 'pending' || status === 'resolved') {
+            fecthReportProblem(search, status, startDate, endDate);
         }
 
         console.log(tempStatus)
@@ -221,6 +233,11 @@ export default function report() {
                                                 <option value={'overdue'}>ค้างชำระ</option>
                                                 <option value={'paid'}>ชำระแล้ว</option>
                                             </>
+                                        ) : activeKey === 'reportProblem' ? (
+                                            <>
+                                                <option value={'pending'}>กำลังแก้ไข</option>
+                                                <option value={'resolved'}>แก้ไขแล้ว</option>
+                                            </>
                                         ) : null}
 
                                     </Form.Select>
@@ -228,7 +245,7 @@ export default function report() {
                             </div>
                             <div className="col-md-6">
 
-                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'paid' || activeKey === 'expenses' && status === '' ? (
+                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
                                     <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
@@ -308,7 +325,7 @@ export default function report() {
                         showData && showData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${filteredShowData.length > 0 ? encodeURIComponent(filteredShowDataString) : encodeURIComponent(showDataString)}/${activeKey}/${search || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>
@@ -599,7 +616,122 @@ export default function report() {
                                 </h2>
                             </div>
                         )
-                    ) : null}
+                    ) : activeKey === 'reportProblem' && (
+                        showData && showData.length > 0 ? (
+                            <>
+                                <div className="text-end mb-3">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                        <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
+                                        ส่งออกข้อมูล
+                                    </Button>
+                                </div>
+
+                                {tempStatus === '' ? (
+                                    <Table bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>บ้านเลขที่</th>
+                                                <th>ชื่อผู้แจ้ง</th>
+                                                <th>รายละเอียดการแจ้ง</th>
+                                                <th>วันที่แจ้ง</th>
+                                                <th>รายละเอียดการแก้ไข</th>
+                                                <th>วันที่แก้ไข</th>
+                                                <th>สถานะ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {showData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{data.house_no}</td>
+                                                    <td>{data.user_name} {data.user_lastname}</td>
+                                                    <td>{data.rp_problem_details}</td>
+                                                    <td>{DateTimeFormat(data.rp_problem_date)}</td>
+                                                    <td>{data.rp_solved_details ? data.rp_solved_details : '-'}</td>
+                                                    <td>{data.rp_solved_date ? DateTimeFormat(data.rp_solved_date) : '-'}</td>
+
+                                                    {data.rp_status === 1 ? (
+                                                        <td>
+                                                            <Badge bg="success">แก้ไขแล้ว</Badge>
+                                                        </td>
+                                                    ) : (
+                                                        <td>
+                                                            <Badge bg="info">กำลังแก้ไข</Badge>
+                                                        </td>
+                                                    )}
+
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </Table>
+                                ) : tempStatus === 'pending' ? (
+                                    <Table bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>บ้านเลขที่</th>
+                                                <th>ชื่อผู้แจ้ง</th>
+                                                <th>รายละเอียดการแจ้ง</th>
+                                                <th>วันที่แจ้ง</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {showData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{data.house_no}</td>
+                                                    <td>{data.user_name} {data.user_lastname}</td>
+                                                    <td>{data.rp_problem_details}</td>
+                                                    <td>{DateTimeFormat(data.rp_problem_date)}</td>
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </Table>
+                                ) : tempStatus === 'resolved' ? (
+                                    <Table bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>บ้านเลขที่</th>
+                                                <th>ชื่อผู้แจ้ง</th>
+                                                <th>รายละเอียดการแจ้ง</th>
+                                                <th>วันที่แจ้ง</th>
+                                                <th>รายละเอียดการแก้ไข</th>
+                                                <th>วันที่แก้ไข</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {showData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{data.house_no}</td>
+                                                    <td>{data.user_name} {data.user_lastname}</td>
+                                                    <td>{data.rp_problem_details}</td>
+                                                    <td>{DateTimeFormat(data.rp_problem_date)}</td>
+                                                    <td>{data.rp_solved_details ? data.rp_solved_details : '-'}</td>
+                                                    <td>{data.rp_solved_date ? DateTimeFormat(data.rp_solved_date) : '-'}</td>
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </Table>
+                                ) : null}
+
+                            </>
+                        ) : (
+                            <div className="text-center">
+                                <h2 className="mt-5 mb-5">
+                                    ไม่มีข้อมูลที่จะแสดง
+                                </h2>
+                            </div>
+                        )
+                    )}
 
                 </Card.Body>
             </Card>

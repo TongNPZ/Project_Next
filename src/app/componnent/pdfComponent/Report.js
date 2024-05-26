@@ -169,6 +169,11 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     }, 0);
     const totalPriceExpensesFormatted = totalPriceExpenses.toLocaleString();
 
+    // reportProblem
+    const filteredDataReportProblem = showData.filter(data => data.rp_id);
+    const filteredDataPending = showData.filter(data => data.rp_status === 0);
+    const filteredDataResolved = showData.filter(data => data.rp_status === 1);
+
     return (
         <Document>
             <Page size="A4" style={styles.body}>
@@ -194,13 +199,15 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <Text style={styles.title}>รายงานค่าส่วนกลาง</Text>
                         ) : activeKey === 'expenses' ? (
                             <Text style={styles.title}>รายงานค่าใช้จ่ายโครงการ</Text>
-                        ) : null}
+                        ) : activeKey === 'reportProblem' && (
+                            <Text style={styles.title}>รายงานการแจ้งปัญหา</Text>
+                        )}
                     </div>
                 ))}
 
                 <Text style={styles.textContent}>
                     ประเภทรายงาน&nbsp;:&nbsp;
-                    {tempStatus === 'default' ? 'ทั้งหมด' : tempStatus === 'vacant' ? 'ว่าง' : tempStatus === 'booked' ? 'จอง' : tempStatus === 'contracted' ? 'ทำสัญญา' : tempStatus === 'transferred' ? 'โอนกรรมสิทธิ์' : tempStatus === 'sold' ? 'ขายแล้ว' : tempStatus === 'cancel' ? 'ยกเลิกขาย' : null}
+                    {tempStatus === 'default' ? 'ทั้งหมด' : tempStatus === 'vacant' ? 'ว่าง' : tempStatus === 'booked' ? 'จอง' : tempStatus === 'contracted' ? 'ทำสัญญา' : tempStatus === 'transferred' ? 'โอนกรรมสิทธิ์' : tempStatus === 'sold' ? 'ขายแล้ว' : tempStatus === 'cancel' ? 'ยกเลิกขาย' : tempStatus === 'pending' ? 'กำลังแก้ไข' : tempStatus === 'resolved' ? 'แก้ไขแล้ว' : null}
                     {search !== 'default' ? `, ค้นหา : เฉพาะที่มีรายการ ${search}` : null}
                     {startDate !== 'default' && endDate !== 'default' ? `, จากวันที่ ${DateFormat(startDate)} ถึง ${DateFormat(endDate)}` : null}&nbsp;
                 </Text>
@@ -932,7 +939,152 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             ) : null}
                         </>
                     ) : null
-                ) : null}
+                ) : activeKey === 'reportProblem' && (
+                    <>
+                        {tempStatus === 'default' || tempStatus === 'pending' ? (
+                            filteredDataPending && filteredDataPending.length > 0 ? (
+                                <>
+                                    <View style={styles.horizontalLine} />
+                                    <View style={styles.table}>
+                                        <View style={styles.tableRow}>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>บ้านเลขที่</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>ชื่อผู้แจ้ง&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>รายละเอียดการแจ้ง&nbsp;&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>วันที่แจ้ง&nbsp;</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.horizontalLine} />
+
+                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;กำลังแก้ไข&nbsp;</Text>
+
+                                    {showData.map((data, index) => (
+                                        data.rp_status === 0 && (
+                                            <View key={index} style={styles.table}>
+                                                <View style={styles.tableRow}>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.house_no}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.user_name} {data.user_lastname}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.rp_problem_details}&nbsp;&nbsp;&nbsp;</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{DateTimeFormat(data.rp_problem_date)}</Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        )
+                                    ))}
+
+                                    <View style={styles.horizontalLineDotted} />
+                                    <View style={styles.row}>
+                                        <Text style={styles.textContentRow}>รวมรายการกำลังแก้ไข&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{filteredDataPending.length}</Text>
+                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                    </View>
+                                    <View style={styles.horizontalLineDotted} />
+                                </>
+                            ) : null
+                        ) : null}
+
+                        {tempStatus === 'default' || tempStatus === 'resolved' ? (
+                            filteredDataResolved && filteredDataResolved.length > 0 ? (
+                                <>
+                                    <View style={styles.horizontalLine} />
+                                    <View style={styles.table}>
+                                        <View style={styles.tableRow}>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>บ้านเลขที่</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>ชื่อผู้แจ้ง&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>รายละเอียดการแจ้ง&nbsp;&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>วันที่แจ้ง&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>รายละเอียดการแก้ไข&nbsp;&nbsp;</Text>
+                                            </View>
+                                            <View style={styles.tableCol}>
+                                                <Text style={styles.tableCell}>วันที่แก้ไข&nbsp;</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.horizontalLine} />
+
+                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;แก้ไขแล้ว&nbsp;</Text>
+
+                                    {showData.map((data, index) => (
+                                        data.rp_status === 1 && (
+                                            <View key={index} style={styles.table}>
+                                                <View style={styles.tableRow}>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.house_no}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.user_name} {data.user_lastname}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.rp_problem_details}&nbsp;</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{DateTimeFormat(data.rp_problem_date)}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{data.rp_solved_details}&nbsp;</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{DateTimeFormat(data.rp_solved_date)}</Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        )
+                                    ))}
+
+                                    <View style={styles.horizontalLineDotted} />
+                                    <View style={styles.row}>
+                                        <Text style={styles.textContentRow}>รวมรายการแก้ไขแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{filteredDataResolved.length}</Text>
+                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                    </View>
+                                    <View style={styles.horizontalLineDotted} />
+                                </>
+                            ) : null
+                        ) : null}
+
+                        <View style={styles.row}>
+                            <Text style={styles.textContentRow}>รวมรายการแจ้งปัญหา&nbsp;&nbsp;</Text>
+                            <Text style={styles.textNumberRow}>{filteredDataReportProblem.length}</Text>
+                            <Text style={styles.textContentRow}>รายการ</Text>
+                        </View>
+                        <View style={styles.horizontalLineDotted} />
+                    </>
+                )}
 
             </Page>
         </Document>

@@ -215,7 +215,7 @@ export default function Book() {
 
     const renderTooltipClose = (props) => (
         <Tooltip {...props}>
-            ยกเลิกจอง
+            ยกเลิกทำสัญญา
         </Tooltip>
     );
     // --- //
