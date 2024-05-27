@@ -337,7 +337,7 @@ export default function Book() {
                                                 <td>{DateTimeFormat(data.con_date)}</td>
                                             ) : (
                                                 <td>
-                                                    <p className='text-danger'>ไม่มีการทำสัญญา</p>
+                                                    <span>-</span>
                                                 </td>
                                             )}
 

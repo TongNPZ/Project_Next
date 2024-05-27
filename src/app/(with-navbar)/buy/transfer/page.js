@@ -270,7 +270,7 @@ export default function Transfer() {
                                                 <td>{DateTimeFormat(data.trans_date)}</td>
                                             ) : (
                                                 <td>
-                                                    <p className='text-danger'>ไม่มีการโอนกรรมสิทธิ์</p>
+                                                    <span>-</span>
                                                 </td>
                                             )}
 
