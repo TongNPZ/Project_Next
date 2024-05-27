@@ -123,7 +123,7 @@ export default function HouseStyle() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลแบบบ้าน (Type)</h5>
+                            <h5>ข้อมูลแบบบ้าน (Type)</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -172,7 +172,7 @@ export default function HouseStyle() {
                                     <th>รหัสแบบบ้าน</th>
                                     <th>ชื่อแบบบ้าน</th>
                                     <th>ขนาดพื้นที่ใช้สอย (ตารางเมตร)</th>
-                                    <th>ราคาขายบ้าน</th>
+                                    <th>ราคาขาย/หลัง (บาท)</th>
                                     <th>ภาพบ้าน 3 มิติ</th>
                                     <th>โซนบ้าน</th>
                                     <th>สถานะ</th>
@@ -199,11 +199,11 @@ export default function HouseStyle() {
 
                                             {data.hs_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="success">เปิดใช้งานแบบบ้าน</Badge>
+                                                    <Badge bg="success">เปิดใช้งาน</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ปิดใช้งานแบบบ้าน</Badge>
+                                                    <Badge bg="danger">ปิดใช้งาน</Badge>
                                                 </td>
                                             )}
 

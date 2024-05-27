@@ -114,7 +114,7 @@ export default function ModalEdit({ show, handleClose, id }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel} size="md">
+        <Modal show={show} onHide={handleCancel} size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>แก้ไขข้อมูลจอง</Modal.Title>
             </Modal.Header>

@@ -1,7 +1,8 @@
 import React from 'react';
 import {
     DateTimeFormat,
-    DateFormat
+    DateFormat,
+    PriceWithCommas
 } from '@/app/Format';
 import { API_URL } from '../../../../app';
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
@@ -28,8 +29,10 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
-        marginHorizontal: 12,
+        width: '100%',
+        marginBottom: 5,
     },
     logo: {
         marginHorizontal: 'auto',
@@ -68,18 +71,20 @@ const styles = StyleSheet.create({
         fontSize: 8,
         marginBottom: 5,
     },
-    textContentRow: {
+    textFrontRow: {
         fontSize: 8,
-        width: '15%',
-        marginHorizontal: 5,
-        marginBottom: 5,
+        width: '20%',
+        textAlign: 'right',
+    },
+    textBehindRow: {
+        fontSize: 8,
+        width: '10%',
+        textAlign: 'right',
     },
     textNumberRow: {
         fontSize: 8,
+        width: '20%',
         textAlign: 'right',
-        width: '10%',
-        marginHorizontal: '10%',
-        marginBottom: 5,
     },
     table: {
         display: 'table',
@@ -115,7 +120,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceSold = filteredDataSold.reduce((sum, data) => {
         return sum + parseFloat(data.price);
     }, 0);
-    const totalPriceSoldFormatted = totalPriceSold.toLocaleString();
+    const totalPriceSoldFormatted = PriceWithCommas(totalPriceSold);
 
     // booked
     const filteredDataBooked = showData.filter(data => data.b_id);
@@ -123,7 +128,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceBooked = filteredDataBooked.reduce((sum, data) => {
         return sum + parseFloat(data.b_amount);
     }, 0);
-    const totalPriceBookedFormatted = totalPriceBooked.toLocaleString();
+    const totalPriceBookedFormatted = PriceWithCommas(totalPriceBooked);
 
     // contracted
     const filteredDataContracted = showData.filter(data => data.b_id);
@@ -131,7 +136,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceContracted = filteredDataContracted.reduce((sum, data) => {
         return sum + parseFloat(data.con_amount);
     }, 0);
-    const totalPriceContractedFormatted = totalPriceContracted.toLocaleString();
+    const totalPriceContractedFormatted = PriceWithCommas(totalPriceContracted);
 
     // transferred
     const filteredDataTransferred = showData.filter(data => data.b_id);
@@ -139,7 +144,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceTransferred = filteredDataTransferred.reduce((sum, data) => {
         return sum + parseFloat(data.trans_amount);
     }, 0);
-    const totalPriceTransferredFormatted = totalPriceTransferred.toLocaleString();
+    const totalPriceTransferredFormatted = PriceWithCommas(totalPriceTransferred);
 
     // commonFee
     const filteredShowData = showData && showData.filter(data => {
@@ -152,14 +157,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceOverdue = filteredDataOverdue.reduce((sum, data) => {
         return sum + parseFloat(data.ncf_amount);
     }, 0);
-    const totalPriceOverdueFormatted = totalPriceOverdue.toLocaleString();
+    const totalPriceOverdueFormatted = PriceWithCommas(totalPriceOverdue);
 
     const filteredDataPaid = showData.filter(data => data.ncf_status === 1);
 
     const totalPricePaid = filteredDataPaid.reduce((sum, data) => {
         return sum + parseFloat(data.ncf_amount);
     }, 0);
-    const totalPricePaidFormatted = totalPricePaid.toLocaleString();
+    const totalPricePaidFormatted = PriceWithCommas(totalPricePaid);
 
     // expenses
     const filteredDataExpenses = showData.filter(data => data.ex_id);
@@ -167,7 +172,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceExpenses = filteredDataExpenses.reduce((sum, data) => {
         return sum + parseFloat(data.ex_amount);
     }, 0);
-    const totalPriceExpensesFormatted = totalPriceExpenses.toLocaleString();
+    const totalPriceExpensesFormatted = PriceWithCommas(totalPriceExpenses);
 
     // reportProblem
     const filteredDataReportProblem = showData.filter(data => data.rp_id);
@@ -177,11 +182,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     return (
         <Document>
             <Page size="A4" style={styles.body}>
-                <View style={styles.contentHeading}>
+                <View style={styles.contentHeading} fixed>
                     <Text style={[styles.textHeading, { marginRight: 3 }]}>หน้า</Text>
-                    <Text style={styles.textHeading} render={({ pageNumber }) => (
-                        `${pageNumber}`
-                    )} fixed />
+                    <Text style={styles.textHeading} render={({ pageNumber }) => `${pageNumber}`} />
                 </View>
 
                 {housingEstate.map((he, index) => (
@@ -207,7 +210,18 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                 <Text style={styles.textContent}>
                     ประเภทรายงาน&nbsp;:&nbsp;
-                    {tempStatus === 'default' ? 'ทั้งหมด' : tempStatus === 'vacant' ? 'ว่าง' : tempStatus === 'booked' ? 'จอง' : tempStatus === 'contracted' ? 'ทำสัญญา' : tempStatus === 'transferred' ? 'โอนกรรมสิทธิ์' : tempStatus === 'sold' ? 'ขายแล้ว' : tempStatus === 'cancel' ? 'ยกเลิกขาย' : tempStatus === 'pending' ? 'กำลังแก้ไข' : tempStatus === 'resolved' ? 'แก้ไขแล้ว' : null}
+                    {tempStatus === 'default' ? 'ทั้งหมด' :
+                        tempStatus === 'vacant' ? 'ว่าง' :
+                            tempStatus === 'booked' ? 'จอง' :
+                                tempStatus === 'contracted' ? 'ทำสัญญา' :
+                                    tempStatus === 'transferred' ? 'โอนกรรมสิทธิ์' :
+                                        tempStatus === 'sold' ? 'ขายแล้ว' :
+                                            tempStatus === 'cancel' ? 'ยกเลิกขาย' :
+                                                tempStatus === 'overdue' ? 'ค้างจ่าย' :
+                                                    tempStatus === 'paid' ? 'ชำระแล้ว' :
+                                                        tempStatus === 'pending' ? 'กำลังแก้ไข' :
+                                                            tempStatus === 'resolved' ? 'แก้ไขแล้ว' : null
+                    }
                     {search !== 'default' ? `, ค้นหา : เฉพาะที่มีรายการ ${search}` : null}
                     {startDate !== 'default' && endDate !== 'default' ? `, จากวันที่ ${DateFormat(startDate)} ถึง ${DateFormat(endDate)}` : null}&nbsp;
                 </Text>
@@ -281,7 +295,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -289,9 +303,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่ว่าง&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ว่าง&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataVacant.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -326,7 +340,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -334,9 +348,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่จอง&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่จอง&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataBook.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -371,7 +385,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -379,9 +393,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่ทำสัญญา&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ทำสัญญา&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataContract.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -389,7 +403,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                             {filteredDataTransfer && filteredDataTransfer.length > 0 ? (
                                 <>
-                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;กำลังดำเนินการโอนกรรมสิทธิ์&nbsp;</Text>
+                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;กำลังดำเนินการโอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
                                     {showData.map((data, index) => (
                                         data.h_status === 4 && (
                                             <View key={index} style={styles.table}>
@@ -416,7 +430,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -424,9 +438,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่โอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่โอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataTransfer.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -461,7 +475,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -469,14 +483,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่ขายแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ขายแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataSold.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนราคาบ้านที่ขายแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนราคาบ้านที่ขายแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceSoldFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -511,7 +525,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                         <Text style={styles.tableCellData}>{parseFloat(data.usable_space).toLocaleString()}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
-                                                        <Text style={styles.tableCellData}>{parseFloat(data.price).toLocaleString()}</Text>
+                                                        <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -519,9 +533,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนบ้านที่ยกเลิกขาย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ยกเลิกขาย&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataCancel.length}</Text>
-                                        <Text style={styles.textContentRow}>หลัง</Text>
+                                        <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -564,7 +578,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                     <Text style={styles.tableCellData}>{data.user_name} {data.user_lastname}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{parseFloat(data.b_amount).toLocaleString()}&nbsp;</Text>
+                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.b_amount))}&nbsp;</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{DateTimeFormat(data.b_date)}</Text>
@@ -577,14 +591,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนรายการจอง&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนรายการจอง&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataBooked.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
-                                    <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินจอง&nbsp;&nbsp;</Text>
+                                    <View style={styles.row}>textFrontRow
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินจอง&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceBookedFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -657,7 +671,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                     <Text style={styles.tableCellData}>{data.witnesstwo_name}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{parseFloat(data.con_amount).toLocaleString()}</Text>
+                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.con_amount))}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{DateTimeFormat(data.con_date)}</Text>
@@ -670,14 +684,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนรายการทำสัญญา&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนรายการทำสัญญา&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataContracted.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินทำสัญญา&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินทำสัญญา&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceContractedFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -720,7 +734,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                     <Text style={styles.tableCellData}>{data.trans_name}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{parseFloat(data.trans_amount).toLocaleString()}</Text>
+                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.trans_amount))}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{DateTimeFormat(data.trans_date)}</Text>
@@ -733,14 +747,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนรายการโอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนรายการโอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataTransferred.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินส่วนที่เหลือ&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินส่วนที่เหลือ&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceTransferredFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -769,7 +783,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             </View>
                             <View style={styles.horizontalLine} />
 
-                            {filteredDataOverdue && filteredDataOverdue.length > 0 && startDate === 'default' && endDate === 'default' ? (
+                            {filteredDataOverdue && filteredDataOverdue.length > 0 && startDate === 'default' && endDate === 'default' || tempStatus === 'overdue' && startDate !== 'default' && endDate !== 'default' ? (
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ค้างชำระ&nbsp;</Text>
                                     {filteredShowData.map((data, index) => {
@@ -784,7 +798,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                             <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                         </View>
                                                         <View style={styles.tableCol}>
-                                                            <Text style={styles.tableCellData}>{parseFloat(data.ncf_amount).toLocaleString()}</Text>
+                                                            <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.ncf_amount))}</Text>
                                                         </View>
                                                         <View style={styles.tableCol}>
                                                             <Text style={styles.tableCellData}>{DateFormat(data.ncf_date)}&nbsp;</Text>
@@ -807,14 +821,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     })}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมรายการค้างชำระ&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมรายการค้างชำระ&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataOverdue.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินค้างชำระ&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินค้างชำระ&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceOverdueFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -835,7 +849,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                             <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                         </View>
                                                         <View style={styles.tableCol}>
-                                                            <Text style={styles.tableCellData}>{parseFloat(data.ncf_amount).toLocaleString()}</Text>
+                                                            <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.ncf_amount))}</Text>
                                                         </View>
                                                         <View style={styles.tableCol}>
                                                             <Text style={styles.tableCellData}>{DateFormat(data.ncf_date)}&nbsp;</Text>
@@ -858,14 +872,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     })}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมรายการชำระแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมรายการชำระแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataPaid.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินชำระแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินชำระแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPricePaidFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -911,7 +925,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                     <Text style={styles.tableCellData}>{data.ex_list}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{parseFloat(data.ex_amount).toLocaleString()}</Text>
+                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.ex_amount))}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{DateTimeFormat(data.ex_record)}&nbsp;</Text>
@@ -925,14 +939,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมรายการค่าใช้จ่าย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมรายการค่าใช้จ่าย&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataExpenses.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมจำนวนเงินค่าใช้จ่าย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินค่าใช้จ่าย&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceExpensesFormatted}</Text>
-                                        <Text style={styles.textContentRow}>บาท</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -994,9 +1008,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมรายการกำลังแก้ไข&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมรายการกำลังแก้ไข&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataPending.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
@@ -1068,21 +1082,26 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textContentRow}>รวมรายการแก้ไขแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมรายการแก้ไขแล้ว&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataResolved.length}</Text>
-                                        <Text style={styles.textContentRow}>รายการ</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
                             ) : null
                         ) : null}
 
-                        <View style={styles.row}>
-                            <Text style={styles.textContentRow}>รวมรายการแจ้งปัญหา&nbsp;&nbsp;</Text>
-                            <Text style={styles.textNumberRow}>{filteredDataReportProblem.length}</Text>
-                            <Text style={styles.textContentRow}>รายการ</Text>
-                        </View>
-                        <View style={styles.horizontalLineDotted} />
+                        {tempStatus === 'default' && (
+                            <>
+                                <View style={styles.row}>
+                                    <Text style={styles.textFrontRow}>รวมรายการแจ้งปัญหา&nbsp;&nbsp;</Text>
+                                    <Text style={styles.textNumberRow}>{filteredDataReportProblem.length}</Text>
+                                    <Text style={styles.textBehindRow}>รายการ</Text>
+                                </View>
+                                <View style={styles.horizontalLineDotted} />
+                            </>
+                        )}
+
                     </>
                 )}
 
