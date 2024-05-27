@@ -315,7 +315,7 @@ export default function Book() {
                                                 <td>{DateTimeFormat(data.b_date)}</td>
                                             ) : (
                                                 <td>
-                                                    <p className='text-danger'>ไม่มีการจอง</p>
+                                                    <span>-</span>
                                                 </td>
                                             )}
 
