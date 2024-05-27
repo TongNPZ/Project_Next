@@ -90,9 +90,9 @@ function SideBar() {
                     {/* collapse house */}
                     <Collapse in={openHouse}>
                       <div className='mb-3' id="collapse-house">
-                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
-                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน (Type)</a>
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/zone')} style={{ cursor: 'pointer' }}>โซนบ้าน (Zone)</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน (Type)</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
                       </div>
                     </Collapse>
                     {/* --- */}

@@ -439,22 +439,12 @@ export default function ReceiveCommonFee() {
                                                         </OverlayTrigger>
                                                     </td>
                                                 ) : (
-                                                    <td><OverlayTrigger overlay={renderTooltipUpload}>
-                                                        <label htmlFor={`fileInput-receipt-${data.ncf_id}`} style={{ cursor: 'pointer' }}>
-                                                            <input
-                                                                id={`fileInput-receipt-${data.ncf_id}`}
-                                                                type="file"
-                                                                style={{ display: 'none' }}
-                                                                value={uploadedFile ? uploadedFile.file : ''}
-                                                                onChange={(e) => {
-                                                                    if (e.target.files.length > 0) {
-                                                                        AddReceive(data.ncf_id, e.target.files[0]);
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                        </label>
-                                                    </OverlayTrigger>
+                                                    <td>
+                                                        <OverlayTrigger overlay={renderTooltipConfirm}>
+                                                            <a onClick={() => ChangedStatus(rcfFindData.rcf_id)} style={{ cursor: 'pointer' }}>
+                                                                <BsCheckSquareFill className='me-2 mb-2 text-success' style={{ fontSize: '24px' }} />
+                                                            </a>
+                                                        </OverlayTrigger>
                                                         <OverlayTrigger overlay={renderTooltipDelete}>
                                                             <a onClick={() => RemoveData(data.ncf_id)} style={{ cursor: 'pointer' }}>
                                                                 <BsFillTrash3Fill className='mb-2 text-danger' style={{ fontSize: '24px' }} />

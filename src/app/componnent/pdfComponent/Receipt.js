@@ -1,9 +1,9 @@
 import React from 'react';
 import THBText from 'thai-baht-text'
-import { 
+import {
     DateFormatNum,
     DateFormat
- } from '@/app/Format';
+} from '@/app/Format';
 import { API_URL } from '../../../../app';
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
         borderStyle: 'dotted',
     },
     lineCustom: {
-        paddingLeft: '10%',
-        paddingRight: '10%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
         borderBottomWidth: 1,
         borderBottomColor: 'black',
         borderStyle: 'dotted',
@@ -150,6 +150,24 @@ const styles = StyleSheet.create({
         // flexDirection: 'row',
         justifyContent: 'center', // จัดให้เนื้อหาตรงกลางแนวนอน
         alignItems: 'center', // จัดให้เนื้อหาตรงกลางแนวตั้ง
+    },
+    signatureImage: {
+        width: '130px',
+        // height: '50px',
+        paddingBottom: 1,
+        textAlign: 'center',
+    },
+    textSignature: {
+        marginTop: 5,
+        fontSize: 12,
+        // textAlign: 'justify',
+    },
+    lineSignature: {
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        borderStyle: 'dotted',
     },
     row: {
         marginTop: 20,
@@ -466,25 +484,38 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
                 </View>
             )}
 
-            <View style={styles.row}>
-                <View style={styles.signatureContainer}>
-                    <Text style={styles.text}>ลงชื่อ................................................ผู้จัดการ</Text>
-
-                    {housingEstate.map((data) => (
-                        <View style={styles.container} key={data.he_id}>
+            {housingEstate.map((data, index) => (
+                <View key={index} style={styles.row}>
+                    <View style={styles.signatureContainer}>
+                        <View style={styles.container}>
+                            <Text style={styles.textSignature}>ลงชื่อ&nbsp;</Text>
+                            <View style={styles.lineSignature}>
+                                <Image
+                                    style={styles.signatureImage}
+                                    src={`${API_URL}${data.signature}`}
+                                />
+                            </View>
+                            <Text style={styles.textSignature}>ผู้จัดการ</Text>
+                        </View>
+                        <View style={styles.container}>
                             <Text style={styles.text}>{'('}</Text>
                             <View style={styles.lineCustom}>
                                 <Text style={styles.textContent}>{data.user_name} {data.user_lastname}</Text>
                             </View>
                             <Text style={styles.text}>{')'}</Text>
                         </View>
-                    ))}
-
-                </View>
-                <View style={styles.signatureContainer}>
-                    <Text style={styles.text}>ลงชื่อ................................................ผู้รับเงิน</Text>
-
-                    {housingEstate.map((data) => (
+                    </View>
+                    <View style={styles.signatureContainer}>
+                        <View style={styles.container}>
+                            <Text style={styles.textSignature}>ลงชื่อ&nbsp;</Text>
+                            <View style={styles.lineSignature}>
+                                <Image
+                                    style={styles.signatureImage}
+                                    src={`${API_URL}${data.md_signature}`}
+                                />
+                            </View>
+                            <Text style={styles.textSignature}>ผู้จัดการ</Text>
+                        </View>
                         <View style={styles.container} key={data.he_id}>
                             <Text style={styles.text}>{'('}</Text>
                             <View style={styles.lineCustom}>
@@ -492,10 +523,9 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
                             </View>
                             <Text style={styles.text}>{')'}</Text>
                         </View>
-                    ))}
-
+                    </View>
                 </View>
-            </View>
+            ))}
 
             <Text style={styles.note}>หมายเหตุ : ใบเสร็จรับเงินฉบับนี้ จะสมบูรณ์ต่อเมื่อมีลายเซ็นผู้จัดการและผู้รับเงิน และบริษัทฯ ได้เรียกเก็บเงินตามเช็คได้ครบถ้วนแล้ว
             </Text>

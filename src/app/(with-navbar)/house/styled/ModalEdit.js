@@ -193,11 +193,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ราคาขายบ้าน</label>
+                            <label className="col-form-label">ราคาขาย/หลัง (บาท)</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
-                                    placeholder="ราคาขายบ้าน"
+                                    placeholder="ราคาขาย/หลัง (บาท)"
                                     value={housePrice}
                                     onChange={(e) => setHousePrice(e.target.value)}
                                     required

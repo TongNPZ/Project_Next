@@ -15,11 +15,7 @@ export default function ModalAdd({ show, handleClose }) {
         { value: 'ค่าเก็บขยะ', label: 'ค่าเก็บขยะ' },
         { value: 'ค่าคนสวน', label: 'ค่าคนสวน' }
     ]);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 8a624742b486df3a1180c5b3d51c1813da9d8a1a
     const ResetData = () => {
         setExList('');
         setExAmount('');

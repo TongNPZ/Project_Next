@@ -161,7 +161,7 @@ export default function House() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลบ้าน</h5>
+                            <h5>ข้อมูลบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>

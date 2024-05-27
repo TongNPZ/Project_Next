@@ -314,7 +314,6 @@ export default function Book() {
                                     <th>จำนวนเงินทำสัญญา</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่ทำสัญญา</th>
-                                    <th>หมายเหตุ</th>
                                     <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>เอกสาร</th>
@@ -341,7 +340,6 @@ export default function Book() {
                                                 </td>
                                             )}
 
-                                            <td>{data.con_note}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.b_id)} style={{ cursor: 'pointer' }}>
@@ -352,7 +350,7 @@ export default function Book() {
 
                                             {data.con_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="info">กำลังดำเนินการ</Badge>
+                                                    <Badge bg="info">รอทำสัญญา</Badge>
                                                 </td>
                                             ) : data.con_status === 2 ? (
                                                 <td>
@@ -381,19 +379,11 @@ export default function Book() {
                                                         </OverlayTrigger>
                                                     )}
 
-                                                    {data.con_receipt === null || data.con_receipt === '' ? (
-                                                        <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
-                                                            <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                                <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                    ) : (
-                                                        <OverlayTrigger overlay={renderTooltipReceipt}>
-                                                            <a href={`${API_URL}${data.con_receipt}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                                <BsReceipt className='mb-2 text-primary' style={{ fontSize: '28px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                    )}
+                                                    <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
+                                                        <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
 
                                                 </td>
                                             ) : data.con_status !== 0 ? (
@@ -401,11 +391,6 @@ export default function Book() {
                                                     <OverlayTrigger overlay={renderTooltipContract}>
                                                         <a href={`${API_URL}${data.contract}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                             <BsFileEarmarkTextFill className='me-2 mb-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-                                                    <OverlayTrigger overlay={renderTooltipReceipt}>
-                                                        <a href={`${API_URL}${data.con_receipt}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                            <BsReceipt className='mb-2 text-primary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
@@ -420,7 +405,7 @@ export default function Book() {
                                                     {data.contract !== null && data.con_receipt !== null && data.contract !== '' && data.con_receipt !== '' ? (
                                                         <OverlayTrigger overlay={renderTooltipTransfer}>
                                                             <a onClick={() => handleAddTransferShow(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                                <BsFileTextFill className='me-2 mb-2 text-secondary' style={{ fontSize: '28px' }} />
+                                                                <BsFileTextFill className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>
                                                     ) : null}
@@ -461,43 +446,7 @@ export default function Book() {
                                                         </OverlayTrigger>
                                                     )}
 
-                                                    {data.con_receipt === null || data.con_receipt === '' ? (
-                                                        <OverlayTrigger overlay={renderTooltipUploadReceipt}>
-                                                            <label htmlFor={`fileInput-receipt-${data.b_id}`} style={{ cursor: 'pointer' }}>
-                                                                <input
-                                                                    id={`fileInput-receipt-${data.b_id}`}
-                                                                    type="file"
-                                                                    style={{ display: 'none' }}
-                                                                    value={uploadedFile ? uploadedFile.file : ''}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.files.length > 0) {
-                                                                            UploadFile(data.b_id, null, e.target.files[0]);
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                            </label>
-                                                        </OverlayTrigger>
-                                                    ) : (
-                                                        <OverlayTrigger overlay={renderTooltipChangedReceipt}>
-                                                            <label htmlFor={`fileInput-receipt-${data.b_id}`} style={{ cursor: 'pointer' }}>
-                                                                <input
-                                                                    id={`fileInput-receipt-${data.b_id}`}
-                                                                    type="file"
-                                                                    style={{ display: 'none' }}
-                                                                    value={uploadedFile ? uploadedFile.file : ''}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.files.length > 0) {
-                                                                            UploadFile(data.b_id, null, e.target.files[0]);
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <BsBoxArrowUp className='me-2 mb-2 text-warning' style={{ fontSize: '28px' }} />
-                                                            </label>
-                                                        </OverlayTrigger>
-                                                    )}
-
-                                                    {data.contract === null && data.con_receipt === null || data.contract === '' && data.con_receipt === '' ? (
+                                                    {data.contract === null || data.contract === '' ? (
                                                         <OverlayTrigger overlay={renderTooltipEdit}>
                                                             <a onClick={() => handleEditShow(data.b_id)} style={{ cursor: 'pointer' }}>
                                                                 <BsPencilSquare className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
