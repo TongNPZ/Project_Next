@@ -88,7 +88,7 @@ const ContractedDetailCard = ({ showData }) => {
                                             {showData.con_date !== null ? (
                                                 <p className="col-form-label">{DateTimeFormat(showData.con_date)}</p>
                                             ) : (
-                                                <p className="col-form-label text-danger">ไม่มีการทำสัญญา</p>
+                                                <p className="col-form-label"> - </p>
                                             )}
 
                                         </div>

@@ -30,16 +30,15 @@ export default function Profile() {
         const fecthUsers = async () => {
             try {
                 const result = await GetRequest(`${API_USER_HOUSE}/${id}`, 'GET', null);
-                setShowData(result);
+                setShowData(result.data);
+                console.log(result.data)
                 console.log(result)
-
             } catch (error) {
                 console.log('error', error);
             }
         }
         fecthUsers();
     }, []);
-    // console.log(showData)
 
     // active key
     const [activeKey, setActiveKey] = useState('overdue');
@@ -53,13 +52,14 @@ export default function Profile() {
     const handleDetailClose = () => setShowDetail(false);
     const handleDetailShow = (id) => {
         setSelectedId(id);
-        // console.log(selectedItemData.trans_status)
-        // console.log(selectedItemData.con_status)
         // หาข้อมูลบ้านที่ถูกกดจาก showData
-        const selectedItem = showData.data.find(item => item.h_id === id);
+        const selectedItem = showData.find(item => item.book_id === id);
         setSelectedItemData(selectedItem);
         setShowDetail(true);
+        console.log(id);
+        // console.log(selectedItem);
     }
+
     useEffect(() => {
         setActiveKey('all');
     }, []);
@@ -90,13 +90,13 @@ export default function Profile() {
                         <Card.Body>
                             <div className="ps-5 pe-5">
                                 <ListGroup className="mb-2">
-                                    {showData.data && showData.data.map(item => (
-                                        (activeKey === 'all' && (showData.data)) ||
-                                            (activeKey === 'inprogress' && (item.h_status === 2 || item.h_status === 3 || item.h_status === 4)) ||
-                                            (activeKey === 'finish' && item.h_status === 5) ||
+                                    {showData && showData.map(item => (
+                                        (activeKey === 'all' && (showData)) ||
+                                            (activeKey === 'inprogress' && (item.h_status === 2 && item.b_status === 1 || item.h_status === 3 && item.con_status === 1 || item.h_status === 4 && item.trans_status === 1)) ||
+                                            (activeKey === 'finish' && item.h_status === 5 && item.trans_status === 2) ||
                                             (activeKey === 'cancel' && (item.b_status === 0 || item.trans_status === 0 || item.con_status === 0)) ? (
                                             <div className="">
-                                                <ListGroup.Item key={item.h_id} action onClick={() => handleDetailShow(item.h_id)} className="hover-card">
+                                                <ListGroup.Item key={item.user_id} action onClick={() => handleDetailShow(item.book_id)} className="hover-card">
                                                     <div className="row">
                                                         <div className="col-md-2">
                                                             <Image src={`${API_URL}${item.image}`} style={{ width: '100%', height: 'auto' }} />

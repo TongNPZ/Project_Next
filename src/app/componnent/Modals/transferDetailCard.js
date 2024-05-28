@@ -22,7 +22,7 @@ const TransferDetailCard = ({ showData }) => {
                                             <p className="col-form-label"><strong>รหัสจอง:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.b_id}</p>
+                                            <p className="col-form-label">{showData.trans_id}</p>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -59,7 +59,7 @@ const TransferDetailCard = ({ showData }) => {
                                             {showData.trans_date !== null ? (
                                                 <p className="col-form-label">{DateTimeFormat(showData.trans_date)}</p>
                                             ) : (
-                                                <p className="col-form-label text-danger">ไม่มีการโอนกรรมสิทธิ์</p>
+                                                <p className="col-form-label"> - </p>
                                             )}
 
                                         </div>

@@ -56,6 +56,14 @@ function SideBar() {
               </div>
             </ListGroup.Item>
 
+            <ListGroup.Item>
+              <div className='my-3'>
+                <a className="nav-link" aria-current="page" onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
+                  <BsFillHouseFill className='me-2' /><strong>บ้านในโครงการ</strong>
+                </a>
+              </div>
+            </ListGroup.Item>
+
             {role === 1 && (
               <ListGroup.Item>
                 <div className='my-3'>
@@ -187,6 +195,7 @@ function SideBar() {
                   </div>
                 </div>
               </ListGroup.Item>
+
             ) : role === 3 ? (
               <ListGroup.Item>
                 <div className='my-3'>
@@ -194,6 +203,7 @@ function SideBar() {
                     <BsReceiptCutoff className='me-2' /><strong>ค่าส่วนกลาง</strong>
                   </a>
                 </div>
+
               </ListGroup.Item>
             ) : null}
 
