@@ -96,11 +96,11 @@ const Navbar = () => {
           </div>
           <div className="col d-flex justify-content-center">
 
-            {authData.token ? (
-              <a style={{ cursor: 'pointer' }}>
-                <Sidebar />
-              </a>
-            ) : null}
+            {/* {authData.token ? ( */}
+            <a style={{ cursor: 'pointer' }}>
+              <Sidebar />
+            </a>
+            {/* ) : null} */}
 
           </div>
         </div>
