@@ -90,7 +90,7 @@ export default function HouseZone() {
 
             <Card>
                 <Card.Header>
-                    <h5>ตารางข้อมูลผู้ใช้งาน</h5>
+                    <h5>ข้อมูลผู้ใช้งาน</h5>
                 </Card.Header>
                 <Card.Body>
                     <div className='row'>

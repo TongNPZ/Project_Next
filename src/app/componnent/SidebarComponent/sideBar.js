@@ -170,7 +170,7 @@ function SideBar() {
                           <BsReceiptCutoff className='me-2' />ค่าส่วนกลาง
                         </div>
 
-                        {openHouse !== true ? (
+                        {openCommonFee !== true ? (
                           <div className='col-md-6 text-end'>
                             <BsCaretRightFill />
                           </div>

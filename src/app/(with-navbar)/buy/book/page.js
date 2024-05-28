@@ -174,7 +174,7 @@ export default function Book() {
 
     const renderTooltipClose = (props) => (
         <Tooltip {...props}>
-            ยกเลิกจอง
+            ยกเลิก
         </Tooltip>
     );
     // --- //
@@ -192,7 +192,7 @@ export default function Book() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลจองบ้าน</h5>
+                            <h5>ข้อมูลจองบ้าน</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -235,9 +235,9 @@ export default function Book() {
                             <div className='mb-3'>
                                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '160px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
-                                    <option value={'booked'}>จองสำเร็จ</option>
-                                    <option value={'processing'}>กำลังดำเนินการ</option>
-                                    <option value={'cancel'}>ยกเลิกจอง</option>
+                                    <option value={'booked'}>สำเร็จ</option>
+                                    <option value={'processing'}>รอชำระเงิน</option>
+                                    <option value={'cancel'}>ยกเลิก</option>
                                 </Form.Select>
                             </div>
                         </div>
@@ -310,15 +310,15 @@ export default function Book() {
                                                 </td>
                                             ) : data.b_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="success">จองสำเร็จ</Badge>
+                                                    <Badge bg="success">สำเร็จ</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ยกเลิกจอง</Badge>
+                                                    <Badge bg="danger">ยกเลิก</Badge>
                                                 </td>
                                             )}
 
-                                            {data.b_status === 1 || data.b_status === 2 ? (
+                                            {data.b_status === 2 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipDownload}>
                                                         <Link href={`/document/receipt/book/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>

@@ -212,7 +212,7 @@ export default function Book() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลสัญญา</h5>
+                            <h5>ข้อมูลสัญญา</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -255,9 +255,9 @@ export default function Book() {
                             <div className='mb-3'>
                                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '220px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
-                                    <option value={'contracted'}>ทำสัญญาสำเร็จ</option>
+                                    <option value={'contracted'}>สำเร็จ</option>
                                     <option value={'processing'}>รอทำสัญญาและชำระเงิน</option>
-                                    <option value={'cancel'}>ยกเลิกสัญญา</option>
+                                    <option value={'cancel'}>ยกเลิก</option>
                                 </Form.Select>
                             </div>
                         </div>
@@ -336,11 +336,11 @@ export default function Book() {
                                                 </td>
                                             ) : data.con_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="success">ทำสัญญาสำเร็จ</Badge>
+                                                    <Badge bg="success">สำเร็จ</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ยกเลิกสัญญา</Badge>
+                                                    <Badge bg="danger">ยกเลิก</Badge>
                                                 </td>
                                             )}
 
@@ -361,18 +361,17 @@ export default function Book() {
                                                         </OverlayTrigger>
                                                     )}
 
-                                                    <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
-                                                        <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-
                                                 </td>
-                                            ) : data.con_status !== 0 ? (
+                                            ) : data.con_status === 2 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipContract}>
                                                         <a href={`${API_URL}${data.contract}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                             <BsFileEarmarkTextFill className='me-2 mb-2 text-primary' style={{ fontSize: '28px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                    <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
+                                                        <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
