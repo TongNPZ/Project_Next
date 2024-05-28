@@ -152,7 +152,7 @@ export default function ModalAdd({ show, handleClose }) {
                             <option value={''}>กรุณาเลือกบ้านเลขที่</option>
 
                             {showUserHouse.map((data, index) => (
-                                data.h_status === 5 && (
+                                data.trans_status === 2 && (
                                     <option key={index} value={data.h_id}>{data.house_no}</option>
                                 )
                             ))}

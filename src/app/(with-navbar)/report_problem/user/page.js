@@ -187,7 +187,7 @@ export default function reportProblemUser() {
                                     </p>
                                 </div>
 
-                                {data.rp_status === 0 ? (
+                                {data.rp_status === 0 && data.user_id === authData.id ? (
                                     <div className="col-md-6 text-end">
                                         <OverlayTrigger overlay={renderTooltipEdit}>
                                             <a onClick={() => handleEditShow(data.rp_id)} style={{ cursor: 'pointer' }}>

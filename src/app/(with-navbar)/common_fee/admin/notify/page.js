@@ -102,7 +102,7 @@ export default function NotifyCommonFee() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
+                            <h5>ข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -172,7 +172,8 @@ export default function NotifyCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อเจ้าของบ้าน</th>
                                     <th>วันที่โอนกรรมสิทธิ์</th>
-                                    <th>วันที่กำหนดชำระค่าส่วนกลาง</th>
+                                    <th>วันที่กำหนดชำระ</th>
+                                    <th>จนถึงวันที่</th>
                                     <th>จำนวนเงินค่าส่วนกลาง</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -198,6 +199,7 @@ export default function NotifyCommonFee() {
                                                             <td>{data.house_no}</td>
                                                             <td>{data.user_name} {data.user_lastname}</td>
                                                             <td>{DateFormat(data.trans_date)}</td>
+                                                            <td>{DateFormat(ncfData.ncf_date)}</td>
                                                             <td>{DateFormat(ncfData.ncf_nextDate)}</td>
                                                             <td>{parseFloat(totalPrice).toLocaleString()}</td>
                                                             <td>

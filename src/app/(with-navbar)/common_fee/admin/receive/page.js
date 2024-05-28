@@ -81,7 +81,7 @@ export default function ReceiveCommonFee() {
     }, [showRcf, startDate, endDate]);
 
     // --- //
-    
+
     // fucntion
     const filteredShowData = showData && showData.filter(data => {
         const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
@@ -186,7 +186,7 @@ export default function ReceiveCommonFee() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลรับเงินค่าส่วนกลาง</h5>
+                            <h5>ข้อมูลรับเงินค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -263,6 +263,7 @@ export default function ReceiveCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>จำนวนเงิน</th>
                                     <th>วันที่กำหนดชำระ</th>
+                                    <th>จนถึงวันที่</th>
                                     <th>วันที่ชำระ</th>
                                     <th>ตรวจสอบการชำระ</th>
                                     <th>เอกสาร</th>
@@ -283,6 +284,7 @@ export default function ReceiveCommonFee() {
                                                 <td>{data.house_no}</td>
                                                 <td>{parseFloat(data.ncf_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                                 <td>{DateFormat(data.ncf_date)}</td>
+                                                <td>{DateFormat(data.ncf_nextDate)}</td>
                                                 <td>
                                                     {rcfSomeData && rcfFindData.rcf_date ? (
                                                         DateFormat(rcfFindData.rcf_date)

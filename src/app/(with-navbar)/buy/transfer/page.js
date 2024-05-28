@@ -171,7 +171,7 @@ export default function Transfer() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลโอนกรรมสิทธิ์</h5>
+                            <h5>ข้อมูลโอนกรรมสิทธิ์</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -214,9 +214,9 @@ export default function Transfer() {
                             <div className='mb-3'>
                                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '190px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
-                                    <option value={'transferred'}>โอนกรรมสิทธิ์สำเร็จ</option>
+                                    <option value={'transferred'}>สำเร็จ</option>
                                     <option value={'processing'}>รอชำระเงิน</option>
-                                    <option value={'cancel'}>ยกเลิกโอนกรรมสิทธิ์</option>
+                                    <option value={'cancel'}>ยกเลิก</option>
                                 </Form.Select>
                             </div>
                         </div>
@@ -287,15 +287,15 @@ export default function Transfer() {
                                                 </td>
                                             ) : data.trans_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="success">โอนกรรมสิทธิ์สำเร็จ</Badge>
+                                                    <Badge bg="success">สำเร็จ</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ยกเลิกโอนกรรมสิทธิ์</Badge>
+                                                    <Badge bg="danger">ยกเลิก</Badge>
                                                 </td>
                                             )}
 
-                                            {data.trans_status === 1 ? (
+                                            {data.trans_status === 2 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipDownload}>
                                                         <a href={`/document/receipt/transfer/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>

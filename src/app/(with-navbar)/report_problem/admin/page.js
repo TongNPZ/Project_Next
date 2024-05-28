@@ -53,7 +53,7 @@ export default function ReportProblemAdmin() {
         }
 
         fecthReportProblem();
-    }, [currentPage, search, status, startDate, endDate]);
+    }, [showData, currentPage, search, status, startDate, endDate]);
 
     // function
     const handlePageClick = (pageNumber) => {
@@ -130,7 +130,7 @@ export default function ReportProblemAdmin() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลการแจ้งปัญหา</h5>
+                            <h5>ข้อมูลการแจ้งปัญหา</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
