@@ -8,9 +8,11 @@ import {
   API_HOUSE_ESTATE,
 } from '../../api'
 import GetRequest from './ConfigAPI'
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     async function fecthHouse_Estate() {
@@ -105,7 +107,7 @@ export default function Home() {
                         }}
                       >
                         <h2>จองได้แล้ววันนี้ !!!</h2>
-                        <button className="btn btn-outline-light" type="button">
+                        <button className="btn btn-outline-light" type="button" onClick={() => router.push('/house_view')}>
                           จองเลย
                         </button>
                       </div>
@@ -118,7 +120,7 @@ export default function Home() {
                             แนวคิดหลักของ "{val.name}" คือการสร้างบ้านที่เป็นที่อยู่อาศัยที่มีคุณภาพและสะดวกสบายตามกระแสสมัยในย่านที่เติบโตอย่างรวดเร็ว ด้วยคำคมที่โดดเด่นเช่น "ความสุขคือการมีบ้านที่สร้างให้เรา" หรือ "บ้านไม่ใช่เพียงแค่สถานที่ แต่เป็นช่องที่อุ่นใจของเรา" เราจะสร้างประสบการณ์ให้กับลูกค้าของเราที่หน้าเว็บไซต์โดยการเน้นที่คำพูดที่สร้างสรรค์และแรงบันดาลใจ เช่น "เราไม่ได้ขายบ้าน แต่เราขายความฝันของคุณ" หรือ "{val.name} สร้างบ้าน เพื่อให้คุณสร้างประสบการณ์ที่ไม่มีวันลืม" ด้วยการใช้คำพูดที่โดดเด่นและชัดเจน เราจะสร้างความประทับใจและเป็นที่จดจำในใจของลูกค้าของเราในทุกการติดต่อที่เกิดขึ้นในหน้าเว็บไซต์ของเรา.
                           </p>))}
 
-                        <button className="btn btn-outline-secondary" type="button">
+                        <button className="btn btn-outline-secondary" type="button" onClick={() => router.push('/house_view')}>
                           อ่านเพิ่ม
                         </button>
                       </div>
@@ -131,7 +133,7 @@ export default function Home() {
                       {data[0] && data.map((val, idx) => (
                         <p className="lead">{val.name} ให้ความสำคัญกับความสบายสบายและความสงบสุข ด้วยการออกแบบที่พิถีพิถันและสม่ำเสมอ เราเชื่อว่าห้องนอนคือศูนย์กลางของความสุขของคุณ ดังนั้นเราได้นำเสนอพื้นที่ที่มอบความสบาย สะดวกสบายและความเป็นส่วนตัวให้กับผู้อยู่อาศัยทุกคน เราให้คำอธิบายถึงห้องนอนใน 'พวงเพรช 4' ว่าเป็นสถานที่ที่ให้คุณเริ่มต้นและสิ้นสุดวันของคุณด้วยความสงบสุขและความเพลิดเพลิน พร้อมทั้งเป็นพื้นที่ที่ทุกคนสามารถหลับใหลในสบายใจได้อย่างแท้จริง.</p>
                       ))}
-                      <button className="btn btn-outline-secondary" type="button">
+                      <button className="btn btn-outline-secondary" type="button" onClick={() => router.push('/house_view')}>
                         อ่านเพิ่ม
                       </button>
                     </div>
@@ -152,7 +154,7 @@ export default function Home() {
                         <p className="lead"> '{val.name}' มอบให้กับคุณ เรายังให้ความสำคัญกับห้องครัว เป็นส่วนสำคัญที่จะเป็นศูนย์กลางของครอบครัวและที่มีความสุขของคุณ เราออกแบบห้องครัวให้เป็นที่ที่ทุกคนในครอบครัวมีส่วนร่วมในการทำอาหารและสร้างความสนุกสนาน ด้วยอุปกรณ์ที่ใช้งานง่ายและมีคุณภาพ พร้อมพื้นที่ที่กว้างขวางเพื่อให้คุณมีส่วนที่จะสร้างสรรค์ และสร้างประสบการณ์ครัวที่น่าจดจำได้อย่างที่คุณต้องการ.</p>
 
                       ))}
-                      <button className="btn btn-outline-secondary" type="button">
+                      <button className="btn btn-outline-secondary" type="button" onClick={() => router.push('/house_view')}>
                         อ่านเพิ่ม
                       </button>
                     </div>

@@ -24,6 +24,8 @@ export default function ModalEdit({ show, handleClose, id }) {
 
     // image choose
     const [imageChoose, setImageChoose] = useState(true);
+    const [signatureChoose, setSignatureChoose] = useState(true);
+    const [mdSignatureChoose, setMdSignatureChoose] = useState(true);
 
     // default values
     const [defaultValues, setDefaultValues] = useState({});
@@ -33,9 +35,11 @@ export default function ModalEdit({ show, handleClose, id }) {
     const [company, setCompany] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
+    const [signature, setSignature] = useState('');
     const [mdName, setMdName] = useState('');
     const [mdNationality, setMdNationality] = useState('');
     const [mdAddress, setMdAddress] = useState('');
+    const [mdSignature, setMdSignature] = useState('');
     const [commonRate, setCommonRate] = useState('');
     const [commonFirstYear, setCommonFirstYear] = useState('');
     const [commonMonth, setCommonMonth] = useState('');
@@ -54,9 +58,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                     setCompany(result.company);
                     setPhone(result.phone);
                     setAddress(result.address);
+                    setSignature(result.signature);
                     setMdName(result.md_name);
                     setMdNationality(result.md_nationality);
                     setMdAddress(result.md_address);
+                    setMdSignature(result.md_signature);
                     setCommonRate(result.common_rate);
                     setCommonFirstYear(result.common_firstYear);
                     setCommonMonth(result.common_month);
@@ -96,9 +102,11 @@ export default function ModalEdit({ show, handleClose, id }) {
         setCompany(defaultValues.company);
         setPhone(defaultValues.phone);
         setAddress(defaultValues.address);
+        setSignature(defaultValues.signature);
         setMdName(defaultValues.md_name);
         setMdNationality(defaultValues.md_nationality);
         setMdAddress(defaultValues.md_address);
+        setMdSignature(defaultValues.md_signature);
         setCommonRate(defaultValues.common_rate);
         setCommonFirstYear(defaultValues.common_firstYear)
         setCommonMonth(defaultValues.common_month);
@@ -106,6 +114,8 @@ export default function ModalEdit({ show, handleClose, id }) {
         setUserId(defaultValues.user_id);
 
         setImageChoose(true);
+        setSignatureChoose(true);
+        setMdSignatureChoose(true);
     }
 
     // handle close reset data
@@ -151,9 +161,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                         formdata.append("company", company);
                         formdata.append("phone", phone);
                         formdata.append("address", address);
+                        formdata.append("signature", signature);
                         formdata.append("mdName", mdName);
                         formdata.append("mdNationality", mdNationality);
                         formdata.append("mdAddress", mdAddress);
+                        formdata.append("mdSignature", mdSignature);
                         formdata.append("commonRate", commonRate);
                         formdata.append("commonFirstYear", commonFirstYear);
                         formdata.append("commonMonth", commonMonth);
@@ -166,6 +178,8 @@ export default function ModalEdit({ show, handleClose, id }) {
                             Success("แก้ไขข้อมูลสำเร็จ!")
                                 .then(() => handleClose())
                                 .then(() => setImageChoose(true))
+                                .then(() => setSignatureChoose(true))
+                                .then(() => setMdSignatureChoose(true))
                         }
                     } catch (error) {
                         console.log('error', error);
@@ -179,7 +193,7 @@ export default function ModalEdit({ show, handleClose, id }) {
     // --- //
 
     return (
-        <Modal show={show} onHide={handleCancel} size="lg">
+        <Modal show={show} onHide={handleCancel} size="xl">
             <Modal.Header closeButton>
                 <Modal.Title>แก้ไขข้อมูลบ้าน</Modal.Title>
             </Modal.Header>
@@ -347,6 +361,9 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <ListGroup.Item />
+                        <div className='ms-3 me-3 mt-3'>
                             <div className="mb-3">
                                 <label className="col-form-label">โลโก้</label>
                                 <div className="mt-3">
@@ -377,6 +394,76 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             setImage(e.target.files[0])
                                         }}
                                     />
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className='col-md-6'>
+                                    <div className="mb-3">
+                                        <label className="col-form-label">ลายเซ็นผู้จัดการ</label>
+                                        <div className="mt-3">
+
+                                            {signatureChoose ? (
+                                                signature ? (
+                                                    <div className='text-center mb-3'>
+                                                        <Image src={`${API_URL}${signature}`} style={{ maxWidth: 250 }} />
+                                                    </div>
+                                                ) : (
+                                                    <p>ไม่มีลายเซ็นที่แสดง</p>
+                                                )
+                                            ) : (
+                                                signature && (
+                                                    <div className='text-center mb-3'>
+                                                        <Image src={URL.createObjectURL(new Blob([signature], { type: signature.type }))} style={{ width: 250 }} />
+                                                    </div>
+                                                )
+                                            )}
+
+                                            <Form.Control
+                                                type="file"
+                                                accept='image/*'
+                                                key={keyImage}
+                                                placeholder="เลือกลายเซ็น"
+                                                onChange={(e) => {
+                                                    setSignatureChoose(false)
+                                                    setSignature(e.target.files[0])
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-md-6'>
+                                    <div className="mb-3">
+                                        <label className="col-form-label">ลายเซ็นเจ้าของบริษัท</label>
+                                        <div className="mt-3">
+
+                                            {mdSignatureChoose ? (
+                                                mdSignature ? (
+                                                    <div className='text-center mb-3'>
+                                                        <Image src={`${API_URL}${mdSignature}`} style={{ maxWidth: 250 }} />
+                                                    </div>
+                                                ) : (
+                                                    <p>ไม่มีลายเซ็นที่แสดง</p>
+                                                )
+                                            ) : (
+                                                mdSignature && (
+                                                    <div className='text-center mb-3'>
+                                                        <Image src={URL.createObjectURL(new Blob([mdSignature], { type: mdSignature.type }))} style={{ width: 250 }} />
+                                                    </div>
+                                                )
+                                            )}
+
+                                            <Form.Control
+                                                type="file"
+                                                accept='image/*'
+                                                key={keyImage}
+                                                placeholder="เลือกลายเซ็น"
+                                                onChange={(e) => {
+                                                    setMdSignatureChoose(false)
+                                                    setMdSignature(e.target.files[0])
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

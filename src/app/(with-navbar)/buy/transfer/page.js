@@ -250,7 +250,6 @@ export default function Transfer() {
                                     <th>จำนวนเงินส่วนที่เหลือ</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่โอนกรรมสิทธิ์</th>
-                                    <th>หมายเหตุ</th>
                                     <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>เอกสาร</th>
@@ -270,11 +269,10 @@ export default function Transfer() {
                                                 <td>{DateTimeFormat(data.trans_date)}</td>
                                             ) : (
                                                 <td>
-                                                    <p className='text-danger'>ไม่มีการโอนกรรมสิทธิ์</p>
+                                                    <span>-</span>
                                                 </td>
                                             )}
 
-                                            <td>{data.trans_note}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.b_id)} style={{ cursor: 'pointer' }}>
@@ -299,27 +297,9 @@ export default function Transfer() {
 
                                             {data.trans_status === 1 ? (
                                                 <td>
-
-                                                    {data.trans_receipt === null || data.trans_receipt === '' ? (
-                                                        <OverlayTrigger overlay={renderTooltipDownload}>
-                                                            <a href={`/document/receipt/transfer/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                                <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                    ) : (
-                                                        <OverlayTrigger overlay={renderTooltipReceipt}>
-                                                            <a href={`${API_URL}${data.trans_receipt}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                                <BsReceipt className='mb-2 text-primary' style={{ fontSize: '28px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                    )}
-
-                                                </td>
-                                            ) : data.trans_status !== 0 ? (
-                                                <td>
-                                                    <OverlayTrigger overlay={renderTooltipReceipt}>
-                                                        <a href={`${API_URL}${data.trans_receipt}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                            <BsReceipt className='mb-2 text-primary' style={{ fontSize: '28px' }} />
+                                                    <OverlayTrigger overlay={renderTooltipDownload}>
+                                                        <a href={`/document/receipt/transfer/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
@@ -331,42 +311,7 @@ export default function Transfer() {
 
                                             {data.trans_status === 1 ? (
                                                 <td>
-                                                    {data.trans_receipt === null || data.trans_receipt === '' ? (
-                                                        <OverlayTrigger overlay={renderTooltipUpload}>
-                                                            <label htmlFor={`fileInput-receipt-${data.b_id}`} style={{ cursor: 'pointer' }}>
-                                                                <input
-                                                                    id={`fileInput-receipt-${data.b_id}`}
-                                                                    type="file"
-                                                                    style={{ display: 'none' }}
-                                                                    value={uploadedFile ? uploadedFile.file : ''}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.files.length > 0) {
-                                                                            UploadFile(data.b_id, e.target.files[0]);
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <BsBoxArrowUp className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
-                                                            </label>
-                                                        </OverlayTrigger>
-                                                    ) : (
-                                                        <OverlayTrigger overlay={renderTooltipChangedUpload}>
-                                                            <label htmlFor={`fileInput-receipt-${data.b_id}`} style={{ cursor: 'pointer' }}>
-                                                                <input
-                                                                    id={`fileInput-receipt-${data.b_id}`}
-                                                                    type="file"
-                                                                    style={{ display: 'none' }}
-                                                                    value={uploadedFile ? uploadedFile.file : ''}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.files.length > 0) {
-                                                                            UploadFile(data.b_id, e.target.files[0]);
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <BsBoxArrowUp className='me-2 mb-2 text-warning' style={{ fontSize: '28px' }} />
-                                                            </label>
-                                                        </OverlayTrigger>
-                                                    )}
-
+                                                    
                                                     {data.trans_receipt === null || data.trans_receipt === '' ? (
                                                         <>
                                                             <OverlayTrigger overlay={renderTooltipEdit}>

@@ -19,7 +19,6 @@ import {
   ListGroup
 } from 'react-bootstrap';
 
-
 function SideBar() {
   const [show, setShow] = useState(false);
 
@@ -58,7 +57,7 @@ function SideBar() {
 
             <ListGroup.Item>
               <div className='my-3'>
-                <a className="nav-link" aria-current="page" onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
+                <a className="nav-link" aria-current="page" onClick={() => router.push('/house_view')} style={{ cursor: 'pointer' }}>
                   <BsFillHouseFill className='me-2' /><strong>บ้านในโครงการ</strong>
                 </a>
               </div>
@@ -91,16 +90,15 @@ function SideBar() {
                             <BsCaretDownFill />
                           </div>
                         )}
-
                       </div>
                     </a>
 
                     {/* collapse house */}
                     <Collapse in={openHouse}>
                       <div className='mb-3' id="collapse-house">
-                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
-                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน (Type)</a>
                         <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/zone')} style={{ cursor: 'pointer' }}>โซนบ้าน (Zone)</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house/styled')} style={{ cursor: 'pointer' }}>แบบบ้าน (Type)</a>
+                        <a className="nav-link mx-4 mt-3" aria-current="page" onClick={() => router.push('/house')} style={{ cursor: 'pointer' }}>บ้าน</a>
                       </div>
                     </Collapse>
                     {/* --- */}
@@ -221,7 +219,6 @@ function SideBar() {
               </div>
             )}
 
-
             {role === 1 ? (
               <ListGroup.Item>
                 <div className='my-3'>
@@ -230,7 +227,7 @@ function SideBar() {
                   </a>
                 </div>
               </ListGroup.Item>
-            ) : (
+            ) : role === 2 || role === 3 ? (
               <ListGroup.Item>
                 <div className='my-3'>
                   <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/user')} style={{ cursor: 'pointer' }}>
@@ -238,7 +235,7 @@ function SideBar() {
                   </a>
                 </div>
               </ListGroup.Item>
-            )}
+            ) : null}
 
             {role === 1 && (
               <ListGroup.Item>

@@ -158,11 +158,11 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label className="col-form-label">จำนวนเงินทำสัญญา</label>
+                        <label className="col-form-label">จำนวนเงินมัดจำ</label>
                         <div className="mt-1">
                             <Form.Control
                                 type="number"
-                                placeholder="จำนวนเงินทำสัญญา"
+                                placeholder="จำนวนเงินมัดจำ"
                                 value={conAmount}
                                 onChange={(e) => setConAmount(e.target.value)}
                                 required

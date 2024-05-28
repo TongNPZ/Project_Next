@@ -13,6 +13,7 @@ import ContractedDetailCard from '../Modals/contractedDetailCard'
 import TransferDetailCard from '../Modals/transferDetailCard'
 
 export default function ProgressBarDetail({ show, handleClose, id, selectedItemData }) {
+    // console.log(selectedItemData)
     const [showData, setShowData] = useState({});
     const [step, setStep] = useState(0);
 
@@ -147,19 +148,17 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                             {selectedItemData.trans_status === 0 && (
                                 <TransferDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 2 && (
+                            {selectedItemData.b_status === 1 && (
                                 <BookingCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 3 && (
+                            {selectedItemData.con_status === 1 && (
                                 <ContractedDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 4 && (
+                            {selectedItemData.trans_status === 1 && (
                                 <TransferDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 5 && (
-
+                            {selectedItemData.trans_status === 2 && (
                                 <TransferDetailCard showData={selectedItemData} />
-
                             )}
                         </div>
                     </div>

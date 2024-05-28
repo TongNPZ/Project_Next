@@ -91,7 +91,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
 
     // +++ show user +++ //
     const [showUser, setShowUser] = useState([]);
-    
+
     const fecthUser = async () => {
         try {
             const result = await GetRequest(GET_API_DATA_USER, 'GET', null);
@@ -253,6 +253,36 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                             />
                         </div>
                     </div>
+                    {/* <div className="mb-3">
+                        <label className="col-form-label">พื้นที่ดิน (ตารางวา)</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={price}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">พื้นที่ใช้สอย (ตารางเมตร)</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={price}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ราคาบ้านพร้อมที่ดิน/หลัง (บาท)</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={price}
+                                disabled
+                            />
+                        </div>
+                    </div> */}
 
                     {/* show input user id */}
                     {!showInputUserId ? (

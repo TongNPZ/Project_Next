@@ -18,16 +18,6 @@ const ContractedDetailCard = ({ showData }) => {
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขที่สัญญา:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.con_number}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
                                             <p className="col-form-label"><strong>เลขที่สัญญาจะซื้อจะขายที่ดิน:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
@@ -110,7 +100,7 @@ const ContractedDetailCard = ({ showData }) => {
                 </div>
                 <div>
                     <Card>
-                        <Card.Header>ข้อมูลผู้สัญญา</Card.Header>
+                        <Card.Header>ข้อมูลทำผู้สัญญา</Card.Header>
                         <Card.Body>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
