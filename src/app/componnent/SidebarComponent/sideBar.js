@@ -55,13 +55,15 @@ function SideBar() {
               </div>
             </ListGroup.Item>
 
-            <ListGroup.Item>
-              <div className='my-3'>
-                <a className="nav-link" aria-current="page" onClick={() => router.push('/house_view')} style={{ cursor: 'pointer' }}>
-                  <BsFillHouseFill className='me-2' /><strong>บ้านในโครงการ</strong>
-                </a>
-              </div>
-            </ListGroup.Item>
+            {role === 2 || role === 3 || role === null && (
+              <ListGroup.Item>
+                <div className='my-3'>
+                  <a className="nav-link" aria-current="page" onClick={() => router.push('/house_view')} style={{ cursor: 'pointer' }}>
+                    <BsFillHouseFill className='me-2' /><strong>บ้านในโครงการ</strong>
+                  </a>
+                </div>
+              </ListGroup.Item>
+            )}
 
             {role === 1 && (
               <ListGroup.Item>

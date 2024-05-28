@@ -3,65 +3,106 @@ import { Card, ListGroup, Image } from 'react-bootstrap';
 import { API_URL } from '../../../../app';
 import {
     DateTimeFormat,
-    FormatThaiNationalID
+    FormatThaiNationalID,
+    DateFormat
 } from '@/app/Format';
 
-const ContractedDetailCard = ({ showData }) => {
+const TransferDetailCard = ({ showData }) => {
     return (
         <div className='row'>
             <div className='col-md-6'>
                 <div className='mb-3'>
+                    <div className='mb-3'>
+                        <Card>
+                            <Card.Header>ข้อมูลเจ้าของบ้าน</Card.Header>
+                            <Card.Body>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>เลขบัตรประจำตัวประชาชน:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{FormatThaiNationalID(showData.user_id)}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>ชื่อ-นามสกุล:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.user_name} {showData.user_lastname}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>ที่อยู่ตามทะเบียนบ้าน:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.user_address}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>อายุ:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.user_age}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>สัญชาติ:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.nationality}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>เบอร์โทรศัพท์:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.user_phone}</p>
+                                            </div>
+                                        </div>
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </Card.Body>
+                        </Card>
+                    </div>
+
                     <Card>
-                        <Card.Header>ข้อมูลสัญญา</Card.Header>
+                        <Card.Header>ข้อมูลโอนกรรมสิทธิ์</Card.Header>
                         <Card.Body>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขที่สัญญา:</strong></p>
+                                            <p className="col-form-label"><strong>รหัสจอง:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.con_number}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขที่สัญญาจะซื้อจะขายที่ดิน:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.con_number}</p>
+                                            <p className="col-form-label">{showData.trans_id}</p>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>ชื่อพยาน:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.witnessone_name}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>ชื่อพยาน:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.witnesstwo_name}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>จำนวนเงินมัดจำ:</strong></p>
+                                            <p className="col-form-label"><strong>จำนวนเงินส่วนที่เหลือ:</strong></p>
                                         </div>
                                         <div className='col-md-4'>
-                                            <p className="col-form-label">{parseFloat(showData.con_amount).toLocaleString()}</p>
+                                            <p className="col-form-label">{parseFloat(showData.trans_amount).toLocaleString()}</p>
                                         </div>
                                         <div className='col-md-2 text-end'>
                                             <p className="col-form-label">บาท</p>
@@ -74,19 +115,19 @@ const ContractedDetailCard = ({ showData }) => {
                                             <p className="col-form-label"><strong>วันที่บันทึกข้อมูล:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label">{DateTimeFormat(showData.con_record)}</p>
+                                            <p className="col-form-label">{DateTimeFormat(showData.trans_record)}</p>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>วันที่ทำสัญญา:</strong></p>
+                                            <p className="col-form-label"><strong>วันที่โอนกรรมสิทธิ์:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
 
-                                            {showData.con_date !== null ? (
-                                                <p className="col-form-label">{DateTimeFormat(showData.con_date)}</p>
+                                            {showData.trans_date !== null ? (
+                                                <p className="col-form-label">{DateTimeFormat(showData.trans_date)}</p>
                                             ) : (
                                                 <p className="col-form-label"> - </p>
                                             )}
@@ -100,7 +141,7 @@ const ContractedDetailCard = ({ showData }) => {
                                             <p className="col-form-label"><strong>หมายเหตุ:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.b_note}</p>
+                                            <p className="col-form-label">{showData.trans_note}</p>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -108,75 +149,58 @@ const ContractedDetailCard = ({ showData }) => {
                         </Card.Body>
                     </Card>
                 </div>
-                <div>
-                    <Card>
-                        <Card.Header>ข้อมูลทำผู้สัญญา</Card.Header>
-                        <Card.Body>
-                            <ListGroup variant="flush">
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขบัตรประจำตัวประชาชน:</strong></p>
+
+                {showData.bank_name && showData.bank_branch && showData.bank_num && showData.bank_date ? (
+                    <div className='mb-3'>
+                        <Card>
+                            <Card.Header>ข้อมูลเช็คธนาคาร</Card.Header>
+                            <Card.Body>
+                                <ListGroup variant='flush'>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>ธนาคาร:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.bank_name}</p>
+                                            </div>
                                         </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{FormatThaiNationalID(showData.user_id)}</p>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>สาขา:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.bank_branch}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>ชื่อ-นามสกุล:</strong></p>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>เลขที่:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{showData.bank_num}</p>
+                                            </div>
                                         </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.user_name} {showData.user_lastname}</p>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>วันที่:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{DateFormat(showData.bank_date)}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>ที่อยู่ตามทะเบียนบ้าน:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.user_address}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>อายุ:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.user_age}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>สัญชาติ:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.nationality}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เบอร์โทรศัพท์:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.user_phone}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card.Body>
-                    </Card>
-                </div>
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </Card.Body>
+                        </Card>
+                    </div>
+                ) : null}
             </div>
             <div className='col-md-6'>
                 <div className='text-center mb-3'>
@@ -293,4 +317,4 @@ const ContractedDetailCard = ({ showData }) => {
     );
 };
 
-export default ContractedDetailCard;
+export default TransferDetailCard;
