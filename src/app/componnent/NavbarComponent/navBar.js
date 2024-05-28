@@ -96,11 +96,11 @@ const Navbar = () => {
           </div>
           <div className="col d-flex justify-content-center">
 
-            {authData.token ? (
-              <a style={{ cursor: 'pointer' }}>
-                <Sidebar />
-              </a>
-            ) : null}
+            {/* {authData.token ? ( */}
+            <a style={{ cursor: 'pointer' }}>
+              <Sidebar />
+            </a>
+            {/* ) : null} */}
 
           </div>
         </div>
@@ -155,6 +155,9 @@ const Navbar = () => {
             style={{ color: 'white' }}
           >
             <NavDropdown.Item onClick={() => router.push('/profile')}>ข้อมูลผู้ใช้</NavDropdown.Item>
+            {role === 2 || role === 3 && (
+              <NavDropdown.Item onClick={() => router.push('/houseUser')}>บ้านของฉัน</NavDropdown.Item>
+            )}
 
             {role === 2 || role === 3 && (
               <NavDropdown.Item onClick={() => router.push('/buy_process')}>การซื้อของฉัน</NavDropdown.Item>

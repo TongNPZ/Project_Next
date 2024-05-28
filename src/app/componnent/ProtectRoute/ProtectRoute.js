@@ -7,8 +7,12 @@ const ProtectRoute = ({ children, requireRoles = [] }) => {
 
     const role = authData.role;
 
-    if (!authData.token) {
-        return router.push('/');
+    if (router.pathname !== '/house_view') {
+        return children;
+    }
+
+    if (!authData.token && router.pathname !== '/house_view') {
+        router.push('/');
     }
 
     const matchRoles = !requireRoles.length || requireRoles.includes(role);

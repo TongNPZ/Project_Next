@@ -25,17 +25,7 @@ const ContractedDetailCard = ({ showData }) => {
                                         </div>
                                     </div>
                                 </ListGroup.Item>
-                                <ListGroup.Item>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขที่สัญญา:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.con_number}</p>
-                                        </div>
-                                    </div>
-                                </ListGroup.Item>
-                                <ListGroup.Item>
+                                                                <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
                                             <p className="col-form-label"><strong>ชื่อพยาน:</strong></p>
@@ -88,7 +78,7 @@ const ContractedDetailCard = ({ showData }) => {
                                             {showData.con_date !== null ? (
                                                 <p className="col-form-label">{DateTimeFormat(showData.con_date)}</p>
                                             ) : (
-                                                <p className="col-form-label text-danger">ไม่มีการทำสัญญา</p>
+                                                <p className="col-form-label"> - </p>
                                             )}
 
                                         </div>
