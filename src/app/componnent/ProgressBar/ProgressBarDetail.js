@@ -135,6 +135,12 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                                                 </div>
                                             </div>
                                         </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <span >{selectedItemData.b_status === 0 ? "จอง" : "จองสำเร็จ"}</span>
+                                        <span>{selectedItemData.con_status === 0 ? "ทำสัญญา" : selectedItemData.con_status !== null ? "ทำสัญญาสำเร็จ" : null}</span>
+                                        <span>{selectedItemData.trans_status === 0 ? "โอนกรรมสิทธิ์" : null}</span>
+                                        <span>{selectedItemData.b_status === 0 ? "ยกเลิก" : selectedItemData.con_status === 0 ? "ยกเลิก" : selectedItemData.trans_status === 0 && "ยกเลิก"}</span>
+                                        {/* <span>{step === 4 ? "ซื้อสำเร็จ" : "ยกเลิก"}</span> */}
                                     </div>
                                 )}
 
