@@ -136,7 +136,6 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                                     </div>
                                 )}
                             </div>
-
                             {selectedItemData.b_status === 0 && (
                                 <BookingCard showData={selectedItemData} />
                             )}

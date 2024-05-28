@@ -16,8 +16,8 @@ export default function RootLayout({ children }) {
         </head>
         <body className={inter.className}>
           {children}
-          <footer className="my-5 pt-5 text-muted text-center text-small">
-            <p className="mb-1">&copy; 2024 Company Name</p>
+          <footer className="my-5 pt-5 text-muted text-center text-small" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
+            <p className="mb-1">&copy; 2024 บริษัท ศิวิลัยแลนด์ ขอนแก่น จำกัด </p>
             <ul className="list-inline">
               <li className="list-inline-item"><a href="#">Privacy</a></li>
               <li className="list-inline-item"><a href="#">Terms</a></li>
