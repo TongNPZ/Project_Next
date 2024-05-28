@@ -182,6 +182,20 @@ export default function ModalEdit({ show, handleClose, id }) {
                     >
                         <Form.Control type="text" defaultValue={id} readOnly />
                     </FloatingLabel>
+                    <div className='mb-3'>
+                        <label className="col-form-label">แบบบ้าน</label>
+
+                        <Form.Select value={hsId} onChange={(e) => setHsId(e.target.value)}>
+
+                            {showHouseStyle.map((data) => (
+                                data.hs_status === 1 ? (
+                                    <option key={data.hs_id} value={data.hs_id}>{data.house_name}</option>
+                                ) : null
+                            ))}
+
+                        </Form.Select>
+
+                    </div>
                     <div className="mb-3">
                         <label className="col-form-label">บ้านเลขที่</label>
                         <div className="mt-1">
@@ -292,20 +306,6 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 onChange={(e) => setNote(e.target.value)}
                             />
                         </div>
-                    </div>
-                    <div className='mb-3'>
-                        <label className="col-form-label">แบบบ้าน</label>
-
-                        <Form.Select value={hsId} onChange={(e) => setHsId(e.target.value)}>
-
-                            {showHouseStyle.map((data) => (
-                                data.hs_status === 1 ? (
-                                    <option key={data.hs_id} value={data.hs_id}>{data.house_name}</option>
-                                ) : null
-                            ))}
-
-                        </Form.Select>
-
                     </div>
                     <div className="mb-3">
                         <label className="col-form-label">รูปภาพบ้าน</label>

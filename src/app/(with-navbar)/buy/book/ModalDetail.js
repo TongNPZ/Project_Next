@@ -89,7 +89,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                                                     {showData.b_date !== null ? (
                                                         <p className="col-form-label">{DateTimeFormat(showData.b_date)}</p>
                                                     ) : (
-                                                        <p className="col-form-label text-danger">ไม่มีการจอง</p>
+                                                        <span className="col-form-label">-</span>
                                                     )}
 
                                                 </div>

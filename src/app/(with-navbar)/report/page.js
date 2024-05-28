@@ -2,7 +2,8 @@
 import React, { useState } from "react"
 import {
     DateTimeFormat,
-    DateFormat
+    DateFormat,
+    PriceWithCommas
 } from "@/app/Format"
 import ProtectRoute from "@/app/componnent/ProtectRoute/ProtectRoute"
 import GetRequest from "@/app/ConfigAPI"
@@ -79,9 +80,9 @@ export default function report() {
         }
     }
 
-    const fetchNcf = async (search, status) => {
+    const fetchNcf = async (search, status, startDate, endDate) => {
         try {
-            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&search=${search}&status=${status}`, 'GET', null);
+            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&search=${search}&status=${status}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
             setShowData(result.data);
         } catch (error) {
             console.log('error', error);
@@ -138,9 +139,15 @@ export default function report() {
     const handleSearchReport = async (e) => {
         e.preventDefault();
 
+        if (status !== 'overdue') {
+            setTempStartDate(startDate)
+            setTempEndDate(endDate)
+        } else {
+            setTempStartDate('')
+            setTempEndDate('')
+        }
+
         setTempStatus(status)
-        setTempStartDate(startDate)
-        setTempEndDate(endDate)
 
         if (endDate === '') {
             setStartDate('');
@@ -157,9 +164,12 @@ export default function report() {
                 fecthTransfer(search, status, startDate, endDate);
             }
         } else if (activeKey === 'commonFee') {
-            if (status === '' || status === 'overdue' || status === 'paid') {
-                fetchNcf(search, status)
+            if (status === '' || status === 'paid') {
+                fetchNcf(search, status, '', '')
                 fetchRcf(startDate, endDate)
+            } else if (status === 'overdue') {
+                fetchNcf(search, status, startDate, endDate)
+                fetchRcf('', '')
             }
         } else if (activeKey === 'expenses') {
             if (status === '') {
@@ -168,8 +178,6 @@ export default function report() {
         } else if (status === '' || status === 'pending' || status === 'resolved') {
             fecthReportProblem(search, status, startDate, endDate);
         }
-
-        console.log(tempStatus)
     }
 
     const handleSortReset = () => {
@@ -182,8 +190,21 @@ export default function report() {
         setTempStatus('')
     };
 
-    const showDataString = JSON.stringify(showData);
-    const showRcfString = JSON.stringify(showRcf);
+    function base64Encode(data) {
+        return Buffer.from(JSON.stringify(data)).toString('base64');
+    }
+
+    const reportData = {
+        showData: showData,
+        activeKey: activeKey,
+        search: search || 'default',
+        tempStatus: tempStatus || 'default',
+        startDate: startDate || 'default',
+        endDate: endDate || 'default',
+        showRcf: showRcf
+    }
+
+    const encodedData = base64Encode(reportData);
 
     return (
         <ProtectRoute requireRoles={[1]}>
@@ -191,7 +212,7 @@ export default function report() {
                 <Card.Header>
                     <Nav variant="tabs" activeKey={activeKey} onSelect={handleSelect}>
                         <Nav.Item>
-                            <Nav.Link eventKey='house'>รายงานบ้าน</Nav.Link>
+                            <Nav.Link eventKey='house'>รายงานข้อมูลบ้าน</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey='commonFee'>รายงานค่าส่วนกลาง</Nav.Link>
@@ -245,7 +266,7 @@ export default function report() {
                             </div>
                             <div className="col-md-6">
 
-                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
+                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'overdue' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
                                     <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
@@ -325,7 +346,7 @@ export default function report() {
                         showData && showData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>
@@ -369,7 +390,7 @@ export default function report() {
                                                     <td>{data.num_survey}</td>
                                                     <td>{parseFloat(data.hLand_space).toLocaleString()}</td>
                                                     <td>{parseFloat(data.usable_space).toLocaleString()}</td>
-                                                    <td>{parseFloat(data.price).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.price))}</td>
 
                                                     {tempStatus === '' ? (
                                                         data.h_status === 1 ? (
@@ -423,7 +444,7 @@ export default function report() {
                                                     <td>{data.b_id}</td>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.user_name} {data.user_lastname}</td>
-                                                    <td>{parseFloat(data.b_amount).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.b_amount))}</td>
                                                     <td>{DateTimeFormat(data.b_date)}</td>
                                                     <td>{data.b_note}</td>
                                                 </tr>
@@ -456,7 +477,7 @@ export default function report() {
                                                     <td>{data.con_numLandSale}</td>
                                                     <td>{data.witnessone_name}</td>
                                                     <td>{data.witnesstwo_name}</td>
-                                                    <td>{parseFloat(data.con_amount).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.con_amount))}</td>
                                                     <td>{DateTimeFormat(data.con_date)}</td>
                                                     <td>{data.con_note}</td>
                                                 </tr>
@@ -481,7 +502,7 @@ export default function report() {
                                                 <tr key={index}>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.trans_name}</td>
-                                                    <td>{parseFloat(data.trans_amount).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.trans_amount))}</td>
                                                     <td>{DateTimeFormat(data.trans_date)}</td>
                                                     <td>{data.trans_note}</td>
                                                 </tr>
@@ -503,7 +524,7 @@ export default function report() {
                         filteredShowData && filteredShowData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>
@@ -533,7 +554,7 @@ export default function report() {
                                                 return (
                                                     <tr key={index}>
                                                         <td>{data.house_no}</td>
-                                                        <td>{parseFloat(data.ncf_amount).toLocaleString()}</td>
+                                                        <td>{PriceWithCommas(parseFloat(data.ncf_amount))}</td>
                                                         <td>{DateFormat(data.ncf_date)}</td>
                                                         <td>
                                                             {rcfSomeData && rcfFindData.rcf_date ? (
@@ -575,7 +596,7 @@ export default function report() {
                         showData && showData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>
@@ -598,7 +619,7 @@ export default function report() {
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>{data.ex_list}</td>
-                                                    <td>{parseFloat(data.ex_amount).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.ex_amount))}</td>
                                                     <td>{DateTimeFormat(data.ex_record)}</td>
                                                     <td>{DateFormat(data.ex_date)}</td>
                                                 </tr>
@@ -620,7 +641,7 @@ export default function report() {
                         showData && showData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(showDataString)}/${activeKey}/${encodeURIComponent(search) || 'default'}/${tempStatus || 'default'}/${startDate || 'default'}/${endDate || 'default'}/${encodeURIComponent(showRcfString) || 'default'}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>

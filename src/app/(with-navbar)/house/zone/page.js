@@ -115,7 +115,7 @@ export default function HouseZone() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลโซนบ้าน (Zone)</h5>
+                            <h5>ข้อมูลโซนบ้าน (Zone)</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -164,7 +164,7 @@ export default function HouseZone() {
                                     <th>รหัสโซน</th>
                                     <th>ชื่อโซน</th>
                                     <th>ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)</th>
-                                    <th>ราคาบ้านต่อที่ดิน (ตารางวา)</th>
+                                    <th>ราคาพื้นที่ดิน/ตารางวา (บาท)</th>
                                     <th>สถานะ</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -181,11 +181,11 @@ export default function HouseZone() {
 
                                             {data.hz_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="success">โซนเปิดใช้งาน</Badge>
+                                                    <Badge bg="success">เปิดใช้งาน</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">โซนปิดใช้งาน</Badge>
+                                                    <Badge bg="danger">ปิดใช้งาน</Badge>
                                                 </td>
                                             )}
 

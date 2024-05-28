@@ -110,7 +110,7 @@ const ContractedDetailCard = ({ showData }) => {
                 </div>
                 <div>
                     <Card>
-                        <Card.Header>ข้อมูลผู้สัญญา</Card.Header>
+                        <Card.Header>ข้อมูลทำผู้สัญญา</Card.Header>
                         <Card.Body>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>

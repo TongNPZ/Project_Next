@@ -13,6 +13,7 @@ import ContractedDetailCard from '../Modals/contractedDetailCard'
 import TransferDetailCard from '../Modals/transferDetailCard'
 
 export default function ProgressBarDetail({ show, handleClose, id, selectedItemData }) {
+    // console.log(selectedItemData)
     const [showData, setShowData] = useState({});
     const [step, setStep] = useState(0);
 
@@ -134,6 +135,12 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                                                 </div>
                                             </div>
                                         </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <span >{selectedItemData.b_status === 0 ? "จอง" : "จองสำเร็จ"}</span>
+                                        <span>{selectedItemData.con_status === 0 ? "ทำสัญญา" : selectedItemData.con_status !== null ? "ทำสัญญาสำเร็จ" : null}</span>
+                                        <span>{selectedItemData.trans_status === 0 ? "โอนกรรมสิทธิ์" : null}</span>
+                                        <span>{selectedItemData.b_status === 0 ? "ยกเลิก" : selectedItemData.con_status === 0 ? "ยกเลิก" : selectedItemData.trans_status === 0 && "ยกเลิก"}</span>
+                                        {/* <span>{step === 4 ? "ซื้อสำเร็จ" : "ยกเลิก"}</span> */}
                                     </div>
                                 )}
 
@@ -147,19 +154,17 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                             {selectedItemData.trans_status === 0 && (
                                 <TransferDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 2 && (
+                            {selectedItemData.b_status === 1 && (
                                 <BookingCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 3 && (
+                            {selectedItemData.con_status === 1 && (
                                 <ContractedDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 4 && (
+                            {selectedItemData.trans_status === 1 && (
                                 <TransferDetailCard showData={selectedItemData} />
                             )}
-                            {selectedItemData.h_status === 5 && (
-
+                            {selectedItemData.trans_status === 2 && (
                                 <TransferDetailCard showData={selectedItemData} />
-
                             )}
                         </div>
                     </div>

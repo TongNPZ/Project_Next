@@ -90,7 +90,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                                                     {showData.trans_date !== null ? (
                                                         <p className="col-form-label">{DateTimeFormat(showData.trans_date)}</p>
                                                     ) : (
-                                                        <p className="col-form-label text-danger">ไม่มีการโอนกรรมสิทธิ์</p>
+                                                        <span>-</span>
                                                     )}
 
                                                 </div>
