@@ -529,8 +529,8 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
 
             <Text style={styles.note}>หมายเหตุ : ใบเสร็จรับเงินฉบับนี้ จะสมบูรณ์ต่อเมื่อมีลายเซ็นผู้จัดการและผู้รับเงิน และบริษัทฯ ได้เรียกเก็บเงินตามเช็คได้ครบถ้วนแล้ว
             </Text>
-            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-                `${pageNumber} / ${totalPages}`
+            <Text style={styles.pageNumber} render={({ pageNumber }) => (
+                `${pageNumber}`
             )} fixed />
         </Page>
     </Document>

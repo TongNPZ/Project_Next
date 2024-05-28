@@ -119,7 +119,7 @@ export default function Transfer() {
 
     const renderTooltipUpload = (props) => (
         <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จ
+            ดาวน์โหลดใบเสร็จรับเงิน
         </Tooltip>
     );
 
@@ -131,7 +131,7 @@ export default function Transfer() {
 
     const renderTooltipDownload = (props) => (
         <Tooltip {...props}>
-            ดาวน์โหลดเอกสารใบเสร็จ
+            ดาวน์โหลดใบเสร็จรับเงิน
         </Tooltip>
     );
 
@@ -214,8 +214,8 @@ export default function Transfer() {
                             <div className='mb-3'>
                                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '190px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
-                                    <option value={'contracted'}>โอนกรรมสิทธิ์สำเร็จ</option>
-                                    <option value={'processing'}>กำลังดำเนินการ</option>
+                                    <option value={'transferred'}>โอนกรรมสิทธิ์สำเร็จ</option>
+                                    <option value={'processing'}>รอชำระเงิน</option>
                                     <option value={'cancel'}>ยกเลิกโอนกรรมสิทธิ์</option>
                                 </Form.Select>
                             </div>
@@ -283,7 +283,7 @@ export default function Transfer() {
 
                                             {data.trans_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="info">กำลังดำเนินการ</Badge>
+                                                    <Badge bg="info">รอชำระเงิน</Badge>
                                                 </td>
                                             ) : data.trans_status === 2 ? (
                                                 <td>
@@ -311,27 +311,23 @@ export default function Transfer() {
 
                                             {data.trans_status === 1 ? (
                                                 <td>
-                                                    
-                                                    {data.trans_receipt === null || data.trans_receipt === '' ? (
-                                                        <>
-                                                            <OverlayTrigger overlay={renderTooltipEdit}>
-                                                                <a onClick={() => handleEditShow(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                                    <BsPencilSquare className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
-                                                                </a>
-                                                            </OverlayTrigger>
-                                                            <OverlayTrigger overlay={renderTooltipClose}>
-                                                                <a onClick={() => CancelStatus(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                                    <BsFillXSquareFill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
-                                                                </a>
-                                                            </OverlayTrigger>
-                                                        </>
-                                                    ) : (
+                                                    <>
                                                         <OverlayTrigger overlay={renderTooltipConfirm}>
                                                             <a onClick={() => ConfirmStatus(data.b_id)} style={{ cursor: 'pointer' }}>
                                                                 <BsCheckSquareFill className='me-2 mb-2 text-success' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>
-                                                    )}
+                                                        <OverlayTrigger overlay={renderTooltipEdit}>
+                                                            <a onClick={() => handleEditShow(data.b_id)} style={{ cursor: 'pointer' }}>
+                                                                <BsPencilSquare className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
+                                                            </a>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger overlay={renderTooltipClose}>
+                                                            <a onClick={() => CancelStatus(data.b_id)} style={{ cursor: 'pointer' }}>
+                                                                <BsFillXSquareFill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
+                                                            </a>
+                                                        </OverlayTrigger>
+                                                    </>
                                                 </td>
                                             ) : (
                                                 <td>

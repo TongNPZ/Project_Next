@@ -29,11 +29,9 @@ import {
     BsFileEarmarkTextFill,
     BsFillXSquareFill,
     BsFillInfoCircleFill,
-    BsBoxArrowUp,
     BsFileTextFill,
     BsFileEarmarkArrowUpFill,
     BsDownload,
-    BsReceipt,
     BsFileEarmarkArrowDownFill,
     BsCaretRightFill,
     BsArrowCounterclockwise,
@@ -159,21 +157,9 @@ export default function Book() {
         </Tooltip>
     );
 
-    const renderTooltipUploadReceipt = (props) => (
-        <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
     const renderTooltipChangedContract = (props) => (
         <Tooltip {...props}>
             เปลี่ยนเอกสารสัญญา
-        </Tooltip>
-    );
-
-    const renderTooltipChangedReceipt = (props) => (
-        <Tooltip {...props}>
-            เปลี่ยนเอกสารใบเสร็จ
         </Tooltip>
     );
 
@@ -185,19 +171,13 @@ export default function Book() {
 
     const renderTooltipDownloadReceipt = (props) => (
         <Tooltip {...props}>
-            ดาวน์โหลดเอกสารใบเสร็จ
+            ดาวน์โหลดใบเสร็จรับเงิน
         </Tooltip>
     );
 
     const renderTooltipContract = (props) => (
         <Tooltip {...props}>
             แสดงเอกสารสัญญา
-        </Tooltip>
-    );
-
-    const renderTooltipReceipt = (props) => (
-        <Tooltip {...props}>
-            แสดงเอกสารใบเสร็จ
         </Tooltip>
     );
 
@@ -273,10 +253,10 @@ export default function Book() {
                                 </InputGroup>
                             </div>
                             <div className='mb-3'>
-                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '160px' }}>
+                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '220px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
                                     <option value={'contracted'}>ทำสัญญาสำเร็จ</option>
-                                    <option value={'processing'}>กำลังดำเนินการ</option>
+                                    <option value={'processing'}>รอทำสัญญาและชำระเงิน</option>
                                     <option value={'cancel'}>ยกเลิกสัญญา</option>
                                 </Form.Select>
                             </div>
@@ -308,12 +288,11 @@ export default function Book() {
                                 <tr>
                                     <th>รหัสจอง</th>
                                     <th>เลขที่สัญญา</th>
-                                    <th>เลขที่สัญญาจะซื้อจะขายที่ดิน</th>
-                                    <th>ชื่อพยาน</th>
-                                    <th>ชื่อพยาน</th>
-                                    <th>จำนวนเงินทำสัญญา</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่ทำสัญญา</th>
+                                    <th>ชื่อพยาน</th>
+                                    <th>ชื่อพยาน</th>
+                                    <th>จำนวนเงินมัดจำ</th>
                                     <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>เอกสาร</th>
@@ -326,10 +305,6 @@ export default function Book() {
                                         <tr key={data.b_id}>
                                             <td>{data.b_id}</td>
                                             <td>{data.con_number}</td>
-                                            <td>{data.con_numLandSale}</td>
-                                            <td>{data.witnessone_name}</td>
-                                            <td>{data.witnesstwo_name}</td>
-                                            <td>{data.con_amount.toLocaleString()}</td>
                                             <td>{DateTimeFormat(data.con_record)}</td>
 
                                             {data.con_date ? (
@@ -340,6 +315,9 @@ export default function Book() {
                                                 </td>
                                             )}
 
+                                            <td>{data.witnessone_name}</td>
+                                            <td>{data.witnesstwo_name}</td>
+                                            <td>{data.con_amount.toLocaleString()}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.b_id)} style={{ cursor: 'pointer' }}>
@@ -348,9 +326,13 @@ export default function Book() {
                                                 </OverlayTrigger>
                                             </td>
 
-                                            {data.con_status === 1 ? (
+                                            {data.con_status === 1 && data.contract === null ? (
                                                 <td>
                                                     <Badge bg="info">รอทำสัญญา</Badge>
+                                                </td>
+                                            ) : data.con_status === 1 && data.contract !== '' ? (
+                                                <td>
+                                                    <Badge bg="info">รอชำระเงิน</Badge>
                                                 </td>
                                             ) : data.con_status === 2 ? (
                                                 <td>

@@ -13,7 +13,6 @@ import ModalDetail from './ModalDetail';
 import ModalEdit from './ModalEdit'
 import ChangedStatus from './ChangedStatus';
 import ModalContractAdd from '../contracted/ModalAdd';
-import UploadFile from './UploadFile';
 import {
     Table,
     Card,
@@ -28,12 +27,9 @@ import {
 import {
     BsPencilSquare,
     BsFillHouseGearFill,
-    BsFileEarmarkTextFill,
     BsFillXSquareFill,
     BsFillInfoCircleFill,
-    BsBoxArrowUp,
     BsFileTextFill,
-    BsFileEarmarkArrowUpFill,
     BsDownload,
     BsCaretRightFill,
     BsArrowCounterclockwise,
@@ -158,27 +154,9 @@ export default function Book() {
         </Tooltip>
     );
 
-    const renderTooltipUpload = (props) => (
-        <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
-    const renderTooltipChangedUpload = (props) => (
-        <Tooltip {...props}>
-            เปลี่ยนเอกสารสัญญา
-        </Tooltip>
-    );
-
     const renderTooltipDownload = (props) => (
         <Tooltip {...props}>
-            ดาวน์โหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
-    const renderTooltipReceipt = (props) => (
-        <Tooltip {...props}>
-            แสดงเอกสารใบเสร็จ
+            ดาวน์โหลดใบเสร็จรับเงิน
         </Tooltip>
     );
 
@@ -291,7 +269,7 @@ export default function Book() {
                                     <th>รหัสจอง</th>
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อผู้จอง</th>
-                                    <th>จำนวนเงินจอง</th>
+                                    <th>จำนวนเงินมัดจำ</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่จอง</th>
                                     <th>รายละเอียด</th>
@@ -328,7 +306,7 @@ export default function Book() {
 
                                             {data.b_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="info">รอออกใบรับเงิน</Badge>
+                                                    <Badge bg="info">รอชำระเงิน</Badge>
                                                 </td>
                                             ) : data.b_status === 2 ? (
                                                 <td>

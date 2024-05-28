@@ -136,26 +136,14 @@ export default function ModalEdit({ show, handleClose, id }) {
                     >
                         <Form.Control type="text" defaultValue={id} readOnly disabled />
                     </FloatingLabel>
-                    <div className="row mb-3">
-                        <div className='col-md-6'>
-                            <label className="col-form-label">เลขที่สัญญา</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={defaultValues.con_number}
-                                    disabled
-                                />
-                            </div>
-                        </div>
-                        <div className='col-md-6'>
-                            <label className="col-form-label">เลขที่สัญญาจะซื้อจะขายที่ดิน</label>
-                            <div className="mt-1">
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={defaultValues.con_numLandSale}
-                                    disabled
-                                />
-                            </div>
+                    <div className='mb-3'>
+                        <label className="col-form-label">เลขที่สัญญา</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={defaultValues.con_number}
+                                disabled
+                            />
                         </div>
                     </div>
                     <div className="row mb-3">
@@ -185,11 +173,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label className="col-form-label">จำนวนเงินทำสัญญา</label>
+                        <label className="col-form-label">จำนวนเงินมัดจำ</label>
                         <div className="mt-1">
                             <Form.Control
                                 type="number"
-                                placeholder="จำนวนเงินทำสัญญา"
+                                placeholder="จำนวนเงินมัดจำ"
                                 value={conAmount}
                                 onChange={(e) => setCoAmount(e.target.value)}
                                 required

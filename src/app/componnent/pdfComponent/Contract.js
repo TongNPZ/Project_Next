@@ -81,7 +81,7 @@ const DocContract = ({ housingEstate, contract }) => (
 
             <View style={styles.contentHeading}>
                 <Text style={[styles.textHeading, { marginRight: 3 }]}>เลขที่สัญญา L </Text>
-                <Text style={styles.textHeading}>{contract.con_numLandSale}</Text>
+                <Text style={styles.textHeading}>{contract.con_number}</Text>
             </View>
             <Text style={styles.title}>สัญญาจะซื้อจะขายที่ดิน</Text>
 
