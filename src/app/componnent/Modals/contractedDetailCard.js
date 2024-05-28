@@ -18,14 +18,14 @@ const ContractedDetailCard = ({ showData }) => {
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>เลขที่สัญญาจะซื้อจะขายที่ดิน:</strong></p>
+                                            <p className="col-form-label"><strong>เลขที่สัญญา:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.con_numLandSale}</p>
+                                            <p className="col-form-label">{showData.con_number}</p>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
-                                <ListGroup.Item>
+                                                                <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
                                             <p className="col-form-label"><strong>ชื่อพยาน:</strong></p>
@@ -48,7 +48,7 @@ const ContractedDetailCard = ({ showData }) => {
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>จำนวนเงินทำสัญญา:</strong></p>
+                                            <p className="col-form-label"><strong>จำนวนเงินมัดจำ:</strong></p>
                                         </div>
                                         <div className='col-md-4'>
                                             <p className="col-form-label">{parseFloat(showData.con_amount).toLocaleString()}</p>

@@ -356,7 +356,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>รหัสบ้าน</th>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>โซนบ้าน</th>
                                                 <th>ชื่อแบบบ้าน</th>
@@ -382,7 +382,7 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.h_id}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.name}</td>
                                                     <td>{data.house_name}</td>
@@ -429,7 +429,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>รหัสจอง</th>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>ชื่อผู้จอง</th>
                                                 <th>จำนวนเงินจอง</th>
@@ -441,7 +441,7 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.b_id}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.user_name} {data.user_lastname}</td>
                                                     <td>{PriceWithCommas(parseFloat(data.b_amount))}</td>
@@ -456,14 +456,13 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>บ้านเลขที่</th>
+                                                <th>ลำดับ</th>
                                                 <th>ชื่อผู้ทำสัญญา</th>
                                                 <th>เลขที่สัญญา</th>
-                                                <th>เลขที่สัญญาจะซื้อจะขายที่ดิน</th>
-                                                <th>ชื่อพยาน</th>
-                                                <th>ชื่อพยาน</th>
-                                                <th>จำนวนเงินทำสัญญา</th>
                                                 <th>วันที่ทำสัญญา</th>
+                                                <th>ชื่อพยาน</th>
+                                                <th>ชื่อพยาน</th>
+                                                <th>จำนวนเงินมัดจำ</th>
                                                 <th>หมายเหตุ</th>
                                             </tr>
                                         </thead>
@@ -471,14 +470,13 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.house_no}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.user_name} {data.user_lastname}</td>
                                                     <td>{data.con_number}</td>
-                                                    <td>{data.con_numLandSale}</td>
+                                                    <td>{DateTimeFormat(data.con_date)}</td>
                                                     <td>{data.witnessone_name}</td>
                                                     <td>{data.witnesstwo_name}</td>
                                                     <td>{PriceWithCommas(parseFloat(data.con_amount))}</td>
-                                                    <td>{DateTimeFormat(data.con_date)}</td>
                                                     <td>{data.con_note}</td>
                                                 </tr>
                                             ))}
@@ -489,6 +487,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>ชื่อผู้รับโอน</th>
                                                 <th>จำนวนเงินส่วนที่เหลือ</th>
@@ -500,7 +499,7 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.house_no}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.trans_name}</td>
                                                     <td>{PriceWithCommas(parseFloat(data.trans_amount))}</td>
                                                     <td>{DateTimeFormat(data.trans_date)}</td>
@@ -534,6 +533,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>จำนวนเงิน</th>
                                                 <th>วันที่กำหนดชำระ</th>
@@ -553,6 +553,7 @@ export default function report() {
 
                                                 return (
                                                     <tr key={index}>
+                                                        <td>{index + 1}</td>
                                                         <td>{data.house_no}</td>
                                                         <td>{PriceWithCommas(parseFloat(data.ncf_amount))}</td>
                                                         <td>{DateFormat(data.ncf_date)}</td>

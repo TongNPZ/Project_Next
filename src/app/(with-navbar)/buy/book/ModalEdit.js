@@ -65,17 +65,13 @@ export default function ModalEdit({ show, handleClose, id }) {
             if (result.isConfirmed) {
                 const editData = async () => {
                     try {
-                        const formdata = new FormData();
-                        formdata.append("id", id);
-                        formdata.append("bAmount", bAmount);
+                        const raw = {
+                            "id": id,
+                            "bAmount": bAmount,
+                            "bNote": bNote !== '' ? bNote : '-'
+                        };
 
-                        if (bNote !== '') {
-                            formdata.append("bNote", bNote);
-                        } else {
-                            formdata.append("bNote", '-');
-                        }
-
-                        const response = await GetRequest(API_BOOK, 'PATCH', formdata)
+                        const response = await GetRequest(API_BOOK, 'PATCH', raw)
 
                         if (response.message === 'Update Successfully!') {
                             Success("แก้ไขข้อมูลสำเร็จ!").then(() => handleClose())
@@ -133,13 +129,6 @@ export default function ModalEdit({ show, handleClose, id }) {
                         className='mb-3'
                     >
                         <Form.Control type="text" defaultValue={defaultValues.house_no} disabled />
-                    </FloatingLabel>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="ชื่อผู้จอง"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={`${defaultValues.user_name} ${defaultValues.user_lastname}`} disabled />
                     </FloatingLabel>
                     <div className="mb-3">
                         <label className="col-form-label">จำนวนเงินจอง</label>

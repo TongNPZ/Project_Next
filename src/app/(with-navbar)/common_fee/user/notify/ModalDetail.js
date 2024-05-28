@@ -192,14 +192,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                                     </div>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>หมายเหตุ:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.ncf_note}</p>
-                                        </div>
-                                    </div>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
                                             <p className="col-form-label"><strong>ชื่อเจ้าของบ้าน:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
@@ -226,7 +218,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                             <tr>
                                 <th>เลขที่แจ้งชำระ</th>
                                 <th>รายละเอียด</th>
-                                <th>หมายเหตุ</th>
                                 <th>อัตราเก็บค่าส่วนกลาง (ตารางวา)</th>
                                 <th>จำนวนเดือนที่เก็บ</th>
                                 <th>พื้นที่ดิน (ตารางวา)</th>
@@ -237,7 +228,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                             <tr>
                                 <td>{showData.ncf_id}</td>
                                 <td>เก็บค่าบริการสาธารณะ</td>
-                                <td>{showData.ncf_note}</td>
                                 <td>{showData.common_rate}</td>
                                 <td>{showData.ncf_common_month}</td>
                                 <td>{parseFloat(showData.hLand_space).toLocaleString()}</td>

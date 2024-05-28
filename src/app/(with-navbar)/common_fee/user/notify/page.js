@@ -42,10 +42,10 @@ export default function NotifyCommonFeeUser() {
         try {
 
             if (activeKey === 'overdue') {
-                const result = await GetRequest(`${API_USER_COMMON_FEE}/${authData.id}?status=overdue`, 'GET', null);
+                const result = await GetRequest(`${API_USER_COMMON_FEE}/${authData.id}?status=overdue&order=DESC`, 'GET', null);
                 setShowData(result.data);
             } else if (activeKey === 'paid') {
-                const result = await GetRequest(`${API_USER_COMMON_FEE}/${authData.id}?status=paid`, 'GET', null);
+                const result = await GetRequest(`${API_USER_COMMON_FEE}/${authData.id}?status=paid&order=DESC`, 'GET', null);
                 setShowData(result.data);
             }
         } catch (error) {
@@ -116,7 +116,7 @@ export default function NotifyCommonFeeUser() {
                     </div>
 
                     {showData.map((data, index) => (
-                        activeKey === 'overdue' && data.ncf_status === 0 ? (
+                        activeKey === 'overdue' ? (
                             <ListGroup key={index} className="mb-2">
                                 <ListGroup.Item action onClick={() => handleDetailShow(data.ncf_id)}>
                                     <div className="row">
@@ -141,11 +141,7 @@ export default function NotifyCommonFeeUser() {
                             </ListGroup>
                         ) : activeKey === 'paid' && data.ncf_status === 1 && (
                             <ListGroup key={index} className="mb-2">
-                                <ListGroup.Item action href={
-                                    showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_receipt) ? (
-                                        `${API_URL}${showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_receipt}`
-                                    ) : null
-                                }>
+                                <ListGroup.Item action onClick={() => handleDetailShow(data.ncf_id)}>
                                     <div className="row">
                                         <div className="col-md-6">
                                             <p>ค่าบริการสาธารณะ</p>
@@ -154,17 +150,9 @@ export default function NotifyCommonFeeUser() {
                                             </div>
                                             <p>โครงการขอขอบคุณที่ชำระค่าบริการสาธารณะ จำนวน {parseFloat(data.ncf_amount).toLocaleString()} บาท สำหรับเลขที่ชำระหมายเลข {showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_id} เมื่อวันที่ {DateFormat(showRcf.find((rcf) => rcf.ncf_id === data.ncf_id).rcf_date)}</p>
                                         </div>
-
-                                        {showRcf.some((rcf) => rcf.ncf_id === data.ncf_id && rcf.rcf_receipt) ? (
-                                            <div className="col-md-6 text-end">
-                                                ดูใบเสร็จรับเงิน <BsCaretRightFill />
-                                            </div>
-                                        ) : (
-                                            <div className="col-md-6 text-end">
-                                                รอใบเสร็จรับเงิน
-                                            </div>
-                                        )}
-
+                                        <div className="col-md-6 text-end">
+                                            ดูรายละเอียด <BsCaretRightFill />
+                                        </div>
                                     </div>
                                 </ListGroup.Item>
                             </ListGroup>
