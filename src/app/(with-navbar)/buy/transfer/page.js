@@ -215,7 +215,7 @@ export default function Transfer() {
                                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '190px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
                                     <option value={'transferred'}>สำเร็จ</option>
-                                    <option value={'processing'}>รอชำระเงิน</option>
+                                    <option value={'processing'}>รอยืนยัน</option>
                                     <option value={'cancel'}>ยกเลิก</option>
                                 </Form.Select>
                             </div>
@@ -283,7 +283,7 @@ export default function Transfer() {
 
                                             {data.trans_status === 1 ? (
                                                 <td>
-                                                    <Badge bg="info">รอชำระเงิน</Badge>
+                                                    <Badge bg="info">รอยืนยัน</Badge>
                                                 </td>
                                             ) : data.trans_status === 2 ? (
                                                 <td>
@@ -315,16 +315,6 @@ export default function Transfer() {
                                                         <OverlayTrigger overlay={renderTooltipConfirm}>
                                                             <a onClick={() => ConfirmStatus(data.b_id)} style={{ cursor: 'pointer' }}>
                                                                 <BsCheckSquareFill className='me-2 mb-2 text-success' style={{ fontSize: '24px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                        <OverlayTrigger overlay={renderTooltipEdit}>
-                                                            <a onClick={() => handleEditShow(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                                <BsPencilSquare className='me-2 mb-2 text-warning' style={{ fontSize: '24px' }} />
-                                                            </a>
-                                                        </OverlayTrigger>
-                                                        <OverlayTrigger overlay={renderTooltipClose}>
-                                                            <a onClick={() => CancelStatus(data.b_id)} style={{ cursor: 'pointer' }}>
-                                                                <BsFillXSquareFill className='mb-2 text-danger' style={{ fontSize: '24px' }} />
                                                             </a>
                                                         </OverlayTrigger>
                                                     </>

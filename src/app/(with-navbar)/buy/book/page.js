@@ -1,10 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'
-import { DateTimeFormat } from '@/app/Format';
+import {
+    DateTimeFormat,
+    PriceWithCommas
+} from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
-import { API_URL } from '../../../../../app'
 import {
     API_BOOK,
     API_CONTRACT
@@ -108,9 +110,6 @@ export default function Book() {
 
     // modal //
     const [selectedId, setSelectedId] = useState('');
-    const [selectedHouseNo, setSelectedHouseNo] = useState('');
-    const [selectedUserName, setSelectedUserName] = useState('');
-    const [selectedUserLastname, setSelectedUserLastname] = useState('');
 
     // +++ modal detail +++ //
     const [showDetail, setShowDetail] = useState(false);
@@ -134,13 +133,29 @@ export default function Book() {
 
     // +++ modal add contract +++ //
     const [showAddContract, setShowAddContract] = useState(false);
+    const [showBookData, setShowBookData] = useState({
+        id: 0,
+        houseNo: '',
+        hLandSpace: 0,
+        usableSpace: 0,
+        price: 0,
+        userName: '',
+        userLastname: '',
+        bAmount: 0,
+    })
 
     const handleAddContractClose = () => setShowAddContract(false);
-    const handleAddContractShow = (id, houseNo, userName, userLastname) => {
-        setSelectedId(id);
-        setSelectedHouseNo(houseNo);
-        setSelectedUserName(userName);
-        setSelectedUserLastname(userLastname);
+    const handleAddContractShow = (id, houseNo, hLandSpace, usableSpace, price, userName, userLastname, bAmount) => {
+        setShowBookData({
+            id: id,
+            houseNo: houseNo,
+            hLandSpace: hLandSpace,
+            usableSpace: usableSpace,
+            price: price,
+            userName: userName,
+            userLastname: userLastname,
+            bAmount: bAmount,
+        })
         setShowAddContract(true);
     }
     // +++ //
@@ -185,7 +200,7 @@ export default function Book() {
             {/* modal */}
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
-            <ModalContractAdd show={showAddContract} handleClose={handleAddContractClose} id={selectedId} houseNo={selectedHouseNo} userName={selectedUserName} userLastname={selectedUserLastname} />
+            <ModalContractAdd show={showAddContract} handleClose={handleAddContractClose} showBookData={showBookData} />
             {/* --- */}
 
             <Card>
@@ -269,7 +284,7 @@ export default function Book() {
                                     <th>รหัสจอง</th>
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อผู้จอง</th>
-                                    <th>จำนวนเงินมัดจำ</th>
+                                    <th>จำนวนเงินจอง</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่จอง</th>
                                     <th>รายละเอียด</th>
@@ -285,7 +300,7 @@ export default function Book() {
                                             <td>{data.b_id}</td>
                                             <td>{data.house_no}</td>
                                             <td>{data.user_name} {data.user_lastname}</td>
-                                            <td>{data.b_amount.toLocaleString()}</td>
+                                            <td>{PriceWithCommas(data.b_amount)}</td>
                                             <td>{DateTimeFormat(data.b_record)}</td>
 
                                             {data.b_date ? (
@@ -335,7 +350,7 @@ export default function Book() {
                                             {data.b_status === 1 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipContract}>
-                                                        <a onClick={() => handleAddContractShow(data.b_id, data.house_no, data.user_name, data.user_lastname)} style={{ cursor: 'pointer' }}>
+                                                        <a onClick={() => handleAddContractShow(data.b_id, data.house_no, data.hLand_space, data.usable_space, data.price, data.user_name, data.user_lastname, data.b_amount)} style={{ cursor: 'pointer' }}>
                                                             <BsFileTextFill className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>

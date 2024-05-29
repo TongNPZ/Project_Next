@@ -114,26 +114,26 @@ export default function ModalConfirm({ show, handleClose, id }) {
     return (
         <Modal show={show} onHide={handleCancel} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>แก้ไขข้อมูล</Modal.Title>
+                <Modal.Title>ผลการแก้ไขปัญหา</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label className="col-form-label">ชื่อผู้แจ้งปัญหา</label>
-                        <div className="mt-1">
-                            <Form.Control
-                                type="text"
-                                value={`${defaultValues.user_name} ${defaultValues.user_lastname}`}
-                                disabled
-                            />
-                        </div>
-                    </div>
                     <div className="mb-3">
                         <label className="col-form-label">บ้านเลขที่</label>
                         <div className="mt-1">
                             <Form.Control
                                 type="text"
                                 defaultValue={defaultValues.house_no}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อผู้แจ้ง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={`${defaultValues.user_name} ${defaultValues.user_lastname}`}
                                 disabled
                             />
                         </div>

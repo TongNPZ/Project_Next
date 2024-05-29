@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import {
     DateFormat,
-    DateTimeFormat
+    DateTimeFormat,
+    PriceWithCommas
 } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
@@ -190,7 +191,7 @@ export default function ReceiveCommonFee() {
 
                                 {record && record.length > 0 ? (
                                     record.map((data, index) => {
-                                        const formattedAmount = parseFloat(data.ex_amount).toLocaleString();
+                                        const formattedAmount = PriceWithCommas(parseFloat(data.ex_amount));
                                         return (
                                             <tr key={index}>
                                                 <td style={{ textAlign: 'center' }} >{data.ex_id}</td>

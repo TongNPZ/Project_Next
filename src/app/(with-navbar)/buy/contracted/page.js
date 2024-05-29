@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateTimeFormat } from '@/app/Format';
+import {
+    DateTimeFormat,
+    PriceWithCommas
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../app'
 import {
@@ -317,7 +320,7 @@ export default function Book() {
 
                                             <td>{data.witnessone_name}</td>
                                             <td>{data.witnesstwo_name}</td>
-                                            <td>{data.con_amount.toLocaleString()}</td>
+                                            <td>{PriceWithCommas(data.con_amount)}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.b_id)} style={{ cursor: 'pointer' }}>

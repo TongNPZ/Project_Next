@@ -157,6 +157,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
                                     value={landSpace}
                                     onChange={(e) => setLandSpace(e.target.value)}
+                                    min="0"
                                     required
                                 />
                             </div>
@@ -169,6 +170,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     placeholder="ราคาพื้นที่ดิน/ตารางวา (บาท)"
                                     value={landPrice}
                                     onChange={(e) => setLandPrice(e.target.value)}
+                                    min="0"
                                     required
                                 />
                             </div>

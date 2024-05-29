@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/componnent/AuthContext/AuthContext';
+import {
+    FormatThaiNationalID,
+    handleChangeText,
+    handleChangeNumber
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { GET_API_DATA_USER } from './../../../../api';
 import {
@@ -150,13 +155,16 @@ export default function ModalEdit({ show, handleClose, id }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="เลขบัตรประจำตัวประชาชน"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={id} readOnly />
-                    </FloatingLabel>
+                    <div className='mb-3'>
+                        <label className="col-form-label">เลขบัตรประจำตัวประชาชน</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={FormatThaiNationalID(id)}
+                                disabled
+                            />
+                        </div>
+                    </div>
                     <div className="row mb-3">
                         <div className='col-md-6'>
                             <label className="col-form-label">ชื่อจริง</label>
@@ -165,7 +173,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="ชื่อจริง"
                                     value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
+                                    onChange={handleChangeText(setUserName)}
                                     required
                                 />
                             </div>
@@ -177,7 +185,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="นามสกุล"
                                     value={userLastname}
-                                    onChange={(e) => setUserLastname(e.target.value)}
+                                    onChange={handleChangeText(setUserLastname)}
                                     required
                                 />
                             </div>
@@ -204,6 +212,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     placeholder="อายุ"
                                     value={userAge}
                                     onChange={(e) => setUserAge(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -215,7 +224,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="สัญชาติ"
                                     value={nationality}
-                                    onChange={(e) => setNationality(e.target.value)}
+                                    onChange={handleChangeText(setNationality)}
                                     required
                                 />
                             </div>
@@ -228,7 +237,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 type="text"
                                 placeholder="เบอร์โทรศัพท์"
                                 value={userPhone}
-                                onChange={(e) => setUserPhone(e.target.value)}
+                                onChange={handleChangeNumber(setUserPhone)}
                                 required
                             />
                         </div>

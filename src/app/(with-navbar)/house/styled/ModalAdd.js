@@ -118,6 +118,20 @@ export default function ModalAdd({ show, handleClose }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
+                    <div className='mb-3'>
+                        <label className="col-form-label">โซนบ้าน</label>
+
+                        <Form.Select value={hzId} onChange={(e) => setHzId(e.target.value)}>
+                            <option>กรุณาเลือกโซนบ้าน</option>
+
+                            {showHouseZone.map((data) => (
+                                data.hz_status === 1 ? (
+                                    <option key={data.hz_id} value={data.hz_id}>{data.name}</option>
+                                ) : null
+                            ))}
+
+                        </Form.Select>
+                    </div>
                     <div className="mb-3">
                         <label className="col-form-label">ชื่อแบบบ้าน</label>
                         <div className="mt-1">
@@ -139,6 +153,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     placeholder="ขนาดพื้นที่ใช้สอย (ตารางเมตร)"
                                     value={usableSpace}
                                     onChange={(e) => setUsableSpace(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -151,6 +166,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     placeholder="ราคาขายบ้าน"
                                     value={housePrice}
                                     onChange={(e) => setHousePrice(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -167,20 +183,6 @@ export default function ModalAdd({ show, handleClose }) {
                                 required
                             />
                         </div>
-                    </div>
-                    <div className='mb-3'>
-                        <label className="col-form-label">โซนบ้าน</label>
-
-                        <Form.Select value={hzId} onChange={(e) => setHzId(e.target.value)}>
-                            <option>กรุณาเลือกโซนบ้าน</option>
-
-                            {showHouseZone.map((data) => (
-                                data.hz_status === 1 ? (
-                                    <option key={data.hz_id} value={data.hz_id}>{data.name}</option>
-                                ) : null
-                            ))}
-
-                        </Form.Select>
                     </div>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleRestore}>

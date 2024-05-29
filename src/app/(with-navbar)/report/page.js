@@ -213,10 +213,22 @@ export default function report() {
         tempStatus: tempStatus || 'default',
         startDate: startDate || 'default',
         endDate: endDate || 'default',
-        showRcf: showRcf
+        showRcf: 'default'
     }
 
     const encodedData = base64Encode(reportData);
+
+    const reportDataCommonFee = {
+        showData: showData,
+        activeKey: activeKey,
+        search: search || 'default',
+        tempStatus: tempStatus || 'default',
+        startDate: startDate || 'default',
+        endDate: endDate || 'default',
+        showRcf: showRcf
+    }
+
+    const encodedDataCommonFee = base64Encode(reportDataCommonFee);
 
     return (
         <ProtectRoute requireRoles={[1]}>
@@ -600,7 +612,7 @@ export default function report() {
                         filteredShowData && filteredShowData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedDataCommonFee)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>

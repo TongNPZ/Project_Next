@@ -1,9 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateFormat } from '@/app/Format';
+import {
+    DateFormat,
+    PriceWithCommas
+} from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
-import { API_URL } from '../../../../../../app';
 import {
     API_NOTIFY_COMMON_FEE,
     API_RECEIVE_COMMON_FEE
@@ -261,6 +263,7 @@ export default function ReceiveCommonFee() {
                                 <tr>
                                     <th>รหัสแจ้งชำระค่าส่วนกลาง</th>
                                     <th>บ้านเลขที่</th>
+                                    <th>ชื่อเจ้าของบ้าน</th>
                                     <th>จำนวนเงิน</th>
                                     <th>วันที่กำหนดชำระ</th>
                                     <th>สิ้นสุดวันที่</th>
@@ -282,7 +285,8 @@ export default function ReceiveCommonFee() {
                                             <tr key={index}>
                                                 <td>{data.ncf_id}</td>
                                                 <td>{data.house_no}</td>
-                                                <td>{parseFloat(data.ncf_amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                <td>{data.user_name} {data.user_lastname}</td>
+                                                <td>{PriceWithCommas(parseFloat(data.ncf_amount))}</td>
                                                 <td>{DateFormat(data.ncf_date)}</td>
                                                 <td>{DateFormat(data.ncf_nextDate)}</td>
                                                 <td>
@@ -312,12 +316,15 @@ export default function ReceiveCommonFee() {
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <OverlayTrigger overlay={renderTooltipDownload}>
-                                                        <a href={`/document/receipt/commonFee/${data.ncf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                            <BsDownload className='mb-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
+                                                    {data.ncf_status !== 0 && (
+                                                        <OverlayTrigger overlay={renderTooltipDownload}>
+                                                            <a href={`/document/receipt/commonFee/${rcfFindData.rcf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                                <BsDownload className='mb-2 text-primary' style={{ fontSize: '28px' }} />
+                                                            </a>
+                                                        </OverlayTrigger>
+                                                    )}
                                                 </td>
+
                                                 {rcfSomeData && rcfFindData.rcf_status === 1 && data.ncf_status === 1 ? (
                                                     <td>
                                                         <Badge bg="success">ชำระแล้ว</Badge>
@@ -331,6 +338,7 @@ export default function ReceiveCommonFee() {
                                                         <Badge bg="danger">ค้างชำระ</Badge>
                                                     </td>
                                                 )}
+
                                                 <td>
                                                     {data.ncf_status !== 1 && data.rcf_status !== 1 ? (
                                                         <>

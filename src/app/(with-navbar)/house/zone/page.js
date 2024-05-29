@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import { PriceWithCommas } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE_ZONE } from '../../../../../api';
@@ -177,7 +178,7 @@ export default function HouseZone() {
                                             <td>{data.hz_id}</td>
                                             <td>{data.name}</td>
                                             <td>{data.land_space.toLocaleString()}</td>
-                                            <td>{data.land_price.toLocaleString()}</td>
+                                            <td>{PriceWithCommas(data.land_price)}</td>
 
                                             {data.hz_status === 1 ? (
                                                 <td>

@@ -88,6 +88,13 @@ export default function NotifyCommonFee() {
         setEndDate('');
     };
 
+
+    function addOneYear(dateString) {
+        const date = new Date(dateString);
+        date.setFullYear(date.getFullYear() + 1);
+        return date;
+    }
+
     // tooltip
     const renderTooltipAddNotifyCommonFee = (props) => (
         <Tooltip {...props}>
@@ -192,15 +199,15 @@ export default function NotifyCommonFee() {
                                                 const commonMonth = ncfData.common_month;
                                                 const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
-                                                if (currentDate < new Date(ncfData.ncf_nextDate)) {
+                                                if (currentDate > new Date(ncfData.ncf_nextDate)) {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
                                                             <td>{data.house_no}</td>
                                                             <td>{data.user_name} {data.user_lastname}</td>
                                                             <td>{DateFormat(data.trans_date)}</td>
-                                                            <td>{DateFormat(ncfData.ncf_date)}</td>
                                                             <td>{DateFormat(ncfData.ncf_nextDate)}</td>
+                                                            <td>{DateFormat(addOneYear(ncfData.ncf_nextDate))}</td>
                                                             <td>{parseFloat(totalPrice).toLocaleString()}</td>
                                                             <td>
                                                                 <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>

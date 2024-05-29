@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+    handleChangeNumber,
+    handleChangeNumberAndSlash
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from './../../../../app';
 import {
@@ -95,7 +99,7 @@ export default function ModalEdit({ show, handleClose, id }) {
 
     useEffect(() => {
         fecthHouseStyle();
-    }, [showHouseStyle]);
+    }, []);
     // --- //
 
     // submit //
@@ -203,7 +207,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 type="text"
                                 placeholder="บ้านเลขที่"
                                 value={houseNo}
-                                onChange={(e) => setHouseNo(e.target.value)}
+                                onChange={handleChangeNumberAndSlash(setHouseNo)}
                                 maxLength={6}
                                 required
                             />
@@ -217,7 +221,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="เลขที่โฉนดที่ดิน"
                                     value={numDeed}
-                                    onChange={(e) => setNumDeed(e.target.value)}
+                                    onChange={handleChangeNumber(setNumDeed)}
                                     maxLength={6}
                                     required
                                 />
@@ -230,7 +234,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="เลขที่หน้าสำรวจ"
                                     value={numSurvey}
-                                    onChange={(e) => setNumSurvey(e.target.value)}
+                                    onChange={handleChangeNumber(setNumSurvey)}
                                     maxLength={5}
                                     required
                                 />
