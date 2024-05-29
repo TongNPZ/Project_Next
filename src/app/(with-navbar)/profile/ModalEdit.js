@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+    handleChangeText,
+    handleChangeNumber
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     GET_API_DATA_USER
@@ -154,7 +158,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="ชื่อ"
                                             value={userName}
-                                            onChange={(e) => setUserName(e.target.value)}
+                                            onChange={handleChangeText(setUserName)}
                                             required
                                         />
                                     </div>
@@ -166,7 +170,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="นามสกุล"
                                             value={userLastname}
-                                            onChange={(e) => setUserLastname(e.target.value)}
+                                            onChange={handleChangeText(setUserLastname)}
                                             required
                                         />
                                     </div>
@@ -175,11 +179,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     <label className="col-form-label">อายุ</label>
                                     <div className="mt-1">
                                         <Form.Control
-                                            type="number"
+                                            type="text"
                                             placeholder="อายุ"
-                                            min="1" // หรือค่าที่ต้องการกำหนด
                                             value={userAge}
-                                            onChange={(e) => setUserAge(e.target.value)}
+                                            onChange={handleChangeNumber(setUserAge)}
+                                            maxLength={3}
                                             required
                                         />
                                     </div>
@@ -191,7 +195,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="สัญชาติ"
                                             value={userNationality}
-                                            onChange={(e) => setUserNationality(e.target.value)}
+                                            onChange={handleChangeText(setUserNationality)}
                                             required
                                         />
                                     </div>
@@ -236,7 +240,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="เบอร์โทรศัพท์"
                                             value={userPhone}
-                                            onChange={(e) => setUserPhone(e.target.value)}
+                                            onChange={handleChangeNumber(setUserPhone)}
                                             maxLength={10}
                                             required
                                         />

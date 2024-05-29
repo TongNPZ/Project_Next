@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FormatThaiNationalID } from '@/app/Format';
+import {
+    FormatThaiNationalID,
+    handleChangeText,
+    handleChangeNumber
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_TRANSFER,
@@ -251,7 +255,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                                                     type="text"
                                                     placeholder="ชื่อธนาคาร"
                                                     value={bankName}
-                                                    onChange={(e) => setBankName(e.target.value)}
+                                                    onChange={handleChangeText(setBankName)}
                                                     required
                                                 />
                                             </div>
@@ -263,7 +267,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                                                     type="text"
                                                     placeholder="สาขา"
                                                     value={bankBranch}
-                                                    onChange={(e) => setBankBranch(e.target.value)}
+                                                    onChange={handleChangeText(setBankBranch)}
                                                     required
                                                 />
                                             </div>
@@ -278,6 +282,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                                                     placeholder="เลขที่"
                                                     value={bankNum}
                                                     onChange={(e) => setBankNum(e.target.value)}
+                                                    min='0'
                                                     required
                                                 />
                                             </div>
@@ -369,20 +374,32 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                                                 <p className="col-form-label">บาท</p>
                                             </div>
                                         </div>
-                                        <div className='row'>
+                                        <div className='row mt-3'>
                                             <div className='col-md-6'>
-                                                <p className="col-form-label">ยอดคงเหลือ:</p>
+                                                <p className="col-form-label"><strong>ยอดคงเหลือ:</strong></p>
                                             </div>
                                             <div className='col-md-4 text-end'>
-                                                <p className="col-form-label">{parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()}</p>
+                                                <h4>{parseFloat((contract.price - contract.b_amount) - contract.con_amount).toLocaleString()}</h4>
                                             </div>
                                             <div className='col-md-2 text-end'>
-                                                <p className="col-form-label">บาท</p>
+                                                <p className="col-form-label"><strong>บาท</strong></p>
                                             </div>
                                         </div>
+
+                                    </div>
+                                ))}
+
+                            </div>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <div className='row mt-3 mb-3'>
+                                <div className='col-md-3' />
+
+                                {showHousingEstate.map((data) => (
+                                    <div key={data.he_id} className='col-md-9'>
                                         <div className='row'>
                                             <div className='col-md-6'>
-                                                <p className="col-form-label">บวก ค่าส่วนกลางล่วงหน้า {data.common_firstYear} ปี:</p>
+                                                <p className="col-form-label">ค่าส่วนกลางล่วงหน้า {data.common_firstYear} ปี:</p>
                                             </div>
                                             <div className='col-md-4 text-end'>
                                                 <p className="col-form-label">{parseFloat(((contract.hLand_space * data.common_rate) * data.common_month) * data.common_firstYear).toLocaleString()}</p>

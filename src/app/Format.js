@@ -12,15 +12,15 @@ export function DateInputFormat(date) {
 }
 
 export function DateFormat(date) {
-    return moment(date).add(543, 'years').format('LL');
+    return moment(date).add(543, 'years').format('ll');
 }
 
 export function DateFormatNum(date) {
-    return moment(date).add(543, 'years').format('L');
+    return moment(date).add(543, 'years').format('l');
 }
 
 export function DateTimeFormat(dateTime) {
-    return moment(dateTime).add(543, 'years').format('LLL');
+    return moment(dateTime).add(543, 'years').format('lll');
 }
 
 export function FormatThaiNationalID(id) {
@@ -38,4 +38,22 @@ export function FormatThaiNationalID(id) {
 
 export function PriceWithCommas(number) {
     return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+};
+
+export const handleChangeNumber = (setter) => (e) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/[^0-9]/g, '');
+    setter(numericValue);
+};
+
+export const handleChangeText = (setter) => (e) => {
+    const value = e.target.value;
+    const textValue = value.replace(/[^a-zA-Zก-๏\s]/g, '');
+    setter(textValue);
+};
+
+export const handleChangeNumberAndSlash = (setter) => (e) => {
+    const value = e.target.value;
+    const filteredValue = value.replace(/[^0-9/]/g, '');
+    setter(filteredValue);
 };

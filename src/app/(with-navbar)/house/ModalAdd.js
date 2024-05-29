@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+    handleChangeNumber,
+    handleChangeNumberAndSlash
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_HOUSE_STYLE,
@@ -139,6 +143,7 @@ export default function ModalAdd({ show, handleClose }) {
             }
         });
     }
+
     // -- //
 
     // restore //
@@ -163,6 +168,19 @@ export default function ModalAdd({ show, handleClose }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
+                    <div className='mb-3'>
+                        <label className="col-form-label">แบบบ้าน</label>
+                        <Form.Select value={hsId} onChange={(e) => setHsId(e.target.value)}>
+                            <option value={''}>กรุณาเลือกแบบบ้าน</option>
+
+                            {showHouseStyle.map((data) => (
+                                data.hs_status === 1 ? (
+                                    <option key={data.hs_id} value={data.hs_id}>{data.house_name}</option>
+                                ) : null
+                            ))}
+
+                        </Form.Select>
+                    </div>
                     <div className="mb-3">
                         <label className="col-form-label">บ้านเลขที่</label>
                         <div className="mt-1">
@@ -170,7 +188,7 @@ export default function ModalAdd({ show, handleClose }) {
                                 type="text"
                                 placeholder="บ้านเลขที่"
                                 value={houseNo}
-                                onChange={(e) => setHouseNo(e.target.value)}
+                                onChange={handleChangeNumberAndSlash(setHouseNo)}
                                 maxLength={6}
                                 required
                             />
@@ -184,7 +202,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     type="text"
                                     placeholder="เลขที่โฉนดที่ดิน"
                                     value={numDeed}
-                                    onChange={(e) => setNumDeed(e.target.value)}
+                                    onChange={handleChangeNumber(setNumDeed)}
                                     maxLength={6}
                                     required
                                 />
@@ -197,25 +215,12 @@ export default function ModalAdd({ show, handleClose }) {
                                     type="text"
                                     placeholder="เลขที่หน้าสำรวจ"
                                     value={numSurvey}
-                                    onChange={(e) => setNumSurvey(e.target.value)}
+                                    onChange={handleChangeNumber(setNumSurvey)}
                                     maxLength={5}
                                     required
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className='mb-3'>
-                        <label className="col-form-label">แบบบ้าน</label>
-                        <Form.Select value={hsId} onChange={(e) => setHsId(e.target.value)}>
-                            <option value={''}>กรุณาเลือกแบบบ้าน</option>
-
-                            {showHouseStyle.map((data) => (
-                                data.hs_status === 1 ? (
-                                    <option key={data.hs_id} value={data.hs_id}>{data.house_name}</option>
-                                ) : null
-                            ))}
-
-                        </Form.Select>
                     </div>
                     <div className='mb-3'>
                         <label className="col-form-label">
@@ -238,6 +243,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     placeholder="ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)"
                                     value={hLandSpace}
                                     onChange={(e) => setHLandSpace(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -258,6 +264,7 @@ export default function ModalAdd({ show, handleClose }) {
                                         setHLandSpace(0);
                                     }
                                 }}
+                                min='0'
                                 disabled={hsId === ''}
                             />
                         </div>

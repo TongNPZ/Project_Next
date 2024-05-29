@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+    PriceWithCommas,
+    handleChangeText
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_CONTRACT
@@ -129,19 +133,98 @@ export default function ModalEdit({ show, handleClose, id }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="รหัสจอง"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={id} readOnly disabled />
-                    </FloatingLabel>
+                    <div className="mb-3">
+                        <label className="col-form-label">รหัสจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={id}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">บ้านเลขที่</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={defaultValues.house_no}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ดิน (ตารางวา)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={defaultValues.hLand_space}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ใช้สอย (ตารางเมตร)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={defaultValues.usable_space}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ราคาบ้านพร้อมที่ดิน/หลัง (บาท)</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(defaultValues.price))}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">จำนวนเงินจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(defaultValues.b_amount))}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ราคาบ้านหักจากค่าจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(defaultValues.price) - parseFloat(defaultValues.b_amount))}
+                                disabled
+                            />
+                        </div>
+                    </div>
                     <div className='mb-3'>
                         <label className="col-form-label">เลขที่สัญญา</label>
                         <div className="mt-1">
                             <Form.Control
                                 type="text"
                                 defaultValue={defaultValues.con_number}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อผู้ทำสัญญา</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={`${defaultValues.user_name} ${defaultValues.user_lastname}`}
                                 disabled
                             />
                         </div>
@@ -154,7 +237,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="ชื่อพยานคนที่หนึ่ง"
                                     value={witnessOneName}
-                                    onChange={(e) => setWitnessOneName(e.target.value)}
+                                    onChange={handleChangeText(setWitnessOneName)}
                                     required
                                 />
                             </div>
@@ -166,7 +249,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     type="text"
                                     placeholder="ชื่อพยานคนที่สอง"
                                     value={witnessTwoName}
-                                    onChange={(e) => setWitnessTwoName(e.target.value)}
+                                    onChange={handleChangeText(setWitnessTwoName)}
                                     required
                                 />
                             </div>
@@ -180,6 +263,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                 placeholder="จำนวนเงินมัดจำ"
                                 value={conAmount}
                                 onChange={(e) => setCoAmount(e.target.value)}
+                                min='0'
                                 required
                             />
                         </div>

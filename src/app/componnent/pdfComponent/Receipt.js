@@ -208,7 +208,17 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
             <View style={styles.container}>
                 <Text style={styles.datetext}>วันที่</Text>
                 <View style={styles.lineProject}>
-                    <Text style={styles.dateContent}>{DateFormat(currentDate)}</Text>
+
+                    {book ? (
+                        <Text style={styles.dateContent}>{DateFormat(book.b_date)}</Text>
+                    ) : contract ? (
+                        <Text style={styles.dateContent}>{DateFormat(contract.con_date)}</Text>
+                    ) : transfer ? (
+                        <Text style={styles.dateContent}>{DateFormat(transfer.trans_date)}</Text>
+                    ) : (
+                        <Text style={styles.dateContent}>{DateFormat(commonFee.rcf_date)}</Text>
+                    )}
+
                 </View>
             </View>
 

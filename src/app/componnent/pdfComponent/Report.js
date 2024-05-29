@@ -162,10 +162,15 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceTransferredFormatted = PriceWithCommas(totalPriceTransferred);
 
     // commonFee
-    const filteredShowData = showData && showData.filter(data => {
-        const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
-        return rcfFindData || data.ncf_status === 0;
-    });
+
+    let filteredShowData;
+    
+    if (activeKey === 'commonFee') {
+        filteredShowData = showData && showData.filter(data => {
+            const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
+            return rcfFindData || data.ncf_status === 0;
+        });
+    }
 
     const filteredDataOverdue = showData.filter(data => data.ncf_status === 0);
 

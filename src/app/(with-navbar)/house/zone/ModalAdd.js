@@ -114,6 +114,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
                                     value={landSpace}
                                     onChange={(e) => setLandSpace(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -126,6 +127,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     placeholder="ราคาบ้านต่อที่ดิน (ตารางวา)"
                                     value={landPrice}
                                     onChange={(e) => setLandPrice(e.target.value)}
+                                    min='0'
                                     required
                                 />
                             </div>
