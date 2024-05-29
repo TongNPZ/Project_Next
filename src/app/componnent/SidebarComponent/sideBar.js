@@ -36,6 +36,7 @@ function SideBar() {
   const [openCommonFee, setOpenCommonFee] = useState(false);
   // --- //
 
+  console.log(authData.role)
   return (
     <>
       <GiHamburgerMenu
@@ -55,7 +56,7 @@ function SideBar() {
               </div>
             </ListGroup.Item>
 
-            {role === 2 || role === 3 || role === null && (
+            {(role === 2 || role === 3 || role === null) && (
               <ListGroup.Item>
                 <div className='my-3'>
                   <a className="nav-link" aria-current="page" onClick={() => router.push('/house_view')} style={{ cursor: 'pointer' }}>
