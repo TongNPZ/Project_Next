@@ -194,7 +194,7 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
                 />
             ))}
 
-            <Text style={styles.title}>ใบรับเงินชั่วคราว</Text>
+            <Text style={styles.title}>ใบเสร็จรับเงิน</Text>
 
             {housingEstate.map((data) => (
                 <View style={styles.container} key={data.he_id}>
@@ -514,7 +514,7 @@ const MyDocument = ({ housingEstate, book, contract, transfer, commonFee }) => (
                                     src={`${API_URL}${data.md_signature}`}
                                 />
                             </View>
-                            <Text style={styles.textSignature}>ผู้จัดการ</Text>
+                            <Text style={styles.textSignature}>ผู้รับเงิน</Text>
                         </View>
                         <View style={styles.container} key={data.he_id}>
                             <Text style={styles.text}>{'('}</Text>

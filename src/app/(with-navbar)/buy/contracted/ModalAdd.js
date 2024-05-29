@@ -106,7 +106,7 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>กรอกข้อมูลสัญญา</Modal.Title>
+                <Modal.Title>กรอกข้อมูลมัดจำ</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
