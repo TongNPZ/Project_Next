@@ -169,68 +169,80 @@ export default function reportProblemUser() {
                     </Card.Body>
                 </Card>
 
-                {showData.map((data, index) => (
-                    <Card key={index} className="mb-3" >
-                        <Card.Body>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <p>
-                                        <strong>บ้านเลขที่ {data.house_no} {data.user_name} {data.user_lastname}</strong><br />
-                                        {DateTimeFormat(data.rp_problem_date)}&nbsp;
+                {showData && showData.length > 0 ? (
+                    showData.map((data, index) => (
+                        <Card key={index} className="mb-3" >
+                            <Card.Body>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p>
+                                            <strong>บ้านเลขที่ {data.house_no} {data.user_name} {data.user_lastname}</strong><br />
+                                            {DateTimeFormat(data.rp_problem_date)}&nbsp;
 
-                                        {data.rp_status === 0 ? (
-                                            <Badge bg="info">รอการแก้ไข</Badge>
-                                        ) : (
-                                            <Badge bg="success">แก้ไขแล้ว</Badge>
-                                        )}
+                                            {data.rp_status === 0 ? (
+                                                <Badge bg="info">รอการแก้ไข</Badge>
+                                            ) : (
+                                                <Badge bg="success">แก้ไขแล้ว</Badge>
+                                            )}
 
-                                    </p>
-                                </div>
-
-                                {data.rp_status === 0 && data.user_id === authData.id ? (
-                                    <div className="col-md-6 text-end">
-                                        <OverlayTrigger overlay={renderTooltipEdit}>
-                                            <a onClick={() => handleEditShow(data.rp_id)} style={{ cursor: 'pointer' }}>
-                                                <BsPencilSquare className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
-                                            </a>
-                                        </OverlayTrigger>
-                                        <OverlayTrigger overlay={renderTooltipCancel}>
-                                            <a onClick={() => RemoveData(data.rp_id)} style={{ cursor: 'pointer' }}>
-                                                <BsXLg className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
-                                            </a>
-                                        </OverlayTrigger>
+                                        </p>
                                     </div>
+
+                                    {data.rp_status === 0 && data.user_id === authData.id ? (
+                                        <div className="col-md-6 text-end">
+                                            <OverlayTrigger overlay={renderTooltipEdit}>
+                                                <a onClick={() => handleEditShow(data.rp_id)} style={{ cursor: 'pointer' }}>
+                                                    <BsPencilSquare className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                </a>
+                                            </OverlayTrigger>
+                                            <OverlayTrigger overlay={renderTooltipCancel}>
+                                                <a onClick={() => RemoveData(data.rp_id)} style={{ cursor: 'pointer' }}>
+                                                    <BsXLg className='me-2 mb-2 text-secondary' style={{ fontSize: '24px' }} />
+                                                </a>
+                                            </OverlayTrigger>
+                                        </div>
+                                    ) : (
+                                        <div className="col-md-6 text-end" />
+                                    )}
+
+                                </div>
+                                <p>{data.rp_problem_details}</p>
+
+                                {data.rp_problem_image !== '' ? (
+                                    <Card.Img src={`${API_URL}${data.rp_problem_image}`} />
                                 ) : (
-                                    <div className="col-md-6 text-end" />
+                                    <Card>
+                                        <Card.Body>
+                                            <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
+                                        </Card.Body>
+                                    </Card>
                                 )}
 
-                            </div>
-                            <p>{data.rp_problem_details}</p>
+                            </Card.Body>
 
-                            {data.rp_problem_image !== '' ? (
-                                <Card.Img src={`${API_URL}${data.rp_problem_image}`} />
-                            ) : (
-                                <Card>
-                                    <Card.Body>
-                                        <h1 className='text-center mt-5 mb-5'>ไม่มีรูปภาพที่แสดง</h1>
-                                    </Card.Body>
-                                </Card>
-                            )}
+                            {data.rp_status === 1 ? (
+                                <Card.Footer>
+                                    <div className="d-grid">
+                                        <Button variant="secondary" onClick={() => handleDetailShow(data.rp_id)}>
+                                            ผลการแก้ไข
+                                        </Button>
+                                    </div>
+                                </Card.Footer>
+                            ) : null}
 
-                        </Card.Body>
+                        </Card>
+                    ))
+                ) : (
+                    <div className="mt-5 mb-5" style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                    }}>
+                        <h1>ไม่มีข้อมูลที่แสดง</h1>
+                    </div>
+                )}
 
-                        {data.rp_status === 1 ? (
-                            <Card.Footer>
-                                <div className="d-grid">
-                                    <Button variant="secondary" onClick={() => handleDetailShow(data.rp_id)}>
-                                        ผลการแก้ไข
-                                    </Button>
-                                </div>
-                            </Card.Footer>
-                        ) : null}
-
-                    </Card>
-                ))}
 
             </div>
 
