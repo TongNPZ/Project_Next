@@ -73,6 +73,11 @@ export default async function GetRequest(host, method, body) {
                     "รหัสผ่านไม่ถูกต้อง!",
                     "กรุณากรอกรหัสผ่านใหม่อีกครั้ง (หมายเหตุ ต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และห้ามต่ำกว่า 8 ตัว)"
                 )
+            } else if (data.message === 'Password Is Not Correct!') {
+                Error(
+                    "รหัสผ่านไม่ถูกต้อง!",
+                    "กรุณากรอกรหัสผ่านใหม่อีกครั้ง"
+                )
             } else if (data.message === 'Data already exists!') {
                 Warning(
                     "ข้อมูลนี้มีอยู่ในระบบแล้ว!",
