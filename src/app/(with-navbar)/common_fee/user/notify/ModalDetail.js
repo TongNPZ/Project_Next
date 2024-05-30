@@ -322,12 +322,12 @@ export default function ModalDetail({ show, handleClose, id }) {
                             ชำระเงินออนไลน์
                         </Button>
                     ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && !rcf.rcf_slip) ? (
-                        <a class="btn btn-primary" href={`/document/receipt/commonFee/${showData.ncf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                        <a class="btn btn-primary" href={`/document/receipt/commonFee/${showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                             ดาวน์โหลดใบเสร็จรับเงิน
                         </a>
                     ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && rcf.rcf_slip) && (
                         <>
-                            <a class="btn btn-primary" href={`/document/receipt/commonFee/${showData.ncf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                            <a class="btn btn-primary" href={`/document/receipt/commonFee/${showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
                                 ดาวน์โหลดใบเสร็จรับเงิน
                             </a>
                             <Button variant="success" onClick={() => handleChangedSlipShow(showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id)}>
