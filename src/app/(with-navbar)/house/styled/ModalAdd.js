@@ -159,7 +159,7 @@ export default function ModalAdd({ show, handleClose }) {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <label className="col-form-label">ราคาขายบ้าน</label>
+                            <label className="col-form-label">ราคาขาย/หลัง (บาท)</label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"

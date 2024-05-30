@@ -112,7 +112,7 @@ export default function ReceiveCommonFee() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางบันทึกค่าใช้จ่ายส่วนกลาง</h5>
+                            <h5>บันทึกค่าใช้จ่ายส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>

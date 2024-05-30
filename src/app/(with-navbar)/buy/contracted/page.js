@@ -447,7 +447,7 @@ export default function Book() {
                                             ) : data.con_status === 2 ? (
                                                 <td>
 
-                                                    {showTransfer.some((transfer) => transfer.b_id === data.b_id && transfer.trans_status !== 0 && transfer.h_status !== 5) ? (
+                                                    {showTransfer && showTransfer.some((transfer) => transfer.b_id === data.b_id && transfer.trans_status !== 0 && transfer.h_status !== 5) ? (
                                                         <Button href="/buy/transfer" variant="secondary" size="sm">
                                                             <span>ไปยังหน้าโอนกรรมสิทธิ์</span> &nbsp;
                                                             <BsCaretRightFill />

@@ -368,7 +368,7 @@ export default function Book() {
                                             ) : data.b_status === 2 ? (
                                                 <td>
 
-                                                    {showContract.some((contract) => contract.b_id === data.b_id && contract.con_status !== 0 && contract.h_status !== 5) ? (
+                                                    {showContract && showContract.some((contract) => contract.b_id === data.b_id && contract.con_status !== 0 && contract.h_status !== 5) ? (
                                                         <Button href="/buy/contracted" variant="secondary" size="sm">
                                                             <span>ไปยังหน้าสัญญา</span> &nbsp;
                                                             <BsCaretRightFill />

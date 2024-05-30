@@ -230,7 +230,7 @@ function SideBar() {
                   </a>
                 </div>
               </ListGroup.Item>
-            ) : role === 2 || role === 3 ? (
+            ) : role === 3 ? (
               <ListGroup.Item>
                 <div className='my-3'>
                   <a className="nav-link" aria-current="page" onClick={() => router.push('/report_problem/user')} style={{ cursor: 'pointer' }}>

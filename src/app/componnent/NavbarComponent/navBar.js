@@ -159,7 +159,7 @@ const Navbar = () => {
               <NavDropdown.Item onClick={() => router.push('/houseUser')}>บ้านของฉัน</NavDropdown.Item>
             )}
 
-            {role === 2 || role === 3 && (
+            {(role === 2 || role === 3) && (
               <NavDropdown.Item onClick={() => router.push('/buy_process')}>การซื้อของฉัน</NavDropdown.Item>
             )}
 
