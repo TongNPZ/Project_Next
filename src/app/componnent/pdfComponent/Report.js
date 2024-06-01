@@ -122,6 +122,21 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     }, 0);
     const totalPriceSoldFormatted = PriceWithCommas(totalPriceSold);
 
+    const totalPriceSoldฺBooked = filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.b_amount);
+    }, 0);
+    const totalPriceSoldBookedFormatted = PriceWithCommas(totalPriceSoldฺBooked);
+
+    const totalPriceSoldContracted = filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.con_amount);
+    }, 0);
+    const totalPriceSoldContractedFormatted = PriceWithCommas(totalPriceSoldContracted);
+
+    const totalPriceSoldTransferred = filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.trans_amount);
+    }, 0);
+    const totalPriceSoldTransferredFormatted = PriceWithCommas(totalPriceSoldTransferred);
+
     // booked
     const filteredDataBooked = showData.filter(data => data.b_id);
 
@@ -147,10 +162,15 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const totalPriceTransferredFormatted = PriceWithCommas(totalPriceTransferred);
 
     // commonFee
-    const filteredShowData = showData && showData.filter(data => {
-        const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
-        return rcfFindData || data.ncf_status === 0;
-    });
+
+    let filteredShowData;
+    
+    if (activeKey === 'commonFee') {
+        filteredShowData = showData && showData.filter(data => {
+            const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
+            return rcfFindData || data.ncf_status === 0;
+        });
+    }
 
     const filteredDataOverdue = showData.filter(data => data.ncf_status === 0);
 
@@ -227,43 +247,109 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                 </Text>
 
                 {activeKey === 'house' ? (
-                    tempStatus === 'default' || tempStatus === 'vacant' || tempStatus === 'sold' || tempStatus === 'cancel' ? (
+                    tempStatus === 'default' || tempStatus === 'sold' || tempStatus === 'vacant' || tempStatus === 'cancel' ? (
                         <>
                             <View style={styles.horizontalLine} />
-                            <View style={styles.table}>
-                                <View style={styles.tableRow}>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>บ้านเลขที่</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>โซนบ้าน</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>ชื่อแบบบ้าน</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>เลขที่โฉนดที่ดิน</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>เลขที่หน้าสำรวจ&nbsp;</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={styles.tableCell}>ขนาดพื้นที่ดิน</Text>
-                                            <Text style={styles.tableCell}>(ตารางวา)</Text>
+
+                            {tempStatus !== 'sold' ? (
+                                <View style={styles.table}>
+                                    <View style={styles.tableRow}>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
                                         </View>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={styles.tableCell}>ขนาดพื้นที่ใช้สอย</Text>
-                                            <Text style={styles.tableCell}>(ตารางเมตร)</Text>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>บ้านเลขที่</Text>
                                         </View>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>ราคาบ้านพร้อมที่ดิน</Text>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>โซนบ้าน</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ชื่อแบบบ้าน</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>เลขที่โฉนดที่ดิน</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>เลขที่หน้าสำรวจ&nbsp;</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>ขนาดพื้นที่ดิน</Text>
+                                                <Text style={styles.tableCell}>(ตารางวา)</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>ขนาดพื้นที่ใช้สอย</Text>
+                                                <Text style={styles.tableCell}>(ตารางเมตร)</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>ราคาบ้าน</Text>
+                                                <Text style={styles.tableCell}>พร้อมที่ดิน</Text>
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
+                            ) : (
+                                <View style={styles.table}>
+                                    <View style={styles.tableRow}>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>บ้านเลขที่</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>โซนบ้าน</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ชื่อแบบบ้าน</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>เลขที่โฉนด</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>เลขที่</Text>
+                                                <Text style={styles.tableCell}>หน้าสำรวจ&nbsp;</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>พื้นที่ดิน</Text>
+                                                <Text style={styles.tableCell}>(ตร.ว.)</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>พื้นที่ใช้สอย</Text>
+                                                <Text style={styles.tableCell}>(ตร.ม.)</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>ราคาบ้าน</Text>
+                                                <Text style={styles.tableCell}>พร้อมที่ดิน</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ค่าจอง&nbsp;</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>ค่ามัดจำ&nbsp;</Text>
+                                        </View>
+                                        <View style={styles.tableCol}>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={styles.tableCell}>จำนวน&nbsp;</Text>
+                                                <Text style={styles.tableCell}>คงเหลือ</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            )}
+
                             <View style={styles.horizontalLine} />
 
                             {filteredDataVacant && filteredDataVacant.length > 0 ? (
@@ -273,6 +359,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         data.h_status === 1 && (
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
                                                     <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
@@ -319,6 +408,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
                                                     <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
@@ -363,6 +455,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         data.h_status === 3 && (
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
                                                     <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
@@ -409,6 +504,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
                                                     <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
@@ -454,6 +552,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
                                                     <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
+                                                    <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
                                                     <View style={styles.tableCol}>
@@ -477,6 +578,21 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                     <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.price))}</Text>
                                                     </View>
+
+                                                    {tempStatus !== 'default' && (
+                                                        <>
+                                                            <View style={styles.tableCol}>
+                                                                <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.b_amount))}</Text>
+                                                            </View>
+                                                            <View style={styles.tableCol}>
+                                                                <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.con_amount))}</Text>
+                                                            </View>
+                                                            <View style={styles.tableCol}>
+                                                                <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.trans_amount))}</Text>
+                                                            </View>
+                                                        </>
+                                                    )}
+
                                                 </View>
                                             </View>
                                         )
@@ -488,10 +604,31 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนราคาบ้านที่ขายแล้ว&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมมูลค่าบ้านพร้อมที่ดิน&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceSoldFormatted}</Text>
                                         <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
+
+                                    {tempStatus !== 'default' && (
+                                        <>
+                                            <View style={styles.row}>
+                                                <Text style={styles.textFrontRow}>รวมมูลค่าจอง&nbsp;&nbsp;</Text>
+                                                <Text style={styles.textNumberRow}>{totalPriceSoldBookedFormatted}</Text>
+                                                <Text style={styles.textBehindRow}>บาท</Text>
+                                            </View>
+                                            <View style={styles.row}>
+                                                <Text style={styles.textFrontRow}>รวมมูลค่ามัดจำ&nbsp;&nbsp;</Text>
+                                                <Text style={styles.textNumberRow}>{totalPriceSoldContractedFormatted}</Text>
+                                                <Text style={styles.textBehindRow}>บาท</Text>
+                                            </View>
+                                            <View style={styles.row}>
+                                                <Text style={styles.textFrontRow}>รวมมูลค่าคงเหลือ&nbsp;&nbsp;</Text>
+                                                <Text style={styles.textNumberRow}>{totalPriceSoldTransferredFormatted}</Text>
+                                                <Text style={styles.textBehindRow}>บาท</Text>
+                                            </View>
+                                        </>
+                                    )}
+
                                     <View style={styles.horizontalLineDotted} />
                                 </>
                             ) : null}
@@ -500,9 +637,12 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ยกเลิกขาย&nbsp;</Text>
                                     {showData.map((data, index) => (
-                                        data.h_status === 5 && (
+                                        data.h_status === 0 && (
                                             <View key={index} style={styles.table}>
                                                 <View style={styles.tableRow}>
+                                                    <View style={styles.tableCol}>
+                                                        <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                    </View>
                                                     <View style={styles.tableCol}>
                                                         <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                     </View>
@@ -547,6 +687,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <View style={styles.table}>
                                 <View style={styles.tableRow}>
                                     <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>บ้านเลขที่</Text>
                                     </View>
                                     <View style={styles.tableCol}>
@@ -568,9 +711,12 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             {filteredDataBooked && filteredDataBooked.length > 0 ? (
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;รายการจองที่ชำระแล้ว&nbsp;</Text>
-                                    {showData.map((data) => (
+                                    {showData.map((data, index) => (
                                         <View style={styles.table}>
                                             <View style={styles.tableRow}>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                 </View>
@@ -610,25 +756,19 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <View style={styles.table}>
                                 <View style={styles.tableRow}>
                                     <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>บ้านเลขที่</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>ชื่อผู้ทำสัญญา&nbsp;</Text>
+                                        <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>เลขที่สัญญา</Text>
                                     </View>
                                     <View style={styles.tableCol}>
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={styles.tableCell}>เลขที่สัญญา</Text>
-                                            <Text style={styles.tableCell}>จะซื้อจะขายที่ดิน</Text>
-                                        </View>
+                                        <Text style={styles.tableCell}>วันที่ทำสัญญา&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>ชื่อพยาน</Text>
+                                        <Text style={styles.tableCell}>ชื่อผู้ทำสัญญา&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>ชื่อพยาน</Text>
+                                        <Text style={styles.tableCell}>บ้านเลขที่</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <View style={{ flexDirection: 'column' }}>
@@ -637,7 +777,10 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         </View>
                                     </View>
                                     <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>วันที่ทำสัญญา&nbsp;</Text>
+                                        <Text style={styles.tableCell}>ชื่อพยาน</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>ชื่อพยาน</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>หมายเหตุ</Text>
@@ -649,32 +792,32 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             {filteredDataContracted && filteredDataContracted.length > 0 ? (
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;รายการทำสัญญาที่ชำระแล้ว&nbsp;&nbsp;</Text>
-                                    {showData.map((data) => (
+                                    {showData.map((data, index) => (
                                         <View style={styles.table}>
                                             <View style={styles.tableRow}>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{data.house_no}</Text>
+                                                    <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{data.con_number}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{DateTimeFormat(data.con_date)}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.user_name} {data.user_lastname}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{data.con_number}&nbsp;</Text>
+                                                    <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{data.con_numLandSale}</Text>
+                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.con_amount))}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.witnessone_name}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.witnesstwo_name}</Text>
-                                                </View>
-                                                <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.con_amount))}</Text>
-                                                </View>
-                                                <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{DateTimeFormat(data.con_date)}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.con_note}</Text>
@@ -689,7 +832,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินทำสัญญา&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินมัดจำ&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceContractedFormatted}</Text>
                                         <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
@@ -703,16 +846,19 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <View style={styles.table}>
                                 <View style={styles.tableRow}>
                                     <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>บ้านเลขที่</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>วันที่โอนกรรมสิทธิ์&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>ชื่อผู้รับโอน&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>จำนวนเงินส่วนที่เหลือ&nbsp;</Text>
-                                    </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>วันที่โอนกรรมสิทธิ์&nbsp;</Text>
                                     </View>
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>หมายเหตุ</Text>
@@ -724,20 +870,23 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             {filteredDataTransferred && filteredDataTransferred.length > 0 ? (
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;รายการโอนกรรมสิทธิ์ที่ชำระแล้ว&nbsp;&nbsp;</Text>
-                                    {showData.map((data) => (
+                                    {showData.map((data, index) => (
                                         <View style={styles.table}>
                                             <View style={styles.tableRow}>
                                                 <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.house_no}</Text>
+                                                </View>
+                                                <View style={styles.tableCol}>
+                                                    <Text style={styles.tableCellData}>{DateTimeFormat(data.trans_date)}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.trans_name}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{PriceWithCommas(parseFloat(data.trans_amount))}</Text>
-                                                </View>
-                                                <View style={styles.tableCol}>
-                                                    <Text style={styles.tableCellData}>{DateTimeFormat(data.trans_date)}</Text>
                                                 </View>
                                                 <View style={styles.tableCol}>
                                                     <Text style={styles.tableCellData}>{data.trans_note}</Text>
@@ -768,6 +917,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             <View style={styles.table}>
                                 <View style={styles.tableRow}>
                                     <View style={styles.tableCol}>
+                                        <Text style={styles.tableCell}>ลำดับ&nbsp;</Text>
+                                    </View>
+                                    <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>บ้านเลขที่</Text>
                                     </View>
                                     <View style={styles.tableCol}>
@@ -776,9 +928,13 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     <View style={styles.tableCol}>
                                         <Text style={styles.tableCell}>วันที่กำหนดชำระ&nbsp;&nbsp;</Text>
                                     </View>
-                                    <View style={styles.tableCol}>
-                                        <Text style={styles.tableCell}>วันที่ชำระ&nbsp;</Text>
-                                    </View>
+
+                                    {tempStatus !== 'overdue' && (
+                                        <View style={styles.tableCol}>
+                                            <Text style={styles.tableCell}>วันที่ชำระ&nbsp;</Text>
+                                        </View>
+                                    )}
+
                                 </View>
                             </View>
                             <View style={styles.horizontalLine} />
@@ -787,13 +943,13 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ค้างชำระ&nbsp;</Text>
                                     {filteredShowData.map((data, index) => {
-                                        const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
-                                        const rcfSomeData = rcfFindData !== undefined;
-
                                         return (
                                             data.ncf_status === 0 && (
                                                 <View key={index} style={styles.table}>
                                                     <View style={styles.tableRow}>
+                                                        <View style={styles.tableCol}>
+                                                            <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                        </View>
                                                         <View style={styles.tableCol}>
                                                             <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                         </View>
@@ -804,11 +960,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                             <Text style={styles.tableCellData}>{DateFormat(data.ncf_date)}&nbsp;</Text>
                                                         </View>
 
-                                                        {rcfSomeData && rcfFindData.rcf_date ? (
-                                                            <View style={styles.tableCol}>
-                                                                <Text style={styles.tableCellData}>{DateFormat(rcfFindData.rcf_date)}</Text>
-                                                            </View>
-                                                        ) : (
+                                                        {tempStatus === 'default' && (
                                                             <View style={styles.tableCol}>
                                                                 <Text style={styles.tableCellData}>-</Text>
                                                             </View>
@@ -845,6 +997,9 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                             data.ncf_status === 1 && (
                                                 <View key={index} style={styles.table}>
                                                     <View style={styles.tableRow}>
+                                                        <View style={styles.tableCol}>
+                                                            <Text style={styles.tableCellData}>{index + 1}</Text>
+                                                        </View>
                                                         <View style={styles.tableCol}>
                                                             <Text style={styles.tableCellData}>{data.house_no}</Text>
                                                         </View>

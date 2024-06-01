@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import { PriceWithCommas } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE_STYLE } from '../../../../../api';
@@ -187,7 +188,7 @@ export default function HouseStyle() {
                                             <td>{data.hs_id}</td>
                                             <td>{data.house_name}</td>
                                             <td>{data.usable_space.toLocaleString()}</td>
-                                            <td>{data.house_price.toLocaleString()}</td>
+                                            <td>{PriceWithCommas(data.house_price)}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltip3D}>
                                                     <a href={data.image3d} target="_blank" rel="noreferrer">

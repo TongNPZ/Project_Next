@@ -19,6 +19,10 @@ import {
     Table,
     Button
 } from 'react-bootstrap';
+import {
+    BsDownload,
+    BsSearch,
+} from "react-icons/bs";
 
 export default function ModalDetail({ show, handleClose, id }) {
 
@@ -145,7 +149,13 @@ export default function ModalDetail({ show, handleClose, id }) {
                         {housingEstate.map((data) => (
                             <ListGroup key={data.he_id} variant="flush">
                                 <ListGroup.Item>
-                                    <h3 className='text-center'>แจ้งชำระค่าส่วนกลาง</h3>
+
+                                    {!showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id) ? (
+                                        <h3 className='text-center'>แจ้งชำระค่าส่วนกลาง</h3>
+                                    ) : (
+                                        <h3 className='text-center'>รายละเอียดชำระค่าส่วนกลาง</h3>
+                                    )}
+
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <div className='row'>
@@ -174,6 +184,26 @@ export default function ModalDetail({ show, handleClose, id }) {
                                     </div>
                                     <div className='row'>
                                         <div className='col-md-6'>
+                                            <p className="col-form-label"><strong>สิ้นสุดวันที่ชำระ:</strong></p>
+                                        </div>
+                                        <div className='col-md-6'>
+                                            <p className="col-form-label">{DateFormat(showData.ncf_nextDate)}</p>
+                                        </div>
+                                    </div>
+
+                                    {showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id) && (
+                                        <div className='row'>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label"><strong>วันที่ชำระ:</strong></p>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p className="col-form-label">{DateFormat(showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_date)}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className='row'>
+                                        <div className='col-md-6'>
                                             <p className="col-form-label"><strong>ผู้จัดการ:</strong></p>
                                         </div>
                                         <div className='col-md-6'>
@@ -188,14 +218,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                                         </div>
                                         <div className='col-md-6'>
                                             <p className="col-form-label">เก็บค่าบริการสาธารณะ</p>
-                                        </div>
-                                    </div>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>หมายเหตุ:</strong></p>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p className="col-form-label">{showData.ncf_note}</p>
                                         </div>
                                     </div>
                                     <div className='row'>
@@ -226,7 +248,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                             <tr>
                                 <th>เลขที่แจ้งชำระ</th>
                                 <th>รายละเอียด</th>
-                                <th>หมายเหตุ</th>
                                 <th>อัตราเก็บค่าส่วนกลาง (ตารางวา)</th>
                                 <th>จำนวนเดือนที่เก็บ</th>
                                 <th>พื้นที่ดิน (ตารางวา)</th>
@@ -237,7 +258,6 @@ export default function ModalDetail({ show, handleClose, id }) {
                             <tr>
                                 <td>{showData.ncf_id}</td>
                                 <td>เก็บค่าบริการสาธารณะ</td>
-                                <td>{showData.ncf_note}</td>
                                 <td>{showData.common_rate}</td>
                                 <td>{showData.ncf_common_month}</td>
                                 <td>{parseFloat(showData.hLand_space).toLocaleString()}</td>
@@ -301,11 +321,20 @@ export default function ModalDetail({ show, handleClose, id }) {
                         <Button variant="success" onClick={() => handleAddSlipShow(showData.ncf_id, showData.common_receive)}>
                             ชำระเงินออนไลน์
                         </Button>
-                    ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && rcf.rcf_slip) ? (
-                        <Button variant="success" onClick={() => handleChangedSlipShow(showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id)}>
-                            ดูสลิปที่ชำระ
-                        </Button>
-                    ) : null}
+                    ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && !rcf.rcf_slip) ? (
+                        <a class="btn btn-primary" href={`/document/receipt/commonFee/${showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                            ดาวน์โหลดใบเสร็จรับเงิน
+                        </a>
+                    ) : showRcf.some((rcf) => rcf.ncf_id === showData.ncf_id && rcf.rcf_slip) && (
+                        <>
+                            <a class="btn btn-primary" href={`/document/receipt/commonFee/${showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                ดาวน์โหลดใบเสร็จรับเงิน
+                            </a>
+                            <Button variant="success" onClick={() => handleChangedSlipShow(showRcf.find((rcf) => rcf.ncf_id === showData.ncf_id).rcf_id)}>
+                                ดูสลิปที่ชำระ
+                            </Button>
+                        </>
+                    )}
 
                 </Modal.Footer>
             </Modal.Body>

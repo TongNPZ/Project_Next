@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { DateTimeFormat } from '@/app/Format';
+import {
+    DateTimeFormat,
+    PriceWithCommas
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../app'
 import {
@@ -29,11 +32,9 @@ import {
     BsFileEarmarkTextFill,
     BsFillXSquareFill,
     BsFillInfoCircleFill,
-    BsBoxArrowUp,
     BsFileTextFill,
     BsFileEarmarkArrowUpFill,
     BsDownload,
-    BsReceipt,
     BsFileEarmarkArrowDownFill,
     BsCaretRightFill,
     BsArrowCounterclockwise,
@@ -159,21 +160,9 @@ export default function Book() {
         </Tooltip>
     );
 
-    const renderTooltipUploadReceipt = (props) => (
-        <Tooltip {...props}>
-            อัพโหลดเอกสารใบเสร็จ
-        </Tooltip>
-    );
-
     const renderTooltipChangedContract = (props) => (
         <Tooltip {...props}>
             เปลี่ยนเอกสารสัญญา
-        </Tooltip>
-    );
-
-    const renderTooltipChangedReceipt = (props) => (
-        <Tooltip {...props}>
-            เปลี่ยนเอกสารใบเสร็จ
         </Tooltip>
     );
 
@@ -185,19 +174,13 @@ export default function Book() {
 
     const renderTooltipDownloadReceipt = (props) => (
         <Tooltip {...props}>
-            ดาวน์โหลดเอกสารใบเสร็จ
+            ดาวน์โหลดใบเสร็จรับเงิน
         </Tooltip>
     );
 
     const renderTooltipContract = (props) => (
         <Tooltip {...props}>
             แสดงเอกสารสัญญา
-        </Tooltip>
-    );
-
-    const renderTooltipReceipt = (props) => (
-        <Tooltip {...props}>
-            แสดงเอกสารใบเสร็จ
         </Tooltip>
     );
 
@@ -232,7 +215,7 @@ export default function Book() {
                 <Card.Header>
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลสัญญา</h5>
+                            <h5>ข้อมูลสัญญา</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -273,11 +256,11 @@ export default function Book() {
                                 </InputGroup>
                             </div>
                             <div className='mb-3'>
-                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '160px' }}>
+                                <Form.Select value={status} onChange={(e) => setStatus(e.target.value)} style={{ width: '220px' }}>
                                     <option value={''}>สถานะทั้งหมด</option>
-                                    <option value={'contracted'}>ทำสัญญาสำเร็จ</option>
-                                    <option value={'processing'}>กำลังดำเนินการ</option>
-                                    <option value={'cancel'}>ยกเลิกสัญญา</option>
+                                    <option value={'contracted'}>สำเร็จ</option>
+                                    <option value={'processing'}>รอทำสัญญาและชำระเงิน</option>
+                                    <option value={'cancel'}>ยกเลิก</option>
                                 </Form.Select>
                             </div>
                         </div>
@@ -308,12 +291,11 @@ export default function Book() {
                                 <tr>
                                     <th>รหัสจอง</th>
                                     <th>เลขที่สัญญา</th>
-                                    <th>เลขที่สัญญาจะซื้อจะขายที่ดิน</th>
-                                    <th>ชื่อพยาน</th>
-                                    <th>ชื่อพยาน</th>
-                                    <th>จำนวนเงินทำสัญญา</th>
                                     <th>วันที่บันทึกข้อมูล</th>
                                     <th>วันที่ทำสัญญา</th>
+                                    <th>ชื่อพยาน</th>
+                                    <th>ชื่อพยาน</th>
+                                    <th>จำนวนเงินมัดจำ</th>
                                     <th>รายละเอียด</th>
                                     <th>สถานะ</th>
                                     <th>เอกสาร</th>
@@ -326,10 +308,6 @@ export default function Book() {
                                         <tr key={data.b_id}>
                                             <td>{data.b_id}</td>
                                             <td>{data.con_number}</td>
-                                            <td>{data.con_numLandSale}</td>
-                                            <td>{data.witnessone_name}</td>
-                                            <td>{data.witnesstwo_name}</td>
-                                            <td>{data.con_amount.toLocaleString()}</td>
                                             <td>{DateTimeFormat(data.con_record)}</td>
 
                                             {data.con_date ? (
@@ -340,6 +318,9 @@ export default function Book() {
                                                 </td>
                                             )}
 
+                                            <td>{data.witnessone_name}</td>
+                                            <td>{data.witnesstwo_name}</td>
+                                            <td>{PriceWithCommas(data.con_amount)}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.b_id)} style={{ cursor: 'pointer' }}>
@@ -348,17 +329,21 @@ export default function Book() {
                                                 </OverlayTrigger>
                                             </td>
 
-                                            {data.con_status === 1 ? (
+                                            {data.con_status === 1 && data.contract === null ? (
                                                 <td>
                                                     <Badge bg="info">รอทำสัญญา</Badge>
                                                 </td>
+                                            ) : data.con_status === 1 && data.contract !== '' ? (
+                                                <td>
+                                                    <Badge bg="info">รอชำระเงิน</Badge>
+                                                </td>
                                             ) : data.con_status === 2 ? (
                                                 <td>
-                                                    <Badge bg="success">ทำสัญญาสำเร็จ</Badge>
+                                                    <Badge bg="success">สำเร็จ</Badge>
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ยกเลิกสัญญา</Badge>
+                                                    <Badge bg="danger">ยกเลิก</Badge>
                                                 </td>
                                             )}
 
@@ -379,18 +364,17 @@ export default function Book() {
                                                         </OverlayTrigger>
                                                     )}
 
-                                                    <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
-                                                        <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
-                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
-                                                        </a>
-                                                    </OverlayTrigger>
-
                                                 </td>
-                                            ) : data.con_status !== 0 ? (
+                                            ) : data.con_status === 2 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipContract}>
                                                         <a href={`${API_URL}${data.contract}`} target="_blank" style={{ cursor: 'pointer' }}>
                                                             <BsFileEarmarkTextFill className='me-2 mb-2 text-primary' style={{ fontSize: '28px' }} />
+                                                        </a>
+                                                    </OverlayTrigger>
+                                                    <OverlayTrigger overlay={renderTooltipDownloadReceipt}>
+                                                        <a href={`/document/receipt/contract/${data.b_id}`} target="_blank" style={{ cursor: 'pointer' }}>
+                                                            <BsDownload className='me-2 text-primary' style={{ fontSize: '28px' }} />
                                                         </a>
                                                     </OverlayTrigger>
                                                 </td>
@@ -463,7 +447,7 @@ export default function Book() {
                                             ) : data.con_status === 2 ? (
                                                 <td>
 
-                                                    {showTransfer.some((transfer) => transfer.b_id === data.b_id && transfer.trans_status !== 0 && transfer.h_status !== 5) ? (
+                                                    {showTransfer && showTransfer.some((transfer) => transfer.b_id === data.b_id && transfer.trans_status !== 0 && transfer.h_status !== 5) ? (
                                                         <Button href="/buy/transfer" variant="secondary" size="sm">
                                                             <span>ไปยังหน้าโอนกรรมสิทธิ์</span> &nbsp;
                                                             <BsCaretRightFill />

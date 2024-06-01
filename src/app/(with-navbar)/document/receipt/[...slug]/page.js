@@ -5,7 +5,7 @@ import {
     API_BOOK,
     API_CONTRACT,
     API_TRANSFER,
-    API_NOTIFY_COMMON_FEE,
+    API_RECEIVE_COMMON_FEE,
     API_HOUSE_ESTATE
 } from '../../../../../../api';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -105,7 +105,7 @@ export default function DocumentReceipt({ params }) {
         if (params.slug[0] === 'commonFee') {
             async function fetchCommonFeeById() {
                 try {
-                    const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}/${params.slug[1]}`, 'GET', null);
+                    const result = await GetRequest(`${API_RECEIVE_COMMON_FEE}/${params.slug[1]}`, 'GET', null);
                     setShowCommonFee(result);
                 } catch (error) {
                     console.log('error', error);

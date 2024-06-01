@@ -140,6 +140,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                     value={exAmount}
                                     onChange={(e) => setExAmount(e.target.value)}
                                     maxLength={6}
+                                    min='0'
                                     required
                                 />
                             </div>
@@ -157,11 +158,11 @@ export default function ModalEdit({ show, handleClose, id }) {
                         </div>
                     </div>
                     <Modal.Footer>
-                        <Button variant="warning" type='submit'>
-                            แก้ไขข้อมูล
-                        </Button>
                         <Button variant="secondary" onClick={handleRestore}>
                             คืนค่า
+                        </Button>
+                        <Button variant="warning" type='submit'>
+                            แก้ไขข้อมูล
                         </Button>
                     </Modal.Footer>
                 </Form>

@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+import { PriceWithCommas } from '@/app/Format';
 import ProtectRoute from '@/app/componnent/ProtectRoute/ProtectRoute';
 import GetRequest from '@/app/ConfigAPI';
 import { API_HOUSE } from './../../../../api';
@@ -72,7 +73,13 @@ export default function House() {
 
     // modal //
     const [selectedId, setSelectedId] = useState('');
-    const [selectedHouseNo, setSelectedHouseNo] = useState('');
+    const [showHouseData, setShowHouseData] = useState({
+        hId: '',
+        houseNo: '',
+        hLandSpace: 0,
+        usableSpace: 0,
+        price: 0,
+    })
 
     // +++ modal add +++ //
     const [showAdd, setShowAdd] = useState(false);
@@ -105,9 +112,14 @@ export default function House() {
     const [showBookAdd, setShowBookAdd] = useState(false);
 
     const handleBookAddClose = () => setShowBookAdd(false);
-    const handleBookAddShow = (id, houseNo) => {
-        setSelectedId(id);
-        setSelectedHouseNo(houseNo);
+    const handleBookAddShow = (hId, houseNo, hLandSpace, usableSpace, price) => {
+        setShowHouseData({
+            hId: hId,
+            houseNo: houseNo,
+            hLandSpace: hLandSpace,
+            usableSpace: usableSpace,
+            price: price,
+        })
         setShowBookAdd(true);
     }
     // +++ //
@@ -153,7 +165,7 @@ export default function House() {
             <ModalAdd show={showAdd} handleClose={handleAddClose} />
             <ModalEdit show={showEdit} handleClose={handleEditClose} id={selectedId} />
             <ModalDetail show={showDetail} handleClose={handleDetailClose} id={selectedId} />
-            <ModalBookAdd show={showBookAdd} handleClose={handleBookAddClose} hId={selectedId} houseNo={selectedHouseNo} />
+            <ModalBookAdd show={showBookAdd} handleClose={handleBookAddClose} showHouseData={showHouseData} />
             {/* --- */}
 
             <Card>
@@ -244,7 +256,7 @@ export default function House() {
                                             <td>{data.num_survey}</td>
                                             <td>{data.hLand_space.toLocaleString()}</td>
                                             <td>{data.usable_space.toLocaleString()}</td>
-                                            <td>{data.price.toLocaleString()}</td>
+                                            <td>{PriceWithCommas(data.price)}</td>
                                             <td>
                                                 <OverlayTrigger overlay={renderTooltipDetail}>
                                                     <a onClick={() => handleDetailShow(data.h_id)} style={{ cursor: 'pointer' }}>
@@ -282,7 +294,7 @@ export default function House() {
                                             {data.h_status === 1 ? (
                                                 <td>
                                                     <OverlayTrigger overlay={renderTooltipBook}>
-                                                        <a onClick={() => handleBookAddShow(data.h_id, data.house_no)} style={{ cursor: 'pointer' }}>
+                                                        <a onClick={() => handleBookAddShow(data.h_id, data.house_no, data.hLand_space, data.usable_space, data.price)} style={{ cursor: 'pointer' }}>
                                                             <BsCalendar2PlusFill className='me-2 text-secondary' style={{ fontSize: '24px' }} />
                                                         </a>
                                                     </OverlayTrigger>

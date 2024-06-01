@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {
+    handleChangeNumber,
+    handleChangeText
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from './../../../../app';
 import {
@@ -243,7 +247,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="เบอร์โทรศัพท์"
                                             value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
+                                            onChange={handleChangeNumber(setPhone)}
                                             maxLength={10}
                                             required
                                         />
@@ -287,7 +291,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="ชื่อ-นามสกุล"
                                             value={mdName}
-                                            onChange={(e) => setMdName(e.target.value)}
+                                            onChange={handleChangeText(setMdName)}
                                             required
                                         />
                                     </div>
@@ -299,7 +303,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             type="text"
                                             placeholder="สัญชาติ"
                                             value={mdNationality}
-                                            onChange={(e) => setMdNationality(e.target.value)}
+                                            onChange={handleChangeText(setMdNationality)}
                                             required
                                         />
                                     </div>
@@ -330,6 +334,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                         placeholder="อัตราเก็บค่าส่วนกลางต่อตารางวา"
                                         value={commonRate}
                                         onChange={(e) => setCommonRate(e.target.value)}
+                                        min='0'
                                         required
                                     />
                                 </div>
@@ -343,6 +348,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             placeholder="จำนวนปีที่เก็บครั้งแรก"
                                             value={commonFirstYear}
                                             onChange={(e) => setCommonFirstYear(e.target.value)}
+                                            min='0'
                                             required
                                         />
                                     </div>
@@ -355,7 +361,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                                             placeholder="จำนวนเดือนที่เก็บ"
                                             value={commonMonth}
                                             onChange={(e) => setCommonMonth(e.target.value)}
-                                            maxLength={2}
+                                            min='0'
                                             required
                                         />
                                     </div>

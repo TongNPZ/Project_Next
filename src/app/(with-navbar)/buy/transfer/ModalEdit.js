@@ -79,23 +79,26 @@ export default function ModalEdit({ show, handleClose, id }) {
             if (result.isConfirmed) {
                 const editData = async () => {
                     try {
-                        const formdata = new FormData();
-                        formdata.append("id", id);
+
+                        let raw;
 
                         if (defaultValues.bank_name && defaultValues.bank_branch && defaultValues.bank_num && defaultValues.bank_date) {
-                            formdata.append("bankName", bankName);
-                            formdata.append("bankBranch", bankBranch);
-                            formdata.append("bankNum", bankNum);
-                            formdata.append("bankDate", bankDate);
-                        }
-
-                        if (transNote !== '') {
-                            formdata.append("transNote", transNote);
+                            raw = {
+                                "id": id,
+                                "bankName": bankName,
+                                "bankBranch": bankBranch,
+                                "bankNum": bankNum,
+                                "bankDate": bankDate,
+                                "transNote": transNote
+                            };
                         } else {
-                            formdata.append("transNote", '-');
+                            raw = {
+                                "id": id,
+                                "transNote": transNote !== '' ? transNote : '-'
+                            };
                         }
 
-                        const response = await GetRequest(API_TRANSFER, 'PATCH', formdata)
+                        const response = await GetRequest(API_TRANSFER, 'PATCH', raw)
 
                         if (response.message === 'Update Successfully!') {
                             Success("แก้ไขข้อมูลสำเร็จ!").then(() => handleClose())
@@ -145,7 +148,7 @@ export default function ModalEdit({ show, handleClose, id }) {
                         label="รหัสจอง"
                         className='mb-3'
                     >
-                        <Form.Control type="text" defaultValue={id} disabled />
+                        <Form.Control type="text" defaultValue={id} readOnly />
                     </FloatingLabel>
                     <FloatingLabel
                         controlId="floatingInput"

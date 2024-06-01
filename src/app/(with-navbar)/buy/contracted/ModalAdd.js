@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+    PriceWithCommas,
+    handleChangeText
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_CONTRACT } from '../../../../../api';
 import {
@@ -15,7 +19,7 @@ import {
     FloatingLabel
 } from 'react-bootstrap';
 
-export default function ModalContractAdd({ show, handleClose, id, houseNo, userName, userLastname }) {
+export default function ModalContractAdd({ show, handleClose, showBookData }) {
     const router = useRouter();
 
     // useState //
@@ -52,7 +56,7 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
                 const addData = async () => {
                     try {
                         const raw = {
-                            "id": id,
+                            "id": showBookData.id,
                             "witnessOneName": witnessOneName,
                             "witnessTwoName": witnessTwoName,
                             "conAmount": parseFloat(conAmount),
@@ -106,31 +110,96 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>กรอกข้อมูลสัญญา</Modal.Title>
+                <Modal.Title>กรอกข้อมูลมัดจำ</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="รหัสจอง"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={id} disabled />
-                    </FloatingLabel>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="บ้านเลขที่"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={houseNo} disabled />
-                    </FloatingLabel>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="ชื่อผู้จอง"
-                        className='mb-3'
-                    >
-                        <Form.Control type="text" defaultValue={`${userName} ${userLastname}`} disabled />
-                    </FloatingLabel>
+                    <div className="mb-3">
+                        <label className="col-form-label">รหัสจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={showBookData.id}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">บ้านเลขที่</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                defaultValue={showBookData.houseNo}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ดิน (ตารางวา)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={showBookData.hLandSpace}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ใช้สอย (ตารางเมตร)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={showBookData.usableSpace}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ราคาบ้านพร้อมที่ดิน/หลัง (บาท)</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(showBookData.price))}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">จำนวนเงินจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(showBookData.bAmount))}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ราคาบ้านหักจากค่าจอง</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={PriceWithCommas(parseFloat(showBookData.price) - parseFloat(showBookData.bAmount))}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label className="col-form-label">ชื่อผู้ทำสัญญา</label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="text"
+                                value={`${showBookData.userName} ${showBookData.userLastname}`}
+                                disabled
+                            />
+                        </div>
+                    </div>
                     <div className="row mb-3">
                         <div className='col-md-6'>
                             <label className="col-form-label">ชื่อพยานคนที่หนึ่ง</label>
@@ -139,7 +208,7 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
                                     type="text"
                                     placeholder="ชื่อพยานคนที่หนึ่ง"
                                     value={witnessOneName}
-                                    onChange={(e) => setWitnessOneName(e.target.value)}
+                                    onChange={handleChangeText(setWitnessOneName)}
                                     required
                                 />
                             </div>
@@ -151,7 +220,7 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
                                     type="text"
                                     placeholder="ชื่อพยานคนที่สอง"
                                     value={witnessTwoName}
-                                    onChange={(e) => setWitnessTwoName(e.target.value)}
+                                    onChange={handleChangeText(setWitnessTwoName)}
                                     required
                                 />
                             </div>
@@ -165,6 +234,7 @@ export default function ModalContractAdd({ show, handleClose, id, houseNo, userN
                                 placeholder="จำนวนเงินดาวน์"
                                 value={conAmount}
                                 onChange={(e) => setConAmount(e.target.value)}
+                                min='0'
                                 required
                             />
                         </div>

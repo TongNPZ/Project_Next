@@ -107,7 +107,7 @@ export default function ProgressBarDetail({ show, handleClose, id, selectedItemD
                                                 <span>{selectedItemData.b_status === 1 ? "กำลังดำเนินการจอง" : "จองสำเร็จ"}</span>
                                             </div>
                                             <div className='col-md-3'>
-                                                <span >{selectedItemData.con_status === null ? 'ทำสัญญาสำ' : selectedItemData.con_status === 1 ? "กำลังดำเนินการทำสัญญา" : "ทำสัญญาสำเร็จ"}</span>
+                                                <span >{selectedItemData.con_status === null ? 'ทำสัญญาสำเร็จ' : selectedItemData.con_status === 1 ? "กำลังดำเนินการทำสัญญา" : "ทำสัญญาสำเร็จ"}</span>
                                             </div>
                                             <div className='col-md-3'>
                                                 <span >{selectedItemData.trans_status === 1 ? "กำลังดำเนินการโอนกรรมสิทธิ์" : "โอนกรรมสิทธิ์สำเร็จ"}</span>

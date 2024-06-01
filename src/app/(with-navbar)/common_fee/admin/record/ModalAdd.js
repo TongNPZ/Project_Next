@@ -117,6 +117,7 @@ export default function ModalAdd({ show, handleClose }) {
                                     value={exAmount}
                                     onChange={(e) => setExAmount(e.target.value)}
                                     maxLength={6}
+                                    min='0'
                                     required
                                 />
                             </div>

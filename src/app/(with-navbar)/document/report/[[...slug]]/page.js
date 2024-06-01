@@ -7,7 +7,7 @@ import {
 import { PDFViewer } from '@react-pdf/renderer';
 import DocReport from '@/app/componnent/pdfComponent/Report';
 
-export default function DocumentReceipt({ params }) {
+export default function DocumentReport({ params }) {
     // console.log(params)
 
     function base64Decode(encodedData) {

@@ -88,6 +88,13 @@ export default function NotifyCommonFee() {
         setEndDate('');
     };
 
+
+    function addOneYear(dateString) {
+        const date = new Date(dateString);
+        date.setFullYear(date.getFullYear() + 1);
+        return date;
+    }
+
     // tooltip
     const renderTooltipAddNotifyCommonFee = (props) => (
         <Tooltip {...props}>
@@ -102,7 +109,7 @@ export default function NotifyCommonFee() {
 
                     <div className='row'>
                         <div className='col-md-6 d-flex align-items-center'>
-                            <h5>ตารางข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
+                            <h5>ข้อมูลแจ้งชำระค่าส่วนกลาง</h5>
                         </div>
                         <div className='col-md-6 text-md-end'>
                             <Button className='me-2' variant="secondary" onClick={handleSortReset}>
@@ -172,7 +179,8 @@ export default function NotifyCommonFee() {
                                     <th>บ้านเลขที่</th>
                                     <th>ชื่อเจ้าของบ้าน</th>
                                     <th>วันที่โอนกรรมสิทธิ์</th>
-                                    <th>วันที่กำหนดชำระค่าส่วนกลาง</th>
+                                    <th>วันที่กำหนดชำระ</th>
+                                    <th>สิ้นสุดวันที่</th>
                                     <th>จำนวนเงินค่าส่วนกลาง</th>
                                     <th>การจัดการ</th>
                                 </tr>
@@ -191,7 +199,7 @@ export default function NotifyCommonFee() {
                                                 const commonMonth = ncfData.common_month;
                                                 const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
-                                                if (currentDate < new Date(ncfData.ncf_nextDate)) {
+                                                if (currentDate > new Date(ncfData.ncf_nextDate)) {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
@@ -199,6 +207,7 @@ export default function NotifyCommonFee() {
                                                             <td>{data.user_name} {data.user_lastname}</td>
                                                             <td>{DateFormat(data.trans_date)}</td>
                                                             <td>{DateFormat(ncfData.ncf_nextDate)}</td>
+                                                            <td>{DateFormat(addOneYear(ncfData.ncf_nextDate))}</td>
                                                             <td>{parseFloat(totalPrice).toLocaleString()}</td>
                                                             <td>
                                                                 <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>

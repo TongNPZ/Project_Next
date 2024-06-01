@@ -9,6 +9,7 @@ import ProtectRoute from "@/app/componnent/ProtectRoute/ProtectRoute"
 import GetRequest from "@/app/ConfigAPI"
 import {
     API_HOUSE,
+    API_HOUSE_OWNER,
     API_BOOK,
     API_CONTRACT,
     API_TRANSFER,
@@ -50,6 +51,15 @@ export default function report() {
             setShowData(result.data)
         } catch (error) {
             console.log('error', error)
+        }
+    }
+
+    const fetchHouseOwner = async (search, startDate, endDate) => {
+        try {
+            const result = await GetRequest(`${API_HOUSE_OWNER}?order=DESC&search=${search}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
+            setShowData(result.data);
+        } catch (error) {
+            console.log('error', error);
         }
     }
 
@@ -154,8 +164,10 @@ export default function report() {
         }
 
         if (activeKey === 'house') {
-            if (status === '' || status === 'vacant' || status === 'sold' || status === 'cancel') {
+            if (status === '' || status === 'vacant' || status === 'cancel') {
                 fecthHouse(search, status);
+            } else if (status === 'sold') {
+                fetchHouseOwner(search, startDate, endDate);
             } else if (status === 'booked') {
                 fecthBook(search, status, startDate, endDate);
             } else if (status === 'contracted') {
@@ -201,10 +213,22 @@ export default function report() {
         tempStatus: tempStatus || 'default',
         startDate: startDate || 'default',
         endDate: endDate || 'default',
-        showRcf: showRcf
+        showRcf: 'default'
     }
 
     const encodedData = base64Encode(reportData);
+
+    const reportDataCommonFee = {
+        showData: showData,
+        activeKey: activeKey,
+        search: search || 'default',
+        tempStatus: tempStatus || 'default',
+        startDate: startDate || 'default',
+        endDate: endDate || 'default',
+        showRcf: showRcf
+    }
+
+    const encodedDataCommonFee = base64Encode(reportDataCommonFee);
 
     return (
         <ProtectRoute requireRoles={[1]}>
@@ -263,10 +287,28 @@ export default function report() {
 
                                     </Form.Select>
                                 </InputGroup>
+                                <InputGroup>
+                                    <InputGroup.Text>
+                                        <BsSearch />
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type="search"
+                                        placeholder="ค้นหา"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        onKeyUp={(e) => {
+                                            if (e.key === 'Enter') {
+                                                setSearch(e.target.value)
+                                            } else {
+                                                setSearch(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </InputGroup>
                             </div>
                             <div className="col-md-6">
 
-                                {status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'overdue' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
+                                {status === 'sold' || status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'overdue' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
                                     <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
@@ -316,29 +358,11 @@ export default function report() {
                                     </div>
                                 )}
 
-                                <InputGroup>
-                                    <InputGroup.Text>
-                                        <BsSearch />
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="search"
-                                        placeholder="ค้นหา"
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        onKeyUp={(e) => {
-                                            if (e.key === 'Enter') {
-                                                setSearch(e.target.value)
-                                            } else {
-                                                setSearch(e.target.value)
-                                            }
-                                        }}
-                                    />
-                                </InputGroup>
+                                <div className="text-start">
+                                    <Button className="me-1" variant="primary" onClick={handleSearchReport}>ค้นหา</Button>
+                                    <Button variant="secondary" onClick={handleSortReset}>ล้างค่า</Button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="text-center">
-                            <Button className="me-1" variant="primary" onClick={handleSearchReport}>ค้นหา</Button>
-                            <Button variant="secondary" onClick={handleSortReset}>ล้างค่า</Button>
                         </div>
                     </div>
 
@@ -352,11 +376,11 @@ export default function report() {
                                     </Button>
                                 </div>
 
-                                {tempStatus === '' || tempStatus === 'vacant' || tempStatus === 'sold' || tempStatus === 'cancel' ? (
+                                {tempStatus === '' || tempStatus === 'vacant' || tempStatus === 'cancel' ? (
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>รหัสบ้าน</th>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>โซนบ้าน</th>
                                                 <th>ชื่อแบบบ้าน</th>
@@ -382,7 +406,75 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.h_id}</td>
+                                                    <td>{index + 1}</td>
+                                                    <td>{data.house_no}</td>
+                                                    <td>{data.name}</td>
+                                                    <td>{data.house_name}</td>
+                                                    <td>{data.num_deed}</td>
+                                                    <td>{data.num_survey}</td>
+                                                    <td>{parseFloat(data.hLand_space).toLocaleString()}</td>
+                                                    <td>{parseFloat(data.usable_space).toLocaleString()}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.price))}</td>
+
+                                                    {tempStatus === '' ? (
+                                                        data.h_status === 1 ? (
+                                                            <td>
+                                                                <Badge bg="success">ว่าง</Badge>
+                                                            </td>
+                                                        ) : data.h_status === 2 ? (
+                                                            <td>
+                                                                <Badge bg="info">จอง</Badge>
+                                                            </td>
+                                                        ) : data.h_status === 3 ? (
+                                                            <td>
+                                                                <Badge bg="info">ทำสัญญา</Badge>
+                                                            </td>
+                                                        ) : data.h_status === 4 ? (
+                                                            <td>
+                                                                <Badge bg="info">โอนกรรมสิทธิ์</Badge>
+                                                            </td>
+                                                        ) : data.h_status === 5 ? (
+                                                            <td>
+                                                                <Badge bg="secondary">ขายแล้ว</Badge>
+                                                            </td>
+                                                        ) : (
+                                                            <td>
+                                                                <Badge bg="danger">ยกเลิกขาย</Badge>
+                                                            </td>
+                                                        )
+                                                    ) : null}
+
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </Table>
+                                ) : tempStatus === 'sold' ? (
+                                    <Table bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับ</th>
+                                                <th>บ้านเลขที่</th>
+                                                <th>โซนบ้าน</th>
+                                                <th>ชื่อแบบบ้าน</th>
+                                                <th>เลขที่โฉนดที่ดิน</th>
+                                                <th>เลขที่หน้าสำรวจ</th>
+                                                <th>
+                                                    ขนาดพื้นที่ดิน <br />
+                                                    (ตารางวา)
+                                                </th>
+                                                <th>
+                                                    ขนาดพื้นที่ใช้สอย <br />
+                                                    (ตารางเมตร)
+                                                </th>
+                                                <th>ราคาบ้านพร้อมที่ดิน</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {showData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.name}</td>
                                                     <td>{data.house_name}</td>
@@ -429,7 +521,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>รหัสจอง</th>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>ชื่อผู้จอง</th>
                                                 <th>จำนวนเงินจอง</th>
@@ -441,7 +533,7 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.b_id}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.house_no}</td>
                                                     <td>{data.user_name} {data.user_lastname}</td>
                                                     <td>{PriceWithCommas(parseFloat(data.b_amount))}</td>
@@ -456,30 +548,24 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>บ้านเลขที่</th>
-                                                <th>ชื่อผู้ทำสัญญา</th>
+                                                <th>ลำดับ</th>
                                                 <th>เลขที่สัญญา</th>
-                                                <th>เลขที่สัญญาจะซื้อจะขายที่ดิน</th>
-                                                <th>ชื่อพยาน</th>
-                                                <th>ชื่อพยาน</th>
-                                                <th>จำนวนเงินทำสัญญา</th>
                                                 <th>วันที่ทำสัญญา</th>
-                                                <th>หมายเหตุ</th>
+                                                <th>ชื่อผู้ทำสัญญา</th>
+                                                <th>บ้านเลขที่</th>
+                                                <th>จำนวนเงินมัดจำ</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
-                                                    <td>{data.house_no}</td>
-                                                    <td>{data.user_name} {data.user_lastname}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.con_number}</td>
-                                                    <td>{data.con_numLandSale}</td>
-                                                    <td>{data.witnessone_name}</td>
-                                                    <td>{data.witnesstwo_name}</td>
-                                                    <td>{PriceWithCommas(parseFloat(data.con_amount))}</td>
                                                     <td>{DateTimeFormat(data.con_date)}</td>
-                                                    <td>{data.con_note}</td>
+                                                    <td>{data.user_name} {data.user_lastname}</td>
+                                                    <td>{data.house_no}</td>
+                                                    <td>{PriceWithCommas(parseFloat(data.con_amount))}</td>
                                                 </tr>
                                             ))}
 
@@ -489,10 +575,11 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
+                                                <th>วันที่โอนกรรมสิทธิ์</th>
                                                 <th>ชื่อผู้รับโอน</th>
                                                 <th>จำนวนเงินส่วนที่เหลือ</th>
-                                                <th>วันที่โอนกรรมสิทธิ์</th>
                                                 <th>หมายเหตุ</th>
                                             </tr>
                                         </thead>
@@ -500,10 +587,11 @@ export default function report() {
 
                                             {showData.map((data, index) => (
                                                 <tr key={index}>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.house_no}</td>
+                                                    <td>{DateTimeFormat(data.trans_date)}</td>
                                                     <td>{data.trans_name}</td>
                                                     <td>{PriceWithCommas(parseFloat(data.trans_amount))}</td>
-                                                    <td>{DateTimeFormat(data.trans_date)}</td>
                                                     <td>{data.trans_note}</td>
                                                 </tr>
                                             ))}
@@ -524,7 +612,7 @@ export default function report() {
                         filteredShowData && filteredShowData.length > 0 ? (
                             <>
                                 <div className="text-end mb-3">
-                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedData)}`} target="_blank">
+                                    <Button variant="danger" href={`/document/report/${encodeURIComponent(encodedDataCommonFee)}`} target="_blank">
                                         <BsFiletypePdf style={{ fontSize: '24px' }} />&nbsp;
                                         ส่งออกข้อมูล
                                     </Button>
@@ -534,6 +622,7 @@ export default function report() {
                                     <Table bordered hover responsive>
                                         <thead>
                                             <tr>
+                                                <th>ลำดับ</th>
                                                 <th>บ้านเลขที่</th>
                                                 <th>จำนวนเงิน</th>
                                                 <th>วันที่กำหนดชำระ</th>
@@ -553,6 +642,7 @@ export default function report() {
 
                                                 return (
                                                     <tr key={index}>
+                                                        <td>{index + 1}</td>
                                                         <td>{data.house_no}</td>
                                                         <td>{PriceWithCommas(parseFloat(data.ncf_amount))}</td>
                                                         <td>{DateFormat(data.ncf_date)}</td>

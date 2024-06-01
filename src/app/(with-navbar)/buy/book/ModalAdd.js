@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+    handleChangeNumber,
+    handleChangeText,
+    PriceWithCommas
+} from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import {
     API_BOOK,
@@ -17,7 +22,7 @@ import {
     Form,
 } from 'react-bootstrap';
 
-export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
+export default function ModalBookAdd({ show, handleClose, showHouseData }) {
 
     // useState //
 
@@ -103,7 +108,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
 
     useEffect(() => {
         fecthUser();
-    }, [showUser]);
+    }, []);
     // +++ //
 
     // +++ show user by id +++ //
@@ -150,7 +155,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                             const bookRaw = {
                                 bAmount: parseFloat(bAmount),
                                 bNote: bNote === '' ? '-' : bNote,
-                                hId: parseInt(hId),
+                                hId: parseInt(showHouseData.hId),
                                 userId: userId,
                             }
 
@@ -186,7 +191,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                             const raw = {
                                 bAmount: parseFloat(bAmount),
                                 bNote: bNote === '' ? '-' : bNote,
-                                hId: parseInt(hId),
+                                hId: parseInt(showHouseData.hId),
                                 userId: selectUserId,
                             }
 
@@ -248,29 +253,35 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                         <div className="mt-1">
                             <Form.Control
                                 type="text"
-                                defaultValue={houseNo}
+                                defaultValue={showHouseData.houseNo}
                                 disabled
                             />
                         </div>
                     </div>
-                    {/* <div className="mb-3">
-                        <label className="col-form-label">พื้นที่ดิน (ตารางวา)</label>
-                        <div className="mt-1">
-                            <Form.Control
-                                type="text"
-                                defaultValue={price}
-                                disabled
-                            />
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ดิน (ตารางวา)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={showHouseData.hLandSpace}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className="col-form-label">พื้นที่ใช้สอย (ตารางเมตร)</label>
-                        <div className="mt-1">
-                            <Form.Control
-                                type="text"
-                                defaultValue={price}
-                                disabled
-                            />
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label className="col-form-label">พื้นที่ใช้สอย (ตารางเมตร)</label>
+                                <div className="mt-1">
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={showHouseData.usableSpace}
+                                        disabled
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="mb-3">
@@ -278,11 +289,11 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                         <div className="mt-1">
                             <Form.Control
                                 type="text"
-                                defaultValue={price}
+                                defaultValue={PriceWithCommas(showHouseData.price)}
                                 disabled
                             />
                         </div>
-                    </div> */}
+                    </div>
 
                     {/* show input user id */}
                     {!showInputUserId ? (
@@ -293,7 +304,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                     type="text"
                                     placeholder="เลขบัตรประจำตัวประชาชน"
                                     value={userId}
-                                    onChange={(e) => setUserId(e.target.value)}
+                                    onChange={handleChangeNumber(setUserId)}
                                     maxLength={13}
                                     required
                                 />
@@ -342,7 +353,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                         type="text"
                                         placeholder="ชื่อจริง"
                                         value={userName}
-                                        onChange={(e) => setUserName(e.target.value)}
+                                        onChange={handleChangeText(setUserName)}
                                         required
                                     />
                                 </div>
@@ -354,7 +365,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                         type="text"
                                         placeholder="นามสกุล"
                                         value={userLastname}
-                                        onChange={(e) => setUserLastname(e.target.value)}
+                                        onChange={handleChangeText(setUserLastname)}
                                         required
                                     />
                                 </div>
@@ -421,7 +432,8 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                         type="text"
                                         placeholder="อายุ"
                                         value={userAge}
-                                        onChange={(e) => setUserAge(e.target.value)}
+                                        onChange={handleChangeNumber(setUserAge)}
+                                        maxLength={3}
                                         required
                                     />
                                 </div>
@@ -433,7 +445,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                         type="text"
                                         placeholder="สัญชาติ"
                                         value={nationality}
-                                        onChange={(e) => setNationality(e.target.value)}
+                                        onChange={handleChangeText(setNationality)}
                                         required
                                     />
                                 </div>
@@ -472,7 +484,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                     type="text"
                                     placeholder="เบอร์โทรศัพท์"
                                     value={userPhone}
-                                    onChange={(e) => setUserPhone(e.target.value)}
+                                    onChange={handleChangeNumber(setUserPhone)}
                                     maxLength={10}
                                     required
                                 />
@@ -528,6 +540,7 @@ export default function ModalBookAdd({ show, handleClose, hId, houseNo }) {
                                 placeholder="จำนวนเงินจอง"
                                 value={bAmount}
                                 onChange={(e) => setBAmount(e.target.value)}
+                                min='0'
                                 required
                             />
                         </div>

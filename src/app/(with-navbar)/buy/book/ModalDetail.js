@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     DateTimeFormat,
-    FormatThaiNationalID
+    FormatThaiNationalID,
+    PriceWithCommas
 } from '@/app/Format';
 import GetRequest from '@/app/ConfigAPI';
 import { API_URL } from '../../../../../app';
@@ -61,10 +62,10 @@ export default function ModalDetail({ show, handleClose, id }) {
                                                 <div className='col-md-6'>
                                                     <p className="col-form-label"><strong>จำนวนเงินจอง:</strong></p>
                                                 </div>
-                                                <div className='col-md-2'>
-                                                    <p className="col-form-label">{parseFloat(showData.b_amount).toLocaleString()}</p>
+                                                <div className='col-md-4'>
+                                                    <p className="col-form-label">{PriceWithCommas(parseFloat(showData.b_amount))}</p>
                                                 </div>
-                                                <div className='col-md-4 text-end'>
+                                                <div className='col-md-2 text-end'>
                                                     <p className="col-form-label">บาท</p>
                                                 </div>
                                             </div>
@@ -268,7 +269,7 @@ export default function ModalDetail({ show, handleClose, id }) {
                                                     <p className="col-form-label"><strong>ราคาบ้านพร้อมที่ดิน:</strong></p>
                                                 </div>
                                                 <div className='col-md-4'>
-                                                    <p className="col-form-label">{parseFloat(showData.price).toLocaleString()}</p>
+                                                    <p className="col-form-label">{PriceWithCommas(parseFloat(showData.price))}</p>
                                                 </div>
                                                 <div className='col-md-2 text-end'>
                                                     <p className="col-form-label">บาท</p>
