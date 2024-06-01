@@ -76,9 +76,9 @@ export default function Login() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <Form.Text className='text-white'>
+                                {/* <Form.Text className='text-white'>
                                     We'll never share your email with anyone else.
-                                </Form.Text>
+                                </Form.Text> */}
                             </Form.Group>
                             <br />
                             <Form.Group controlId='formBasicPassword'>
@@ -91,7 +91,7 @@ export default function Login() {
                                 />
                             </Form.Group>
                             <br />
-                            <Form.Group controlId='formBasicCheckbox'>
+                            {/* <Form.Group controlId='formBasicCheckbox'>
                                 <Form.Check
                                     type='checkbox'
                                     label='จดจำรหัสผ่าน'
@@ -99,7 +99,7 @@ export default function Login() {
                                     onChange={(e) => setRememberMe(e.target.checked)}
                                 />
                             </Form.Group>
-                            <br />
+                            <br /> */}
                             <button className='button' type='submit'>
                                 เข้าสู่ระบบ
                             </button>

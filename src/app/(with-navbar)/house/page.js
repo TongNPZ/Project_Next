@@ -38,7 +38,7 @@ export default function House() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('vacant');
 
     const fecthHouse = async () => {
         try {
@@ -67,7 +67,7 @@ export default function House() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('vacant');
     };
 
     // modal //
