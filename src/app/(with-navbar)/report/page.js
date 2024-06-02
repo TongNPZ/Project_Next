@@ -230,6 +230,33 @@ export default function report() {
 
     const encodedDataCommonFee = base64Encode(reportDataCommonFee);
 
+    const filteredDataVacant = showData && showData.filter(data => data.h_status === 1);
+    const filteredDataBook = showData && showData.filter(data => data.h_status === 2);
+    const filteredDataContract = showData && showData.filter(data => data.h_status === 3);
+    const filteredDataTransfer = showData && showData.filter(data => data.h_status === 4);
+    const filteredDataSold = showData && showData.filter(data => data.h_status === 5);
+    const filteredDataCancel = showData && showData.filter(data => data.h_status === 0);
+
+    const totalPriceHouse = showData && showData.reduce((sum, data) => {
+        return sum + parseFloat(data.price);
+    }, 0);
+
+    const totalPriceSold = filteredDataSold && filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.price);
+    }, 0);
+
+    const totalPriceSoldฺBooked = filteredDataSold && filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.b_amount);
+    }, 0);
+
+    const totalPriceSoldContracted = filteredDataSold && filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.con_amount);
+    }, 0);
+
+    const totalPriceSoldTransferred = filteredDataSold && filteredDataSold.reduce((sum, data) => {
+        return sum + parseFloat(data.trans_amount);
+    }, 0);
+
     return (
         <ProtectRoute requireRoles={[1]}>
             <Card>
@@ -599,8 +626,175 @@ export default function report() {
                                         </tbody>
                                     </Table>
                                 )}
-                            </>
 
+                                <div className="row mt-3 mb-3">
+                                    <div className='col-md-8' />
+
+                                    {tempStatus === '' || tempStatus === 'vacant' || tempStatus === 'cancel' ? (
+                                        <div className="col-md-4">
+
+                                            {filteredDataVacant && filteredDataVacant.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่ว่าง:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataVacant.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {filteredDataBook && filteredDataBook.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่กำลังจอง:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataBook.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {filteredDataContract && filteredDataContract.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่กำลังทำสัญญา:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataContract.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {filteredDataTransfer && filteredDataTransfer.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่กำลังโอนกรรมสิทธิ์:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataTransfer.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {filteredDataSold && filteredDataSold.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่ขายแล้ว:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataSold.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {filteredDataCancel && filteredDataCancel.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่ยกเลิกขาย:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataCancel.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <div className='row'>
+                                                <div className='col-md-6'>
+                                                    <p className="col-form-label">รวมมูลค่าบ้านทั้งหมด:</p>
+                                                </div>
+                                                <div className='col-md-4 text-end'>
+                                                    <p className="col-form-label">{PriceWithCommas(totalPriceHouse)}</p>
+                                                </div>
+                                                <div className='col-md-2 text-end'>
+                                                    <p className="col-form-label">บาท</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    ) : tempStatus === 'sold' ? (
+                                        <div className="col-md-4">
+                                            {filteredDataSold && filteredDataSold.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมจำนวนบ้านที่ขายแล้ว:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataSold.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">หลัง</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมมูลค่าบ้านที่ขายแล้ว:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{PriceWithCommas(totalPriceSold)}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">บาท</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมมูลค่าจอง:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{PriceWithCommas(totalPriceSoldฺBooked)}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">บาท</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมมูลค่าเงินดาวน์:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{PriceWithCommas(totalPriceSoldContracted)}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">บาท</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมมูลค่าคงเหลือ:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{PriceWithCommas(totalPriceSoldTransferred)}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">บาท</p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </>
                         ) : (
                             <div className="text-center">
                                 <h2 className="mt-5 mb-5">
@@ -843,7 +1037,6 @@ export default function report() {
                             </div>
                         )
                     )}
-
                 </Card.Body>
             </Card>
         </ProtectRoute >

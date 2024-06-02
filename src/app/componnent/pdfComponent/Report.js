@@ -440,7 +440,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่จอง&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่กำลังจอง&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataBook.length}</Text>
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
@@ -488,7 +488,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ทำสัญญา&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่กำลังทำสัญญา&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataContract.length}</Text>
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
@@ -536,7 +536,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่โอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่กำลังโอนกรรมสิทธิ์&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataTransfer.length}</Text>
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
@@ -617,7 +617,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                                 <Text style={styles.textBehindRow}>บาท</Text>
                                             </View>
                                             <View style={styles.row}>
-                                                <Text style={styles.textFrontRow}>รวมมูลค่ามัดจำ&nbsp;&nbsp;</Text>
+                                                <Text style={styles.textFrontRow}>รวมมูลค่าเงินดาวน์&nbsp;&nbsp;</Text>
                                                 <Text style={styles.textNumberRow}>{totalPriceSoldContractedFormatted}</Text>
                                                 <Text style={styles.textBehindRow}>บาท</Text>
                                             </View>
