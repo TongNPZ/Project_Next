@@ -106,7 +106,12 @@ export default function ModalAdd({ show, handleClose }) {
                         formdata.append("houseNo", houseNo);
                         formdata.append("numDeed", numDeed);
                         formdata.append("numSurvey", numSurvey);
-                        formdata.append("hLandSpace", parseFloat(hLandSpace));
+
+                        if (hLandSpace === '') {
+                            formdata.append("hLandSpace", 0);
+                        } else {
+                            formdata.append("hLandSpace", parseFloat(hLandSpace));
+                        }
 
                         if (note === '') {
                             formdata.append("note", '-');
@@ -222,12 +227,12 @@ export default function ModalAdd({ show, handleClose }) {
                             </div>
                         </div>
                     </div>
-                    <div className='mb-3'>
-                        <label className="col-form-label">
-                            ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)
-                        </label>
 
-                        {showInputHLandSpace && hLandSpace === 0 && hsId !== '' ? (
+                    {hsId !== '' ? (
+                        <div className='mb-3'>
+                            <label className="col-form-label">
+                                ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)
+                            </label>
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
@@ -236,7 +241,29 @@ export default function ModalAdd({ show, handleClose }) {
                                     readOnly
                                 />
                             </div>
-                        ) : (
+                        </div>
+                    ) : (
+                        <div className='mb-3'>
+                            <label className="col-form-label">
+                                ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)
+                            </label>
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเริ่มต้น (ตารางวา)"
+                                    value={''}
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className='mb-3'>
+                        <label className="col-form-label">
+                            ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)
+                        </label>
+
+                        {showInputHLandSpace && hsId !== '' ? (
                             <div className="mt-1">
                                 <Form.Control
                                     type="number"
@@ -244,7 +271,17 @@ export default function ModalAdd({ show, handleClose }) {
                                     value={hLandSpace}
                                     onChange={(e) => setHLandSpace(e.target.value)}
                                     min='0'
+                                    step="0.01"
                                     required
+                                />
+                            </div>
+                        ) : (
+                            <div className="mt-1">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)"
+                                    value={''}
+                                    disabled
                                 />
                             </div>
                         )}
@@ -253,10 +290,10 @@ export default function ModalAdd({ show, handleClose }) {
                             <Form.Check
                                 inline
                                 type='switch'
-                                label="ขนาดพื้นที่ดินเริ่มต้น"
-                                checked={showInputHLandSpace && hLandSpace === 0 && hsId !== ''}
+                                label="กรอกพื้นที่ดินเพิ่มเติม (ตารางวา)"
+                                checked={showInputHLandSpace && hsId !== ''}
                                 onChange={() => {
-                                    if (showInputHLandSpace && hLandSpace === 0 && hsId !== '') {
+                                    if (showInputHLandSpace && hsId !== '') {
                                         setShowInputHLandSpace(false);
                                         setHLandSpace('');
                                     } else {
@@ -266,6 +303,19 @@ export default function ModalAdd({ show, handleClose }) {
                                 }}
                                 min='0'
                                 disabled={hsId === ''}
+                            />
+                        </div>
+                    </div>
+                    <div className='mb-3'>
+                        <label className="col-form-label">
+                            ขนาดพื้นที่ดิน (ตารางวา)
+                        </label>
+                        <div className="mt-1">
+                            <Form.Control
+                                type="number"
+                                placeholder="ขนาดพื้นที่ดิน (ตารางวา)"
+                                value={hLandSpace ? parseFloat(showHouseStyleById.land_space) + parseFloat(hLandSpace) : parseFloat(showHouseStyleById.land_space)}
+                                readOnly
                             />
                         </div>
                     </div>

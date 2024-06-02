@@ -243,6 +243,18 @@ export default function ModalEdit({ show, handleClose, id }) {
                     </div>
                     <div className='mb-3'>
                         <label className="col-form-label">
+                            ขนาดพื้นที่ดิน (ตารางวา)
+                        </label>
+
+                        <Form.Control
+                            type="number"
+                            placeholder={defaultValues.hLand_space}
+                            value={hLandSpace === 0 ? defaultValues.land_space : hLandSpace !== 0 && parseFloat(defaultValues.land_space) + parseFloat(hLandSpace)}
+                            readOnly
+                        />
+                    </div>
+                    <div className='mb-3'>
+                        <label className="col-form-label">
                             ขนาดพื้นที่ดินเพิ่มเติม (ตารางวา)
                         </label>
 
