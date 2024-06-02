@@ -195,7 +195,7 @@ export default function House() {
                                 <option value={'contract'}>ทำสัญญา</option>
                                 <option value={'transfer'}>โอนกรรมสิทธิ์</option>
                                 <option value={'sold'}>ขายแล้ว</option>
-                                <option value={'cancel'}>ยกเลิกขาย</option>
+                                <option value={'cancel'}>ไม่พร้อมขาย</option>
                             </Form.Select>
                         </div>
                         <div className='col-md-4 text-md-end mb-3'>
@@ -287,7 +287,7 @@ export default function House() {
                                                 </td>
                                             ) : (
                                                 <td>
-                                                    <Badge bg="danger">ยกเลิกขาย</Badge>
+                                                    <Badge bg="danger">ไม่พร้อมขาย</Badge>
                                                 </td>
                                             )}
 
