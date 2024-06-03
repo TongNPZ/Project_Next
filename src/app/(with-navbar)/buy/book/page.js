@@ -47,7 +47,7 @@ export default function Book() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('processing');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -102,7 +102,7 @@ export default function Book() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('processing');
         setStartDate('');
         setEndDate('');
     };

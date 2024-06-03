@@ -35,7 +35,7 @@ export default function HouseStyle() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('open');
 
     const fecthHouseStyle = async () => {
         try {
@@ -64,7 +64,7 @@ export default function HouseStyle() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('open');
     };
 
     // modal add //

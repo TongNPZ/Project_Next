@@ -43,7 +43,7 @@ export default function ReceiveCommonFee() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('overdue');
 
     const fetchNotifyCommonFee = async () => {
         try {
@@ -110,7 +110,7 @@ export default function ReceiveCommonFee() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('overdue');
         setStartDate('');
         setEndDate('');
     };

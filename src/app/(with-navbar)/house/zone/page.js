@@ -34,7 +34,7 @@ export default function HouseZone() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('open');
 
     const fecthHouseZone = async () => {
         try {
@@ -63,7 +63,7 @@ export default function HouseZone() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('open');
     };
 
     // modal add //
