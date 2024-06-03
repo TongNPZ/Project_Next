@@ -215,7 +215,7 @@ export default function NotifyCommonFee() {
                                                 const commonMonth = ncfData.common_month;
                                                 const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
-                                                if (currentDate < new Date(ncfData.ncf_nextDate)) {
+                                                if (currentDate > new Date(ncfData.ncf_nextDate)) {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
