@@ -147,13 +147,13 @@ export default function House() {
 
     const renderTooltipOpen = (props) => (
         <Tooltip {...props}>
-            เปิดการขายบ้าน
+            พร้อมขายบ้าน
         </Tooltip>
     );
 
     const renderTooltipClose = (props) => (
         <Tooltip {...props}>
-            ปิดการขายบ้าน
+            ไม่พร้อมขายบ้าน
         </Tooltip>
     );
     // --- //

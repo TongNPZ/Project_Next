@@ -58,7 +58,7 @@ const ContractedDetailCard = ({ showData }) => {
                                 <ListGroup.Item>
                                     <div className='row'>
                                         <div className='col-md-6'>
-                                            <p className="col-form-label"><strong>จำนวนเงินมัดจำ:</strong></p>
+                                            <p className="col-form-label"><strong>จำนวนเงินดาวน์:</strong></p>
                                         </div>
                                         <div className='col-md-4'>
                                             <p className="col-form-label">{parseFloat(showData.con_amount).toLocaleString()}</p>

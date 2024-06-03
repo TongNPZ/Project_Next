@@ -110,7 +110,7 @@ export default function ModalContractAdd({ show, handleClose, showBookData }) {
     return (
         <Modal show={show} onHide={handleCancel} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>กรอกข้อมูลมัดจำ</Modal.Title>
+                <Modal.Title>กรอกข้อมูลเงินดาวน์</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>

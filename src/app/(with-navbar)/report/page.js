@@ -41,9 +41,8 @@ export default function report() {
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
 
+    const [tempShowData, setTempShowData] = useState([]);
     const [tempStatus, setTempStatus] = useState('');
-    const [tempStartDate, setTempStartDate] = useState('');
-    const [tempEndDate, setTempEndDate] = useState('');
 
     const fecthHouse = async (search, status) => {
         try {
@@ -90,10 +89,19 @@ export default function report() {
         }
     }
 
-    const fetchNcf = async (search, status, startDate, endDate) => {
+    const fetchNcf = async (search, status, endDate) => {
         try {
-            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&search=${search}&status=${status}&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
+            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&search=${search}&status=${status}&endDate=${endDate}`, 'GET', null);
             setShowData(result.data);
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
+    const fetchTempNcf = async (search, status) => {
+        try {
+            const result = await GetRequest(`${API_NOTIFY_COMMON_FEE}?order=DESC&search=${search}&status=${status}`, 'GET', null);
+            setTempShowData(result.data);
         } catch (error) {
             console.log('error', error);
         }
@@ -101,9 +109,9 @@ export default function report() {
 
     const [showRcf, setShowRcf] = useState([]);
 
-    const fetchRcf = async (startDate, endDate) => {
+    const fetchRcf = async () => {
         try {
-            const result = await GetRequest(`${API_RECEIVE_COMMON_FEE}?order=DESC&startDate=${startDate}&endDate=${endDate}`, 'GET', null);
+            const result = await GetRequest(`${API_RECEIVE_COMMON_FEE}?order=DESC`, 'GET', null);
             setShowRcf(result.data);
         } catch (error) {
             console.log('error', error);
@@ -132,10 +140,19 @@ export default function report() {
     const filteredShowData = showData && showData.filter(data => {
         const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
 
-        if (tempStartDate === '' && tempEndDate === '') {
+        if (tempStatus === '' || tempStatus === 'overdue') {
             return rcfFindData || data.ncf_status === 0;
         } else {
             return rcfFindData
+        }
+    });
+
+    const uniqueYears = [];
+
+    tempShowData.forEach(item => {
+        const year = new Date(item.ncf_date).getFullYear();
+        if (!uniqueYears.includes(year)) {
+            uniqueYears.push(year);
         }
     });
 
@@ -148,14 +165,6 @@ export default function report() {
 
     const handleSearchReport = async (e) => {
         e.preventDefault();
-
-        if (status !== 'overdue') {
-            setTempStartDate(startDate)
-            setTempEndDate(endDate)
-        } else {
-            setTempStartDate('')
-            setTempEndDate('')
-        }
 
         setTempStatus(status)
 
@@ -176,12 +185,10 @@ export default function report() {
                 fecthTransfer(search, status, startDate, endDate);
             }
         } else if (activeKey === 'commonFee') {
-            if (status === '' || status === 'paid') {
-                fetchNcf(search, status, '', '')
-                fetchRcf(startDate, endDate)
-            } else if (status === 'overdue') {
-                fetchNcf(search, status, startDate, endDate)
-                fetchRcf('', '')
+            if (status === '' || status === 'overdue' || status === 'paid') {
+                fetchTempNcf(search, status)
+                fetchNcf(search, status, endDate)
+                fetchRcf()
             }
         } else if (activeKey === 'expenses') {
             if (status === '') {
@@ -198,6 +205,7 @@ export default function report() {
         setStartDate('')
         setEndDate('')
         setShowData([])
+        setTempShowData([])
 
         setTempStatus('')
     };
@@ -219,24 +227,36 @@ export default function report() {
     const encodedData = base64Encode(reportData);
 
     const reportDataCommonFee = {
-        showData: showData,
+        showData: 'default',
         activeKey: activeKey,
         search: search || 'default',
         tempStatus: tempStatus || 'default',
         startDate: startDate || 'default',
         endDate: endDate || 'default',
-        showRcf: showRcf
+        showRcf: 'default'
     }
 
     const encodedDataCommonFee = base64Encode(reportDataCommonFee);
 
+    const filteredDataHouse = showData && showData.filter(data => data.h_id);
     const filteredDataVacant = showData && showData.filter(data => data.h_status === 1);
     const filteredDataBook = showData && showData.filter(data => data.h_status === 2);
     const filteredDataContract = showData && showData.filter(data => data.h_status === 3);
     const filteredDataTransfer = showData && showData.filter(data => data.h_status === 4);
     const filteredDataSold = showData && showData.filter(data => data.h_status === 5);
     const filteredDataCancel = showData && showData.filter(data => data.h_status === 0);
+    const filteredDataBooked = showData && showData.filter(data => data.b_id);
+    const filteredDataContracted = showData && showData.filter(data => data.b_id);
+    const filteredDataTransferred = showData && showData.filter(data => data.b_id);
+    const filteredDataCommonFee = showData && showData.filter(data => data.ncf_id);
+    const filteredDataOverdue = showData && showData.filter(data => data.ncf_status === 0);
+    const filteredDataPaid = showData && showData.filter(data => data.ncf_status === 1);
+    const filteredDataExpenses = showData && showData.filter(data => data.ex_id);
+    const filteredDataReportProblem = showData.filter(data => data.rp_id);
+    const filteredDataPending = showData.filter(data => data.rp_status === 0);
+    const filteredDataResolved = showData.filter(data => data.rp_status === 1);
 
+    // house
     const totalPriceHouse = showData && showData.reduce((sum, data) => {
         return sum + parseFloat(data.price);
     }, 0);
@@ -255,6 +275,39 @@ export default function report() {
 
     const totalPriceSoldTransferred = filteredDataSold && filteredDataSold.reduce((sum, data) => {
         return sum + parseFloat(data.trans_amount);
+    }, 0);
+
+    // booked
+    const totalAmountBooked = showData && showData.reduce((sum, data) => {
+        return sum + parseFloat(data.b_amount);
+    }, 0);
+
+    // contracted
+    const totalAmountContracted = showData && showData.reduce((sum, data) => {
+        return sum + parseFloat(data.con_amount);
+    }, 0);
+
+    // transferred
+    const totalAmountTransferred = showData && showData.reduce((sum, data) => {
+        return sum + parseFloat(data.trans_amount);
+    }, 0);
+
+    // commonFee
+    const totalAmountCommonFee = showData && showData.reduce((sum, data) => {
+        return sum + parseFloat(data.ncf_amount);
+    }, 0);
+
+    const totalAmountOverdue = filteredDataOverdue && filteredDataOverdue.reduce((sum, data) => {
+        return sum + parseFloat(data.ncf_amount);
+    }, 0);
+
+    const totalAmountPaid = filteredDataPaid && filteredDataPaid.reduce((sum, data) => {
+        return sum + parseFloat(data.ncf_amount);
+    }, 0);
+
+    // expenses
+    const totalAmountExpenses = filteredDataExpenses && filteredDataExpenses.reduce((sum, data) => {
+        return sum + parseFloat(data.ex_amount);
     }, 0);
 
     return (
@@ -298,7 +351,7 @@ export default function report() {
                                                 <option value={'contracted'}>ทำสัญญา</option>
                                                 <option value={'transferred'}>โอนกรรมสิทธิ์</option>
                                                 <option value={'sold'}>ขายแล้ว</option>
-                                                <option value={'cancel'}>ยกเลิกขาย</option>
+                                                <option value={'cancel'}>ไม่พร้อมขาย</option>
                                             </>
                                         ) : activeKey === 'commonFee' ? (
                                             <>
@@ -335,7 +388,23 @@ export default function report() {
                             </div>
                             <div className="col-md-6">
 
-                                {status === 'sold' || status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'commonFee' && status === '' || status === 'overdue' || status === 'paid' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
+                                {activeKey === 'commonFee' ? (
+                                    <div className="d-flex align-items-center mb-3">
+                                        <InputGroup>
+                                            <InputGroup.Text>แสดงรายงานตามปี</InputGroup.Text>
+                                            <Form.Select value={endDate} onChange={(e) => setEndDate(e.target.value)}>
+                                                <option value={''}>เลือกปีที่ต้องการแสดง</option>
+
+                                                {status === '' || status === 'overdue' || status === 'paid' ? (
+                                                    uniqueYears.map((data, index) => (
+                                                        <option key={index} value={data}>{data + 543}</option>
+                                                    ))
+                                                ) : null}
+
+                                            </Form.Select>
+                                        </InputGroup>
+                                    </div>
+                                ) : status === 'sold' || status === 'booked' || status === 'contracted' || status === 'transferred' || activeKey === 'expenses' && status === '' || activeKey === 'reportProblem' && status === '' || status === 'pending' || status === 'resolved' ? (
                                     <div className="d-flex align-items-center mb-3">
                                         <InputGroup className='me-2' style={{ width: '70%' }}>
                                             <InputGroup.Text>
@@ -466,7 +535,7 @@ export default function report() {
                                                             </td>
                                                         ) : (
                                                             <td>
-                                                                <Badge bg="danger">ยกเลิกขาย</Badge>
+                                                                <Badge bg="danger">ไม่พร้อมขาย</Badge>
                                                             </td>
                                                         )
                                                     ) : null}
@@ -534,7 +603,7 @@ export default function report() {
                                                             </td>
                                                         ) : (
                                                             <td>
-                                                                <Badge bg="danger">ยกเลิกขาย</Badge>
+                                                                <Badge bg="danger">ไม่พร้อมขาย</Badge>
                                                             </td>
                                                         )
                                                     ) : null}
@@ -580,7 +649,7 @@ export default function report() {
                                                 <th>วันที่ทำสัญญา</th>
                                                 <th>ชื่อผู้ทำสัญญา</th>
                                                 <th>บ้านเลขที่</th>
-                                                <th>จำนวนเงินมัดจำ</th>
+                                                <th>จำนวนเงินดาวน์</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -706,7 +775,7 @@ export default function report() {
                                             {filteredDataCancel && filteredDataCancel.length > 0 && (
                                                 <div className='row'>
                                                     <div className='col-md-6'>
-                                                        <p className="col-form-label">รวมจำนวนบ้านที่ยกเลิกขาย:</p>
+                                                        <p className="col-form-label">รวมจำนวนบ้านที่ไม่พร้อมขาย:</p>
                                                     </div>
                                                     <div className='col-md-4 text-end'>
                                                         <p className="col-form-label">{filteredDataCancel.length}</p>
@@ -717,15 +786,29 @@ export default function report() {
                                                 </div>
                                             )}
 
+                                            {tempStatus === '' && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมจำนวนบ้านทั้งหมด:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataHouse.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">หลัง</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    <p className="col-form-label">รวมมูลค่าบ้านทั้งหมด:</p>
+                                                    <p className="col-form-label"><strong>รวมมูลค่าบ้านทั้งหมด:</strong></p>
                                                 </div>
                                                 <div className='col-md-4 text-end'>
-                                                    <p className="col-form-label">{PriceWithCommas(totalPriceHouse)}</p>
+                                                    <p className="col-form-label"><strong>{PriceWithCommas(totalPriceHouse)}</strong></p>
                                                 </div>
                                                 <div className='col-md-2 text-end'>
-                                                    <p className="col-form-label">บาท</p>
+                                                    <p className="col-form-label"><strong>บาท</strong></p>
                                                 </div>
                                             </div>
 
@@ -747,7 +830,7 @@ export default function report() {
                                                     </div>
                                                     <div className='row'>
                                                         <div className='col-md-6'>
-                                                            <p className="col-form-label">รวมมูลค่าบ้านที่ขายแล้ว:</p>
+                                                            <p className="col-form-label">รวมมูลค่าบ้านทั้งหมด:</p>
                                                         </div>
                                                         <div className='col-md-4 text-end'>
                                                             <p className="col-form-label">{PriceWithCommas(totalPriceSold)}</p>
@@ -780,13 +863,100 @@ export default function report() {
                                                     </div>
                                                     <div className='row'>
                                                         <div className='col-md-6'>
-                                                            <p className="col-form-label">รวมมูลค่าคงเหลือ:</p>
+                                                            <p className="col-form-label"><strong>รวมมูลค่าคงเหลือ:</strong></p>
                                                         </div>
                                                         <div className='col-md-4 text-end'>
-                                                            <p className="col-form-label">{PriceWithCommas(totalPriceSoldTransferred)}</p>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalPriceSoldTransferred)}</strong></p>
                                                         </div>
                                                         <div className='col-md-2 text-end'>
-                                                            <p className="col-form-label">บาท</p>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : tempStatus === 'booked' ? (
+                                        <div className="col-md-4">
+                                            {filteredDataBooked && filteredDataBooked.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมจำนวนรายการจอง:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataBooked.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินจองทั้งหมด:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountBooked)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : tempStatus === 'contracted' ? (
+                                        <div className="col-md-4">
+                                            {filteredDataContracted && filteredDataContracted.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมจำนวนรายการทำสัญญา:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataContracted.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินดาวน์:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountContracted)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : tempStatus === 'transferred' ? (
+                                        <div className="col-md-4">
+                                            {filteredDataTransferred && filteredDataTransferred.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมจำนวนรายการโอนกรรมสิทธิ์:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataTransferred.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินส่วนที่เหลือ:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountTransferred)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
                                                         </div>
                                                     </div>
                                                 </>
@@ -868,6 +1038,132 @@ export default function report() {
                                     </Table>
                                 ) : null}
 
+                                <div className="row mt-3 mb-3">
+                                    <div className='col-md-8' />
+
+                                    {tempStatus === '' ? (
+                                        <div className="col-md-4">
+
+                                            {filteredDataCommonFee && filteredDataCommonFee.length > 0 && (
+                                                <>
+                                                    {filteredDataOverdue && filteredDataOverdue.length > 0 && (
+                                                        <div className='row'>
+                                                            <div className='col-md-6'>
+                                                                <p className="col-form-label">รวมรายการค้างชำระ:</p>
+                                                            </div>
+                                                            <div className='col-md-4 text-end'>
+                                                                <p className="col-form-label">{filteredDataOverdue.length}</p>
+                                                            </div>
+                                                            <div className='col-md-2 text-end'>
+                                                                <p className="col-form-label">รายการ</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {filteredDataPaid && filteredDataPaid.length > 0 && (
+                                                        <div className='row'>
+                                                            <div className='col-md-6'>
+                                                                <p className="col-form-label">รวมรายการชำระแล้ว:</p>
+                                                            </div>
+                                                            <div className='col-md-4 text-end'>
+                                                                <p className="col-form-label">{filteredDataPaid.length}</p>
+                                                            </div>
+                                                            <div className='col-md-2 text-end'>
+                                                                <p className="col-form-label">รายการ</p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมรายการค่าส่วนกลางทั้งหมด:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataCommonFee.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินค่าส่วนกลางทั้งหมด:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountCommonFee)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                        </div>
+                                    ) : tempStatus === 'overdue' ? (
+                                        <div className="col-md-4">
+
+                                            {filteredDataOverdue && filteredDataOverdue.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมรายการค้างชำระ:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataOverdue.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินค้างชำระ:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountOverdue)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                        </div>
+                                    ) : tempStatus === 'paid' ? (
+                                        <div className="col-md-4">
+
+                                            {filteredDataPaid && filteredDataPaid.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมรายการชำระแล้ว:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataPaid.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินชำระแล้ว:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountPaid)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                        </div>
+                                    ) : null}
+                                </div>
                             </>
                         ) : (
                             <div className="text-center">
@@ -913,6 +1209,42 @@ export default function report() {
                                     </Table>
                                 ) : null}
 
+                                <div className="row mt-3 mb-3">
+                                    <div className='col-md-8' />
+
+                                    {tempStatus === '' ? (
+                                        <div className="col-md-4">
+
+                                            {filteredDataExpenses && filteredDataExpenses.length > 0 && (
+                                                <>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label">รวมรายการค่าใช้จ่าย:</p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label">{filteredDataExpenses.length}</p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label">รายการ</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className='row'>
+                                                        <div className='col-md-6'>
+                                                            <p className="col-form-label"><strong>รวมจำนวนเงินค่าใช้จ่าย:</strong></p>
+                                                        </div>
+                                                        <div className='col-md-4 text-end'>
+                                                            <p className="col-form-label"><strong>{PriceWithCommas(totalAmountExpenses)}</strong></p>
+                                                        </div>
+                                                        <div className='col-md-2 text-end'>
+                                                            <p className="col-form-label"><strong>บาท</strong></p>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                        </div>
+                                    ) : null}
+                                </div>
                             </>
                         ) : (
                             <div className="text-center">
@@ -1028,6 +1360,58 @@ export default function report() {
                                     </Table>
                                 ) : null}
 
+                                <div className="row mt-3 mb-3">
+                                    <div className='col-md-8' />
+                                    <div className="col-md-4">
+                                        {tempStatus === '' || tempStatus === 'pending' ? (
+                                            filteredDataPending && filteredDataPending.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมรายการกำลังแก้ไข:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataPending.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">รายการ</p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        ) : null}
+
+                                        {tempStatus === '' || tempStatus === 'resolved' ? (
+                                            filteredDataResolved && filteredDataResolved.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมรายการแก้ไขแล้ว:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataResolved.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">รายการ</p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        ) : null}
+
+                                        {tempStatus === '' && (
+                                            filteredDataReportProblem && filteredDataReportProblem.length > 0 && (
+                                                <div className='row'>
+                                                    <div className='col-md-6'>
+                                                        <p className="col-form-label">รวมรายการแจ้งปัญหาทั้งหมด:</p>
+                                                    </div>
+                                                    <div className='col-md-4 text-end'>
+                                                        <p className="col-form-label">{filteredDataReportProblem.length}</p>
+                                                    </div>
+                                                    <div className='col-md-2 text-end'>
+                                                        <p className="col-form-label">รายการ</p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
                             </>
                         ) : (
                             <div className="text-center">
