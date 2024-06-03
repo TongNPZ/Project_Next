@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
 const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate, endDate, housingEstate }) => {
 
     // house
+    const filteredDataHouse = showData.filter(data => data.h_id);
     const filteredDataVacant = showData.filter(data => data.h_status === 1);
     const filteredDataBook = showData.filter(data => data.h_status === 2);
     const filteredDataContract = showData.filter(data => data.h_status === 3);
@@ -117,10 +118,10 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     const filteredDataSold = showData.filter(data => data.h_status === 5);
     const filteredDataCancel = showData.filter(data => data.h_status === 0);
 
-    const totalPriceSold = filteredDataSold.reduce((sum, data) => {
+    const totalPriceHouse = filteredDataHouse.reduce((sum, data) => {
         return sum + parseFloat(data.price);
     }, 0);
-    const totalPriceSoldFormatted = PriceWithCommas(totalPriceSold);
+    const totalPriceHouseFormatted = PriceWithCommas(totalPriceHouse);
 
     const totalPriceSoldฺBooked = filteredDataSold.reduce((sum, data) => {
         return sum + parseFloat(data.b_amount);
@@ -164,13 +165,22 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
     // commonFee
 
     let filteredShowData;
-    
+    let year
+
     if (activeKey === 'commonFee') {
+        year = new Date(endDate).getFullYear() + 543;
+
         filteredShowData = showData && showData.filter(data => {
             const rcfFindData = showRcf && showRcf.find(rcf => rcf.ncf_id === data.ncf_id);
             return rcfFindData || data.ncf_status === 0;
         });
     }
+
+    const filteredDataCommonFee = showData.filter(data => data.ncf_id);
+
+    const totalPriceCommonFee = filteredDataCommonFee.reduce((sum, data) => {
+        return sum + parseFloat(data.ncf_amount);
+    }, 0);
 
     const filteredDataOverdue = showData.filter(data => data.ncf_status === 0);
 
@@ -236,14 +246,14 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                 tempStatus === 'contracted' ? 'ทำสัญญา' :
                                     tempStatus === 'transferred' ? 'โอนกรรมสิทธิ์' :
                                         tempStatus === 'sold' ? 'ขายแล้ว' :
-                                            tempStatus === 'cancel' ? 'ยกเลิกขาย' :
+                                            tempStatus === 'cancel' ? 'ไม่พร้อมขาย' :
                                                 tempStatus === 'overdue' ? 'ค้างจ่าย' :
                                                     tempStatus === 'paid' ? 'ชำระแล้ว' :
                                                         tempStatus === 'pending' ? 'กำลังแก้ไข' :
                                                             tempStatus === 'resolved' ? 'แก้ไขแล้ว' : null
                     }
                     {search !== 'default' ? `, ค้นหา : เฉพาะที่มีรายการ ${search}` : null}
-                    {startDate !== 'default' && endDate !== 'default' ? `, จากวันที่ ${DateFormat(startDate)} ถึง ${DateFormat(endDate)}` : null}&nbsp;
+                    {startDate !== 'default' && endDate !== 'default' ? `, จากวันที่ ${DateFormat(startDate)} ถึง ${DateFormat(endDate)}` : startDate === 'default' && endDate !== 'default' ? `, แสดงถึงปี ${year}` : null}&nbsp;
                 </Text>
 
                 {activeKey === 'house' ? (
@@ -338,7 +348,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                             <Text style={styles.tableCell}>ค่าจอง&nbsp;</Text>
                                         </View>
                                         <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>ค่ามัดจำ&nbsp;</Text>
+                                            <Text style={styles.tableCell}>ค่าเงินดาวน์&nbsp;</Text>
                                         </View>
                                         <View style={styles.tableCol}>
                                             <View style={{ flexDirection: 'column' }}>
@@ -604,8 +614,8 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมมูลค่าบ้านพร้อมที่ดิน&nbsp;&nbsp;</Text>
-                                        <Text style={styles.textNumberRow}>{totalPriceSoldFormatted}</Text>
+                                        <Text style={styles.textFrontRow}>รวมมูลค่าบ้านทั้งหมด&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{totalPriceHouseFormatted}</Text>
                                         <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
 
@@ -635,7 +645,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
 
                             {filteredDataCancel && filteredDataCancel.length > 0 ? (
                                 <>
-                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ยกเลิกขาย&nbsp;</Text>
+                                    <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ไม่พร้อมขาย&nbsp;</Text>
                                     {showData.map((data, index) => (
                                         data.h_status === 0 && (
                                             <View key={index} style={styles.table}>
@@ -673,13 +683,34 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     ))}
                                     <View style={styles.horizontalLineDotted} />
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ยกเลิกขาย&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนบ้านที่ไม่พร้อมขาย&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{filteredDataCancel.length}</Text>
                                         <Text style={styles.textBehindRow}>หลัง</Text>
                                     </View>
                                     <View style={styles.horizontalLineDotted} />
                                 </>
                             ) : null}
+
+                            {tempStatus === 'default' && (
+                                <View style={styles.row}>
+                                    <Text style={styles.textFrontRow}>รวมจำนวนบ้านทั้งหมด&nbsp;&nbsp;</Text>
+                                    <Text style={styles.textNumberRow}>{filteredDataHouse.length}</Text>
+                                    <Text style={styles.textBehindRow}>หลัง</Text>
+                                </View>
+                            )}
+
+                            {tempStatus === 'default' || tempStatus === 'vacant' || tempStatus === 'cancel' && (
+                                <View style={styles.row}>
+                                    <Text style={styles.textFrontRow}>รวมมูลค่าบ้านทั้งหมด&nbsp;&nbsp;</Text>
+                                    <Text style={styles.textNumberRow}>{totalPriceHouseFormatted}</Text>
+                                    <Text style={styles.textBehindRow}>บาท</Text>
+                                </View>
+                            )}
+
+                            {tempStatus !== 'sold' && (
+                                <View style={styles.horizontalLineDotted} />
+                            )}
+
                         </>
                     ) : tempStatus === 'booked' ? (
                         <>
@@ -741,8 +772,8 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         <Text style={styles.textNumberRow}>{filteredDataBooked.length}</Text>
                                         <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
-                                    <View style={styles.row}>textFrontRow
-                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินจอง&nbsp;&nbsp;</Text>
+                                    <View style={styles.row}>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินจองทั้งหมด&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceBookedFormatted}</Text>
                                         <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
@@ -832,7 +863,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                         <Text style={styles.textBehindRow}>รายการ</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินมัดจำ&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินดาวน์&nbsp;&nbsp;</Text>
                                         <Text style={styles.textNumberRow}>{totalPriceContractedFormatted}</Text>
                                         <Text style={styles.textBehindRow}>บาท</Text>
                                     </View>
@@ -910,6 +941,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             ) : null}
                         </>
                     )
+
                 ) : activeKey === 'commonFee' ? (
                     tempStatus === 'default' || tempStatus === 'overdue' || tempStatus === 'paid' ? (
                         <>
@@ -939,7 +971,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                             </View>
                             <View style={styles.horizontalLine} />
 
-                            {filteredDataOverdue && filteredDataOverdue.length > 0 && startDate === 'default' && endDate === 'default' || tempStatus === 'overdue' && startDate !== 'default' && endDate !== 'default' ? (
+                            {filteredDataOverdue && filteredDataOverdue.length > 0 || tempStatus === 'overdue' ? (
                                 <>
                                     <Text style={styles.textContent}>สถานะ&nbsp;:&nbsp;ค้างชำระ&nbsp;</Text>
                                     {filteredShowData.map((data, index) => {
@@ -1039,6 +1071,23 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                                     <View style={styles.horizontalLineDotted} />
                                 </>
                             ) : null}
+
+                            {tempStatus === 'default' && filteredDataOverdue && filteredDataOverdue.length > 0 && filteredDataPaid && filteredDataPaid.length > 0 ? (
+                                <>
+                                    <View style={styles.row}>
+                                        <Text style={styles.textFrontRow}>รวมรายการค่าส่วนกลางทั้งหมด&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{filteredDataCommonFee.length}</Text>
+                                        <Text style={styles.textBehindRow}>รายการ</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.textFrontRow}>รวมจำนวนเงินค่าส่วนกลางทั้งหมด&nbsp;&nbsp;</Text>
+                                        <Text style={styles.textNumberRow}>{PriceWithCommas(totalPriceCommonFee)}</Text>
+                                        <Text style={styles.textBehindRow}>บาท</Text>
+                                    </View>
+                                    <View style={styles.horizontalLineDotted} />
+                                </>
+                            ) : null}
+
                         </>
                     ) : null
                 ) : activeKey === 'expenses' ? (
@@ -1249,7 +1298,7 @@ const DocReport = ({ showData, showRcf, activeKey, search, tempStatus, startDate
                         {tempStatus === 'default' && (
                             <>
                                 <View style={styles.row}>
-                                    <Text style={styles.textFrontRow}>รวมรายการแจ้งปัญหา&nbsp;&nbsp;</Text>
+                                    <Text style={styles.textFrontRow}>รวมรายการแจ้งปัญหาทั้งหมด&nbsp;&nbsp;</Text>
                                     <Text style={styles.textNumberRow}>{filteredDataReportProblem.length}</Text>
                                     <Text style={styles.textBehindRow}>รายการ</Text>
                                 </View>

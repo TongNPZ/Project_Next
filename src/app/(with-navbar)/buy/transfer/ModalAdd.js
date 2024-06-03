@@ -365,7 +365,7 @@ export default function ModalTransferAdd({ show, handleClose, id }) {
                                         </div>
                                         <div className='row'>
                                             <div className='col-md-6'>
-                                                <p className="col-form-label">หัก ค่ามัดจำ:</p>
+                                                <p className="col-form-label">หัก ค่าเงินดาวน์:</p>
                                             </div>
                                             <div className='col-md-4 text-end'>
                                                 <p className="col-form-label">{`- ${parseFloat(contract.con_amount).toLocaleString()}`}</p>
