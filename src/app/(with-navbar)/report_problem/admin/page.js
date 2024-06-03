@@ -33,7 +33,7 @@ export default function ReportProblemAdmin() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [search, setSearch] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('pending');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -62,7 +62,7 @@ export default function ReportProblemAdmin() {
 
     const handleSortReset = () => {
         setSearch('');
-        setStatus('');
+        setStatus('pending');
         setStartDate('');
         setEndDate('');
     };

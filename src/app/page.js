@@ -108,7 +108,7 @@ export default function Home() {
                       >
                         <h2>จองได้แล้ววันนี้ !!!</h2>
                         <button className="btn btn-outline-light" type="button" onClick={() => router.push('/house_view')}>
-                          จองเลย
+                          ดูรายละเอียด
                         </button>
                       </div>
                     </div>
