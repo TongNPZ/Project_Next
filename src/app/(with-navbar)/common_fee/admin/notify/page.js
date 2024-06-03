@@ -43,6 +43,8 @@ export default function NotifyCommonFee() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    const [selectedDate, setSelectedDate] = useState('');
+
     useEffect(() => {
         const fetchHouseOwner = async () => {
             try {
@@ -148,6 +150,20 @@ export default function NotifyCommonFee() {
                                         onChange={(e) => setEndDate(e.target.value)}
                                     />
                                 </InputGroup>
+                                {/* <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}>
+                                    <option value="">เลือกวันที่</option>
+                                    {showNcf.map((ncf, index) => (
+                                        <option key={index} value={ncf.ncf_nextDate}>{DateFormat(ncf.ncf_nextDate)}</option>
+                                    ))}
+                                </select> */}
+
+                                <Form.Select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} style={{ width: '100px' }}>
+                                    <option value="">ปี</option>
+                                    {showNcf.map((ncf, index) => (
+                                        <option key={index} value={ncf.ncf_nextDate}>{DateFormat(ncf.ncf_nextDate)}</option>
+                                    ))}
+                                </Form.Select>
+
                             </div>
                         </div>
                         <div className='col-md-4 text-md-end mb-3'>
@@ -199,7 +215,7 @@ export default function NotifyCommonFee() {
                                                 const commonMonth = ncfData.common_month;
                                                 const totalPrice = (data.hLand_space * commonRate) * commonMonth;
 
-                                                if (currentDate > new Date(ncfData.ncf_nextDate)) {
+                                                if (currentDate < new Date(ncfData.ncf_nextDate)) {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{index + 1}</td>
@@ -209,6 +225,8 @@ export default function NotifyCommonFee() {
                                                             <td>{DateFormat(ncfData.ncf_nextDate)}</td>
                                                             <td>{DateFormat(addOneYear(ncfData.ncf_nextDate))}</td>
                                                             <td>{parseFloat(totalPrice).toLocaleString()}</td>
+                                                            {/* <td>{DateFormat(ncfData.ncf_nextDate)}</td> */}
+
                                                             <td>
                                                                 <OverlayTrigger overlay={renderTooltipAddNotifyCommonFee}>
                                                                     <a style={{ cursor: 'pointer' }} onClick={() => AddNotify(data.h_id, router)} >

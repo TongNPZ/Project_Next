@@ -43,13 +43,7 @@ export default function Login() {
                 localStorage.setItem('token', response.token);
                 setAuthData(response);
                 router.push('/')
-                console.log('การเข้าสู่ระบบสำเร็จ');
-                // console.log(response);
-
-                // setTimeout(() => {
-                //     window.location.reload();
-                // }, 50);
-                // ทำตามขั้นตอนต่อไปที่คุณต้องการ
+                console.log('การเข้าสู่ระบบสำเร็จ')
             } else {
                 console.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
             }
@@ -76,9 +70,6 @@ export default function Login() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                {/* <Form.Text className='text-white'>
-                                    We'll never share your email with anyone else.
-                                </Form.Text> */}
                             </Form.Group>
                             <br />
                             <Form.Group controlId='formBasicPassword'>
@@ -91,15 +82,6 @@ export default function Login() {
                                 />
                             </Form.Group>
                             <br />
-                            {/* <Form.Group controlId='formBasicCheckbox'>
-                                <Form.Check
-                                    type='checkbox'
-                                    label='จดจำรหัสผ่าน'
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
-                                />
-                            </Form.Group>
-                            <br /> */}
                             <button className='button' type='submit'>
                                 เข้าสู่ระบบ
                             </button>
